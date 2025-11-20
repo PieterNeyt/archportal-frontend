@@ -1,29 +1,19 @@
-import { Link } from "@heroui/link";
+import {ReactNode} from "react";
 
-import { Navbar } from "@/components/navbar";
+import {SideBar} from "@/components/SIdeBar.tsx";
 
-export default function DefaultLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="relative flex flex-col h-screen">
-      <Navbar />
-      <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
-        {children}
-      </main>
-      <footer className="w-full flex items-center justify-center py-3">
-        <Link
-          isExternal
-          className="flex items-center gap-1 text-current"
-          href="https://heroui.com"
-          title="heroui.com homepage"
-        >
-          <span className="text-default-600">Powered by</span>
-          <p className="text-primary">HeroUI</p>
-        </Link>
-      </footer>
-    </div>
-  );
+export default function DefaultLayout({children}: { children: ReactNode }) {
+    return (
+        <div className="relative w-full h-screen overflow-hidden">
+            {/* Sidebar - fixed position, always on the left */}
+            <SideBar/>
+
+            {/* Main content - full width, padding to account for collapsed sidebar */}
+            <div className="w-full h-full overflow-auto pl-16">
+                <div className="max-w-7xl mx-auto p-4">
+                    {children}
+                </div>
+            </div>
+        </div>
+    );
 }
