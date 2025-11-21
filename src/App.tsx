@@ -1,12 +1,15 @@
 import {Route, Routes} from "react-router-dom";
 
-import IndexPage from "@/pages/index";
+import IndexPage from "@/pages";
+import DefaultLayout from "@/layouts/default.tsx";
 
 function App() {
     return (
-        <Routes>
-            <Route element={<IndexPage/>} path="/"/>
-        </Routes>
+        <DefaultLayout>
+            <Routes>
+                <Route element={<IndexPage/>} path="/"/>
+            </Routes>
+        </DefaultLayout>
     );
 }
 
