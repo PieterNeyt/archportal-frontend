@@ -1,5 +1,5 @@
 export interface Game {
-    name: string;
-    image: string;
+    title: string;
+    imageUrl: string | null;
     description: string;
 }

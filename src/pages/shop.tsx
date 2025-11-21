@@ -18,7 +18,7 @@ export function ShopPage() {
         <div>
             <div>
                 {games?.map((game, index) => (
-                    <GameCard key={index} title={game.name} description={game.description} image={game.image}/>
+                    <GameCard key={index} title={game.title} description={game.description} image={game.imageUrl}/>
                 ))}
             </div>
         </div>
