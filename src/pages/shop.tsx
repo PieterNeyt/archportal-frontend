@@ -15,8 +15,12 @@ export function ShopPage() {
     }
 
     return (
-        <div>
-            <div>
+        <div className={"p-4 sm:p-8"}>
+            <h2 className={"text-3xl font-bold mb-6"}>Game shop</h2>
+            <div className={"grid gap-6 justify-items-center"}
+                 style={{
+                     gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))'
+                 }}>
                 {games?.map((game, index) => (
                     <GameCard key={index} title={game.title} description={game.description} image={game.imageUrl}/>
                 ))}
