@@ -4,18 +4,13 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Input} from "@heroui/input";
 import {Button} from "@heroui/button";
 import {useAddGameStudio} from "@/hooks/useGameStudio.ts";
-import {CircleEllipsis} from "lucide-react";
+import {useNavigate} from "react-router-dom";
+import {CircularProgress} from "@heroui/progress";
+import {addToast} from "@heroui/toast";
 
 export function CreateGameStudioForm() {
-    const {isLoading, isError, AddGameStudio} = useAddGameStudio();
-
-    if (isLoading) {
-        return <CircleEllipsis/>;
-    }
-    if (isError) {
-        return <div> ERRORRRRRRRRRRRR </div>;
-    }
-
+    const {isPending, isError, AddGameStudio} = useAddGameStudio();
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -27,6 +22,18 @@ export function CreateGameStudioForm() {
 
     const onSubmit = (data: CreateGameStudioValues) => {
         AddGameStudio(data)
+        if (isPending) {
+            return <CircularProgress aria-label="Loading..."/>;
+        }
+
+        if (isError) {
+            return addToast({
+                title: "Failed to create Account",
+                description: "We have failed to create youre account, try agian or contact support if this porblems keeps happening",
+                color: "warning",
+            });
+        }
+        return navigate("/shop");
     };
 
     return (

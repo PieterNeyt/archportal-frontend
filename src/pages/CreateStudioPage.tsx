@@ -3,9 +3,9 @@ import {Image} from "@heroui/image";
 
 export function CreateGameStudioPage() {
     return (
-        <div className="min-h-screen flex flex-col md:flex-row">
+        <div className="min-h-screen flex flex-col md:flex-row relative z-10">
             {/* LEFT SIDE */}
-            <div className="md:w-1/2 flex flex-col justify-center items-start p-10 gap-6 bg-card/50 backdrop-blur-sm">
+            <div className="md:w-1/2 flex flex-col justify-start items-start p-10 gap-6 bg-card/50 backdrop-blur-sm">
                 <h1 className="text-4xl font-bold text-foreground">Create Your Own Studio</h1>
                 <p className="text-lg text-muted-foreground">
                     Launch your dream game studio today. Fill out the form and start building amazing games with us!
@@ -16,7 +16,7 @@ export function CreateGameStudioPage() {
                         alt="Arch Linux Logo"
                         className="m-5"
                         src="/assets/ArchPortalLogo.png"
-                        width={500}
+                        width={350}
                     />
                 </div>
             </div>
@@ -25,9 +25,10 @@ export function CreateGameStudioPage() {
             <div className="hidden md:block w-px bg-border"/>
 
             {/* RIGHT SIDE (FORM) */}
-            <div className="md:w-1/2 flex justify-center items-center p-10 bg-card/50 backdrop-blur-sm">
+            <div className="md:w-1/2 flex flex-col justify-start items-center p-10 bg-card/50 backdrop-blur-sm">
                 <CreateGameStudioForm/>
             </div>
         </div>
+
     );
 }

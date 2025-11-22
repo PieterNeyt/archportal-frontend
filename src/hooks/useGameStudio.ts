@@ -1,4 +1,4 @@
-import {useMutation, useQueryClient} from "react-query";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {CreateGameStudio} from "@/model/createGameStudio.ts";
 import {AddGameStudio} from "@/service/gameStudioService.ts";
 
@@ -7,7 +7,7 @@ export function useAddGameStudio() {
     const queryClient = useQueryClient()
     const {
         mutate,
-        isLoading,
+        isPending,
         isError,
 
     } = useMutation(
@@ -19,7 +19,7 @@ export function useAddGameStudio() {
         })
 
     return {
-        isLoading,
+        isPending,
         isError,
         AddGameStudio: mutate
     }

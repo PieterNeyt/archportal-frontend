@@ -1,6 +1,9 @@
 import {ReactNode} from "react";
 import {GameLauncherSidebar} from "@/components/SiderBar/sidebar.tsx";
 import Starfield from "@/layouts/background.tsx";
+import {HeroUIProvider,} from "@heroui/system";
+import {ToastProvider} from "@heroui/toast";
+
 
 function DefaultLayout({children}: { children: ReactNode }) {
     return (
@@ -15,7 +18,10 @@ function DefaultLayout({children}: { children: ReactNode }) {
             <div className="flex h-full w-full relative z-10">
                 <GameLauncherSidebar/>
                 <main className="flex-1 overflow-auto relative z-10">
-                    {children}
+                    <HeroUIProvider>
+                        <ToastProvider/>
+                        {children}
+                    </HeroUIProvider>
                 </main>
             </div>
         </div>

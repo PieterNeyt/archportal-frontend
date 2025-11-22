@@ -11,6 +11,9 @@ export function ShopPage() {
     if (isError) {
         return <GameLoadError onRetry={refetch}/>
     }
+    if (games?.length === 0) {
+        return <div>No items found</div>
+    }
 
     return (
         <div className={"p-4 sm:p-8"}>

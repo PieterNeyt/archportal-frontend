@@ -1,28 +1,52 @@
+'use client';
+
+import {useState} from "react";
+import {PlusIcon} from "lucide-react";
+import {useNavigate} from "react-router-dom";
+
 interface FooterProps {
     isOpen: boolean;
 }
 
-
 export function SidebarFooter({isOpen}: FooterProps) {
-    return (
+    const navigate = useNavigate();
+    const [dropdownOpen, setDropdownOpen] = useState(false);
 
-        <div className="p-4 border-t border-border">
+    return (
+        <div className="p-4 border-t border-border relative">
             <div
-                className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent transition-all group cursor-pointer">
+                className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent transition-all group cursor-pointer"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+            >
                 <div
-                    className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-lg">
-                    <span className="text-sm font-bold text-primary-foreground">67</span>
+                    className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-lg"
+                >
+                    <PlusIcon className="text-primary-foreground" size={16}/>
                 </div>
                 {isOpen && (
-                    <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium truncate text-foreground group-hover:text-primary transition-colors">
-                            Hugo Dor
-                        </p>
-                        <p className="text-xs text-muted-foreground truncate">Online</p>
-                    </div>
+                    <span className="text-sm font-bold text-foreground">
+                        Create Account
+                    </span>
                 )}
             </div>
-        </div>
 
+            {dropdownOpen && (
+                <div
+                    className="absolute bottom-full mb-2 left-0 w-48 bg-card border border-border rounded-lg shadow-lg flex flex-col overflow-hidden z-50">
+                    <button
+                        className="px-4 py-2 text-sm text-foreground hover:bg-primary/10 text-left"
+                        onClick={() => navigate("/create-user")}
+                    >
+                        User Account
+                    </button>
+                    <button
+                        className="px-4 py-2 text-sm text-foreground hover:bg-primary/10 text-left"
+                        onClick={() => navigate("/create/gamestudio")}
+                    >
+                        Game Studio Account
+                    </button>
+                </div>
+            )}
+        </div>
     );
 }
