@@ -28,9 +28,7 @@ package:
     - VERSION="$MAJOR.$MINOR.$DATE-$CI_PIPELINE_ID"
     - echo "Building version $VERSION"
     - echo "$CI_REGISTRY_PASSWORD" | docker login registry.gitlab.com -u "$CI_REGISTRY_USER" --password-stdin
-    - docker build -f infrastructure/Dockerfile \
-      -t $CI_REGISTRY_IMAGE/frontend:$VERSION \
-      -t $CI_REGISTRY_IMAGE/frontend:latest .
+    - docker build -f infrastructure/Dockerfile -t $CI_REGISTRY_IMAGE/frontend:$VERSION -t $CI_REGISTRY_IMAGE/frontend:latest .
     - docker push $CI_REGISTRY_IMAGE/frontend:$VERSION
     - docker push $CI_REGISTRY_IMAGE/frontend:latest
   rules:
