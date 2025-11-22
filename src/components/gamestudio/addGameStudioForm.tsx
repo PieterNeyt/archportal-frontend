@@ -24,7 +24,8 @@ export function CreateGameStudioForm() {
             className="w-full max-w-md flex flex-col gap-6"
         >
             {/* PERSONAL */}
-            <h2 className="text-xl font-semibold text-center">Personal</h2>
+            <h2 className="text-xl font-semibold text-center text-primary">Personal</h2>
+
             <div className="flex flex-col md:flex-row gap-4">
                 <Input
                     isRequired
@@ -34,6 +35,11 @@ export function CreateGameStudioForm() {
                     placeholder="Enter your first name"
                     type="text"
                     className="flex-1"
+                    classNames={{
+                        input: "bg-card text-foreground",
+                        inputWrapper: "bg-card border border-border hover:border-ring transition-colors",
+                        label: "text-foreground"
+                    }}
                     {...register("ownerFirstName")}
                 />
                 <Input
@@ -44,6 +50,11 @@ export function CreateGameStudioForm() {
                     placeholder="Enter your last name"
                     type="text"
                     className="flex-1"
+                    classNames={{
+                        input: "bg-card text-foreground",
+                        inputWrapper: "bg-card border border-border hover:border-ring transition-colors",
+                        label: "text-foreground"
+                    }}
                     {...register("ownerLastName")}
                 />
             </div>
@@ -55,14 +66,19 @@ export function CreateGameStudioForm() {
                 labelPlacement="outside"
                 placeholder="Enter your e-mail"
                 type="email"
+                classNames={{
+                    input: "bg-card text-foreground",
+                    inputWrapper: "bg-card border border-border hover:border-ring transition-colors",
+                    label: "text-foreground"
+                }}
                 {...register("ownerEmail")}
             />
 
             {/* DIVIDER */}
-            <div className="border-b border-default-200 dark:border-default-100 my-3"/>
+            <div className="border-b border-border my-3"/>
 
             {/* GAME STUDIO */}
-            <h2 className="text-xl font-semibold text-center">Game Studio</h2>
+            <h2 className="text-xl font-semibold text-center text-primary">Game Studio</h2>
             <div className="flex flex-col md:flex-row gap-4">
                 <Input
                     isRequired
@@ -72,6 +88,11 @@ export function CreateGameStudioForm() {
                     placeholder="Enter your studio name"
                     type="text"
                     className="flex-1"
+                    classNames={{
+                        input: "bg-card text-foreground",
+                        inputWrapper: "bg-card border border-border hover:border-ring transition-colors",
+                        label: "text-foreground"
+                    }}
                     {...register("name")}
                 />
                 <Input
@@ -82,6 +103,11 @@ export function CreateGameStudioForm() {
                     placeholder="Enter your IBAN"
                     type="text"
                     className="flex-1"
+                    classNames={{
+                        input: "bg-card text-foreground",
+                        inputWrapper: "bg-card border border-border hover:border-ring transition-colors",
+                        label: "text-foreground"
+                    }}
                     {...register("IBAN")}
                 />
             </div>
@@ -93,12 +119,21 @@ export function CreateGameStudioForm() {
                 labelPlacement="outside"
                 placeholder="Enter your description"
                 type="textarea"
+                classNames={{
+                    input: "bg-card text-foreground",
+                    inputWrapper: "bg-card border border-border hover:border-ring transition-colors",
+                    label: "text-foreground"
+                }}
                 {...register("description")}
             />
 
             {/* SUBMIT */}
             <div className="flex justify-center mt-2">
-                <Button color="primary" type="submit" className="px-10">
+                <Button
+                    color="primary"
+                    type="submit"
+                    className="px-10"
+                >
                     Submit
                 </Button>
             </div>
