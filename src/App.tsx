@@ -1,7 +1,5 @@
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-import {Route, Routes} from "react-router-dom";
-
-import IndexPage from "@/pages";
+import {Navigate, Route, Routes} from "react-router-dom";
 import DefaultLayout from "@/layouts/default.tsx";
 import {ShopPage} from "@/pages/shop.tsx";
 
@@ -12,8 +10,9 @@ function App() {
         <QueryClientProvider client={queryClient}>
             <DefaultLayout>
                 <Routes>
-                    <Route element={<IndexPage/>} path="/"/>
+                    {/*<Route element={<IndexPage/>} path="/"/>*/}
                     <Route element={<ShopPage/>} path="/shop"/>
+                    <Route path="/" element={<Navigate to={"/shop"}/>}/>
                 </Routes>
             </DefaultLayout>
         </QueryClientProvider>
