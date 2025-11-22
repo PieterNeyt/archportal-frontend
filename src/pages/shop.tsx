@@ -22,7 +22,9 @@ export function ShopPage() {
                      gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))'
                  }}>
                 {games?.map((game, index) => (
-                    <GameCard key={index} title={game.title} description={game.description} image={game.imageUrl}/>
+                    <GameCard key={index} title={game.title}
+                              description={game.description} image={game.imageUrl}
+                              price={game.price}/>
                 ))}
             </div>
         </div>
