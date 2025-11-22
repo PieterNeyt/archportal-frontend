@@ -1,20 +1,12 @@
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {SidebarMainBody} from "@/components/SiderBar/mainbody.tsx";
 import {SidebarHeader} from "@/components/SiderBar/header.tsx";
 import {SidebarFooter} from "@/components/SiderBar/footer.tsx";
+import Starfield from "@/layouts/background.tsx";
 
 
 export function GameLauncherSidebar() {
     const [isOpen, setIsOpen] = useState(true);
-    const [isDark, setIsDark] = useState(false);
-
-    useEffect(() => {
-        if (isDark) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-    }, [isDark]);
 
     const handleSidebarClick = (e: React.MouseEvent<HTMLElement>) => {
         const target = e.target as HTMLElement;
@@ -33,8 +25,14 @@ export function GameLauncherSidebar() {
             >
                 <SidebarHeader isOpen={isOpen} setIsOpen={setIsOpen}/>
                 <SidebarMainBody isOpen={isOpen}/>
-                <SidebarFooter isOpen={isOpen} isDark={isDark} setIsDark={setIsDark}/>
+                <SidebarFooter isOpen={isOpen}/>
+                <Starfield
+                    starCount={1000}
+                    starColor={[255, 255, 255]}
+                    speedFactor={0.05}
+                />
             </aside>
+
         </div>
     );
 }
