@@ -3,8 +3,19 @@ import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Input} from "@heroui/input";
 import {Button} from "@heroui/button";
+import {useAddGameStudio} from "@/hooks/useGameStudio.ts";
+import {CircleEllipsis} from "lucide-react";
 
 export function CreateGameStudioForm() {
+    const {isLoading, isError, AddGameStudio} = useAddGameStudio();
+
+    if (isLoading) {
+        return <CircleEllipsis/>;
+    }
+    if (isError) {
+        return <div> ERRORRRRRRRRRRRR </div>;
+    }
+
     const {
         register,
         handleSubmit,
@@ -15,7 +26,7 @@ export function CreateGameStudioForm() {
     });
 
     const onSubmit = (data: CreateGameStudioValues) => {
-        console.log("Submitted data:", data);
+        AddGameStudio(data)
     };
 
     return (
