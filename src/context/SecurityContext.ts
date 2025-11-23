@@ -1,5 +1,5 @@
-import {User} from "@/model/user.ts";
 import {createContext} from "react";
+import {User} from "@/model/user.ts";
 
 export type SecurityContext = {
     isInitialised: boolean;

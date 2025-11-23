@@ -1,7 +1,7 @@
 import {useState} from 'react';
-import {SidebarMainBody} from "@/components/SiderBar/mainbody.tsx";
-import {SidebarHeader} from "@/components/SiderBar/header.tsx";
-import {SidebarFooter} from "@/components/SiderBar/footer.tsx";
+import {SidebarMainBody} from "@/components/sidebar/mainbody.tsx";
+import {SidebarHeader} from "@/components/sidebar/header.tsx";
+import {SidebarFooter} from "@/components/sidebar/footer/footer.tsx";
 
 
 export function GameLauncherSidebar() {

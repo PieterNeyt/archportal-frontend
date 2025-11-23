@@ -1,58 +1,33 @@
 'use client';
 
 import {useContext, useState} from "react";
-import {LogIn, LogOut, PlusIcon} from "lucide-react";
+import {PlusIcon} from "lucide-react";
 import {useNavigate} from "react-router-dom";
 import SecurityContext from "@/context/SecurityContext.ts";
+import SidebarLogin from "@/components/sidebar/footer/SidebarLogin.tsx";
+import SidebarLogout from "@/components/sidebar/footer/SidebarLogout.tsx";
+import SidebarUserProfile from "@/components/sidebar/footer/SidebarUserProfile.tsx";
 
 interface FooterProps {
     isOpen: boolean;
 }
 
 export function SidebarFooter({isOpen}: FooterProps) {
-    const {loggedInUser, login, logout} = useContext(SecurityContext);
+    const {loggedInUser} = useContext(SecurityContext);
     const navigate = useNavigate();
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
+    console.log("loggedInUser", loggedInUser?.firstName, loggedInUser?.lastName, loggedInUser?.gamerTag);
+
     return (
         <div className="p-4 border-t border-border relative">
-            {!loggedInUser ? (<div
-                className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent transition-all group cursor-pointer"
-                onClick={(e) => {
-                    e.stopPropagation()
-                    login()
-                    console.log("loggedIn: ", loggedInUser!.name);
-                }}
-            >
-                <div
-                    className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-lg"
-                >
-                    <LogIn className="text-primary-foreground" size={16}/>
-                </div>
-                {isOpen && (
-                    <span className="text-sm font-bold text-foreground">
-                        Login
-                    </span>
-                )}
-            </div>) : (<div
-                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent transition-all group cursor-pointer"
-                    onClick={(e) => {
-                        e.stopPropagation()
-                        logout()
-                    }}
-                >
-                    <div
-                        className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-lg"
-                    >
-                        <LogOut className="text-primary-foreground" size={16}/>
-                    </div>
-                    {isOpen && (
-                        <span className="text-sm font-bold text-foreground">
-                        Log out
-                    </span>
-                    )}
-                </div>
-
+            {!loggedInUser ? (
+                <SidebarLogin isOpen={isOpen}/>
+            ) : (
+                <>
+                    <SidebarLogout isOpen={isOpen}/>
+                    <SidebarUserProfile isOpen={isOpen}/>
+                </>
             )}
 
             <div
