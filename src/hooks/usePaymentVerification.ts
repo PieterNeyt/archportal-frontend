@@ -57,7 +57,7 @@ export function usePaymentVerification(orderId: string | null) {
                         progress: 'De betaling kon niet worden bevestigd'
                     });
                 }
-            } catch (error) {
+            } catch {
                 hasVerified.current = true;
                 setState({
                     status: 'error',
