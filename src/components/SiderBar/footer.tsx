@@ -16,7 +16,10 @@ export function SidebarFooter({isOpen}: FooterProps) {
         <div className="p-4 border-t border-border relative">
             <div
                 className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent transition-all group cursor-pointer"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
+                onClick={(e) => {
+                    e.stopPropagation()
+                    setDropdownOpen(!dropdownOpen)
+                }}
             >
                 <div
                     className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-lg"
@@ -35,13 +38,19 @@ export function SidebarFooter({isOpen}: FooterProps) {
                     className="absolute bottom-full mb-2 left-0 w-48 bg-card border border-border rounded-lg shadow-lg flex flex-col overflow-hidden z-50">
                     <button
                         className="px-4 py-2 text-sm text-foreground hover:bg-primary/10 text-left"
-                        onClick={() => navigate("/create-user")}
+                        onClick={() => {
+                            setDropdownOpen(false);
+                            navigate("/create/user");
+                        }}
                     >
                         User Account
                     </button>
                     <button
                         className="px-4 py-2 text-sm text-foreground hover:bg-primary/10 text-left"
-                        onClick={() => navigate("/create/gamestudio")}
+                        onClick={() => {
+                            setDropdownOpen(false);
+                            navigate("/create/gamestudio");
+                        }}
                     >
                         Game Studio Account
                     </button>
