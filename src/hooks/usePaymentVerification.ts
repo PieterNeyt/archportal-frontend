@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { verifyPayment } from '@/service/paymentService';
 
 type VerificationStatus = 'verifying' | 'success' | 'failed' | 'error';
@@ -16,7 +16,11 @@ export function usePaymentVerification(orderId: string | null) {
         progress: 'Bezig met controleren...'
     });
 
+    const hasVerified = useRef(false);
+
     useEffect(() => {
+        if (hasVerified.current) return;
+
         const verify = async () => {
             if (!orderId) {
                 setState({
@@ -33,16 +37,16 @@ export function usePaymentVerification(orderId: string | null) {
             }));
 
             try {
-                const result = await verifyPayment(orderId);
+                const isVerified = await verifyPayment(orderId);
+                hasVerified.current = true;
 
-                if (result.verified || result.success) {
+                if (isVerified) {
                     setState({
                         status: 'success',
                         message: 'Betaling succesvol!',
                         progress: 'Je bestelling wordt verwerkt'
                     });
 
-                    // Na 2 seconden doorsturen naar shop
                     setTimeout(() => {
                         window.location.href = '/shop?paymentSuccess=true';
                     }, 2000);
@@ -54,7 +58,7 @@ export function usePaymentVerification(orderId: string | null) {
                     });
                 }
             } catch (error) {
-                console.error('Verification error:', error);
+                hasVerified.current = true;
                 setState({
                     status: 'error',
                     message: 'Er ging iets mis',

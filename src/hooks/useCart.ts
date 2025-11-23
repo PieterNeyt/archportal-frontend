@@ -22,13 +22,14 @@ export function useCart() {
             queryClient.invalidateQueries({queryKey: ["cart"]});
         }
     });
-
+    const itemCount = cart?.items?.length ?? 0;
     return {
         cart,
         isCartLoading,
         addToCart: addToCartMutation.mutate,
         removeFromCart: removeFromCartMutation.mutate,
         isAddingToCart: addToCartMutation.isPending,
-        isRemovingFromCart: removeFromCartMutation.isPending
+        isRemovingFromCart: removeFromCartMutation.isPending,
+        itemCount
     };
 }
