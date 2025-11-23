@@ -1,53 +1,61 @@
-import {Moon, Sun} from "lucide-react";
+'use client';
+
+import {useState} from "react";
+import {PlusIcon} from "lucide-react";
+import {useNavigate} from "react-router-dom";
 
 interface FooterProps {
     isOpen: boolean;
-    isDark: boolean;
-    setIsDark: (value: boolean) => void;
 }
 
+export function SidebarFooter({isOpen}: FooterProps) {
+    const navigate = useNavigate();
+    const [dropdownOpen, setDropdownOpen] = useState(false);
 
-export function SidebarFooter({isOpen, isDark, setIsDark}: FooterProps) {
     return (
-        <>
-            {/* Theme Toggle */}
-            <div className="px-4 pb-2">
-                <button
-                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                        e.stopPropagation();
-                        setIsDark(!isDark);
-                    }}
-                    className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-accent transition-all group hover:scale-105 active:scale-95"
+        <div className="p-4 border-t border-border relative">
+            <div
+                className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent transition-all group cursor-pointer"
+                onClick={(e) => {
+                    e.stopPropagation()
+                    setDropdownOpen(!dropdownOpen)
+                }}
+            >
+                <div
+                    className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-lg"
                 >
-                    <div className="flex-shrink-0 text-muted-foreground group-hover:text-primary transition-colors">
-                        {isDark ? <Sun size={20}/> : <Moon size={20}/>}
-                    </div>
-                    {isOpen && (
-                        <span className="font-medium text-foreground group-hover:text-primary transition-colors">
-                            {isDark ? 'Licht thema' : 'Donker thema'}
-                        </span>
-                    )}
-                </button>
+                    <PlusIcon className="text-primary-foreground" size={16}/>
+                </div>
+                {isOpen && (
+                    <span className="text-sm font-bold text-foreground">
+                        Create Account
+                    </span>
+                )}
             </div>
 
-            {/* User Profile */}
-            <div className="p-4 border-t border-border">
+            {dropdownOpen && (
                 <div
-                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent transition-all group cursor-pointer">
-                    <div
-                        className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-lg">
-                        <span className="text-sm font-bold text-primary-foreground">JD</span>
-                    </div>
-                    {isOpen && (
-                        <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium truncate text-foreground group-hover:text-primary transition-colors">
-                                Jan de Vries
-                            </p>
-                            <p className="text-xs text-muted-foreground truncate">Online</p>
-                        </div>
-                    )}
+                    className="absolute bottom-full mb-2 left-0 w-48 bg-card border border-border rounded-lg shadow-lg flex flex-col overflow-hidden z-50">
+                    <button
+                        className="px-4 py-2 text-sm text-foreground hover:bg-primary/10 text-left"
+                        onClick={() => {
+                            setDropdownOpen(false);
+                            navigate("/create/user");
+                        }}
+                    >
+                        User Account
+                    </button>
+                    <button
+                        className="px-4 py-2 text-sm text-foreground hover:bg-primary/10 text-left"
+                        onClick={() => {
+                            setDropdownOpen(false);
+                            navigate("/create/gamestudio");
+                        }}
+                    >
+                        Game Studio Account
+                    </button>
                 </div>
-            </div>
-        </>
+            )}
+        </div>
     );
 }

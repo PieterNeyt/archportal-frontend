@@ -1,6 +1,6 @@
 import {Card, CardBody} from "@heroui/card";
 import {Button} from "@heroui/button";
-import {ArrowPathIcon, ExclamationTriangleIcon} from "@heroicons/react/24/outline";
+import {ArrowPathIcon, ExclamationTriangleIcon} from '@heroicons/react/24/outline';
 
 interface GameLoadErrorProps {
     onRetry: () => void;
@@ -20,7 +20,7 @@ export function GameLoadError({onRetry}: GameLoadErrorProps) {
                     We couldn't retrieve the game list. This might be due to a network connection issue or a temporary
                     server problem.
                 </p>
-                
+
                 <Button
                     color={"primary"}
                     size={"lg"}

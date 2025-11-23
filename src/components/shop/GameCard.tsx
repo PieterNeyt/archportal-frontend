@@ -58,33 +58,43 @@ export function GameCard({title, description, image, price}: ShopCardProps) {
                 content: "pointer-events-none"
             }}
         >
-            <Card isHoverable className={"py-4 w-[250px] h-[350px] sm:w-[300px]"}
-                  onMouseEnter={handleMouseEnter}
-                  onMouseLeave={handleMouseLeave}
+            <Card
+                isHoverable
+                className={"py-0 w-[250px] h-[380px] sm:w-[300px] bg-black/30 backdrop-blur-xl border border-white/10 hover:border-white/20 hover:bg-black/40 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl overflow-hidden"}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
             >
-                <CardBody className={"overflow-visible py-2 px-4 flex justify-center items-center"}>
+                <CardBody className={"p-0 overflow-hidden"}>
                     {(imageFailed || !image) ? (
-                        <div>
-                            <Gamepad2 size={"64"} className={"text-default-500 mb-2"}/>
-                            <p className={"text-small text-default-500"}>Image missing</p>
+                        <div
+                            className="flex flex-col items-center justify-center h-[300px] bg-white/5 backdrop-blur-sm border-b border-white/10">
+                            <Gamepad2 size={"64"} className={"text-white/40 mb-2"}/>
+                            <p className={"text-sm text-white/40"}>Image missing</p>
                         </div>
                     ) : (
-                        <Image
-                            alt={title}
-                            className={"object-cover rounded-xl aspect-video w-full h-full"}
-                            src={image}
-                            onError={handleImageError}
-                            isBlurred
-                            removeWrapper
-                        />
+                        <div className="h-[300px] overflow-hidden border-b border-white/10">
+                            <Image
+                                alt={title}
+                                className={"object-cover w-full h-full"}
+                                src={image}
+                                onError={handleImageError}
+                                isBlurred
+                                removeWrapper
+                            />
+                        </div>
                     )}
                 </CardBody>
-                <CardHeader className={"pt-2 px-4 flex-col items-start"}>
-                    <h4 className={"font-bold text-large truncate"}>{title}</h4>
-                </CardHeader>
-                <CardFooter className={"pt-0 px-4 pb-4 flex-col items-end overflow-hidden"}>
-                    <p className={"text-small text-default-500 line-clamp-2"}>€{price}</p>
-                </CardFooter>
+
+                <div className="flex flex-col flex-1 backdrop-blur-xl bg-black/20">
+                    <CardHeader className={"pt-4 px-4 pb-2 flex-col items-start"}>
+                        <h4 className={"font-bold text-lg text-white line-clamp-2 w-full"}>{title}</h4>
+                    </CardHeader>
+
+                    <CardFooter className={"pt-2 px-4 pb-4 flex-col items-start mt-auto"}>
+                        <p className={"text-xs text-white/50 mb-1"}>Price:</p>
+                        <p className={"text-2xl font-bold text-white"}>€{price}</p>
+                    </CardFooter>
+                </div>
             </Card>
         </Tooltip>
     )
