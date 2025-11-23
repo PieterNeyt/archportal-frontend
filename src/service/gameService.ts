@@ -2,6 +2,7 @@ import {Game} from "@/model/game.ts";
 import {Cart, PaymentCreation} from "@/model/shop";
 import axios from "axios";
 
+// voor nu zo hardcoded maar moet later als inlogfunctionaliteit er is opgelost worden
 const PROFILE_ID = "550e8400-e29b-41d4-a716-446655440000";
 
 export async function getGames(): Promise<Game[]> {
