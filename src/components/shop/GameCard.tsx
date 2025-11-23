@@ -72,7 +72,7 @@ export function GameCard({title, description, image, price}: ShopCardProps) {
                             <p className={"text-sm text-white/40"}>Image missing</p>
                         </div>
                     ) : (
-                        <div className="h-[200px] overflow-hidden border-b border-white/10">
+                        <div className="h-[300px] overflow-hidden border-b border-white/10">
                             <Image
                                 alt={title}
                                 className={"object-cover w-full h-full"}
