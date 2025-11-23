@@ -5,6 +5,7 @@ export function useGames() {
     const {isLoading, isError, refetch, data: games} = useQuery({
         queryKey: ["games"],
         queryFn: () => getGames()
-    })
-    return {isLoading, isError, refetch, games}
+    });
+
+    return {isLoading, isError, refetch, games};
 }

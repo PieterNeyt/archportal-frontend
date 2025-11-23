@@ -1,18 +1,22 @@
 import {Card, CardBody, CardFooter, CardHeader} from "@heroui/card";
 import {Image} from "@heroui/image";
 import {useCallback, useEffect, useRef, useState} from "react";
-import {Gamepad2} from "lucide-react";
+import {Gamepad2, ShoppingCart} from "lucide-react";
 import {Tooltip} from "@heroui/tooltip";
 import {GameCardToolTipContent} from "@/components/shop/GameCardToolTipContent.tsx";
+import {Button} from "@heroui/button";
 
 interface ShopCardProps {
     title: string;
     description: string;
     image: string | null;
     price: number;
+    gameId: string;
+    onAddToCart: (gameId: string) => void;
+    isAddingToCart: boolean;
 }
 
-export function GameCard({title, description, image, price}: ShopCardProps) {
+export function GameCard({title, description, image, price, gameId, onAddToCart, isAddingToCart}: ShopCardProps) {
     const [imageFailed, setImageFailed] = useState(false);
     const [isTooltipOpen, setIsTooltipOpen] = useState(false);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -58,7 +62,7 @@ export function GameCard({title, description, image, price}: ShopCardProps) {
                 content: "pointer-events-none"
             }}
         >
-            <Card isHoverable className={"py-4 w-[250px] h-[350px] sm:w-[300px]"}
+            <Card isHoverable className={"py-4 w-[250px] h-[400px] sm:w-[300px]"}
                   onMouseEnter={handleMouseEnter}
                   onMouseLeave={handleMouseLeave}
             >
@@ -80,10 +84,19 @@ export function GameCard({title, description, image, price}: ShopCardProps) {
                     )}
                 </CardBody>
                 <CardHeader className={"pt-2 px-4 flex-col items-start"}>
-                    <h4 className={"font-bold text-large truncate"}>{title}</h4>
+                    <h4 className={"font-bold text-large truncate w-full"}>{title}</h4>
+                    <p className={"text-xl font-bold text-primary"}>€{price.toFixed(2)}</p>
                 </CardHeader>
-                <CardFooter className={"pt-0 px-4 pb-4 flex-col items-end overflow-hidden"}>
-                    <p className={"text-small text-default-500 line-clamp-2"}>€{price}</p>
+                <CardFooter className={"pt-0 px-4 pb-4"}>
+                    <Button
+                        color="primary"
+                        className="w-full"
+                        startContent={<ShoppingCart size={18} />}
+                        onPress={() => onAddToCart(gameId)}
+                        isLoading={isAddingToCart}
+                    >
+                        Toevoegen
+                    </Button>
                 </CardFooter>
             </Card>
         </Tooltip>
