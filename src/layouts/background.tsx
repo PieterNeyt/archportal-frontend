@@ -45,14 +45,14 @@ export default function Starfield(props: Props) {
         const clear = () => {
             const gradient = c.createLinearGradient(0, 0, 0, h);
             gradient.addColorStop(0, '#4B0082'); // indigo / paars
-            gradient.addColorStop(1, 'black');
+            gradient.addColorStop(1, 'BLUE');
             c.fillStyle = gradient;
             c.fillRect(0, 0, w, h);
         };
 
         const putPixel = (x: number, y: number, brightness: number) => {
             c.fillStyle = `rgba(${starColor[0]}, ${starColor[1]}, ${starColor[2]}, ${brightness})`;
-            c.fillRect(x, y, 1, 1);
+            c.fillRect(x, y, 2, 2);
         };
 
         const moveStars = (distance: number) => {
