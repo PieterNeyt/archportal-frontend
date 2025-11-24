@@ -6,7 +6,7 @@ export function CreateGameStudioPage() {
         <div className="min-h-screen flex flex-col md:flex-row relative z-20">
             {/* LEFT SIDE */}
             <div
-                className="md:w-3/5 flex flex-col justify-center items-start p-12 lg:p-16 gap-8 bg-black/10">
+                className="md:w-1/2 flex flex-col justify-center items-start p-12 lg:p-16 gap-8 bg-black/10">
                 <div className="space-y-6 max-w-xl">
                     <h1 className="text-5xl lg:text-6xl font-bold bg-gradient-to-br from-white via-white/90 to-white/70 bg-clip-text text-transparent leading-tight">
                         Create Your Own Studio
@@ -28,7 +28,7 @@ export function CreateGameStudioPage() {
             <div className="hidden md:block w-px bg-gradient-to-b from-transparent via-white/20 to-transparent"/>
 
             {/* RIGHT SIDE (FORM) */}
-            <div className="md:w-2/5 flex flex-col justify-center items-center p-8 lg:p-16 bg-black/5">
+            <div className="md:w-1/2 flex flex-col justify-center items-center p-8 lg:p-16 bg-black/5">
                 <CreateGameStudioForm/>
             </div>
         </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import {useContext, useState} from "react";
+import {useContext} from "react";
 import {PlusIcon} from "lucide-react";
 import {useNavigate} from "react-router-dom";
 import SecurityContext from "@/context/SecurityContext.ts";
@@ -15,9 +15,7 @@ interface FooterProps {
 export function SidebarFooter({isOpen}: FooterProps) {
     const {loggedInUser} = useContext(SecurityContext);
     const navigate = useNavigate();
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-
-    console.log("loggedInUser", loggedInUser?.firstName, loggedInUser?.lastName, loggedInUser?.gamerTag);
+    // const [dropdownOpen, setDropdownOpen] = useState(false);
 
     return (
         <div className="p-4 border-t border-border relative">
@@ -34,7 +32,8 @@ export function SidebarFooter({isOpen}: FooterProps) {
                 className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent transition-all group cursor-pointer"
                 onClick={(e) => {
                     e.stopPropagation()
-                    setDropdownOpen(!dropdownOpen)
+                    // setDropdownOpen(!dropdownOpen)
+                    navigate("/create/gamestudio");
                 }}
             >
                 <div
@@ -44,34 +43,34 @@ export function SidebarFooter({isOpen}: FooterProps) {
                 </div>
                 {isOpen && (
                     <span className="text-sm font-bold text-foreground">
-                        Create Account
+                        Create Studio
                     </span>
                 )}
             </div>
 
-            {dropdownOpen && (
-                <div
-                    className="absolute bottom-full mb-2 left-0 w-48 bg-card border border-border rounded-lg shadow-lg flex flex-col overflow-hidden z-50">
-                    <button
-                        className="px-4 py-2 text-sm text-foreground hover:bg-primary/10 text-left"
-                        onClick={() => {
-                            setDropdownOpen(false);
-                            navigate("/create/user");
-                        }}
-                    >
-                        User Account
-                    </button>
-                    <button
-                        className="px-4 py-2 text-sm text-foreground hover:bg-primary/10 text-left"
-                        onClick={() => {
-                            setDropdownOpen(false);
-                            navigate("/create/gamestudio");
-                        }}
-                    >
-                        Game Studio Account
-                    </button>
-                </div>
-            )}
+            {/*{dropdownOpen && (*/}
+            {/*    <div*/}
+            {/*        className="absolute bottom-full mb-2 left-0 w-48 bg-card border border-border rounded-lg shadow-lg flex flex-col overflow-hidden z-50">*/}
+            {/*        <button*/}
+            {/*            className="px-4 py-2 text-sm text-foreground hover:bg-primary/10 text-left"*/}
+            {/*            onClick={() => {*/}
+            {/*                setDropdownOpen(false);*/}
+            {/*                navigate("/create/user");*/}
+            {/*            }}*/}
+            {/*        >*/}
+            {/*            User Account*/}
+            {/*        </button>*/}
+            {/*        <button*/}
+            {/*            className="px-4 py-2 text-sm text-foreground hover:bg-primary/10 text-left"*/}
+            {/*            onClick={() => {*/}
+            {/*                setDropdownOpen(false);*/}
+            {/*                navigate("/create/gamestudio");*/}
+            {/*            }}*/}
+            {/*        >*/}
+            {/*            Game Studio Account*/}
+            {/*        </button>*/}
+            {/*    </div>*/}
+            {/*)}*/}
         </div>
     );
 }
