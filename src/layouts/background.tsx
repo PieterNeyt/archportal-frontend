@@ -41,14 +41,67 @@ export default function Starfield(props: Props) {
 
         let stars = makeStars(starCount);
 
-        // Clear met gradient
         const clear = () => {
-            const gradient = c.createLinearGradient(0, 0, 0, h);
-            gradient.addColorStop(0, '#4B0082'); // indigo / paars
-            gradient.addColorStop(1, 'BLUE');
+            // BASE DEEP SPACE GRADIENT (zoals tailwind from-purple-950 via-indigo-950 to-blue-950)
+            const gradient = c.createLinearGradient(0, 0, w, h);
+            gradient.addColorStop(0, "rgba(45, 0, 80, 1)");     // deep purple
+            gradient.addColorStop(0.5, "rgba(20, 0, 60, 1)");   // indigo core
+            gradient.addColorStop(1, "rgba(0, 10, 50, 1)");     // deep blue
             c.fillStyle = gradient;
             c.fillRect(0, 0, w, h);
+
+            // --- NEBULA BLOBS --- //
+            // Purple nebula (top-left)
+            let neb = c.createRadialGradient(
+                w * 0.15, h * 0.20, 0,
+                w * 0.15, h * 0.20, w * 0.35
+            );
+            neb.addColorStop(0, "rgba(160, 70, 255, 0.25)");
+            neb.addColorStop(1, "rgba(160, 70, 255, 0)");
+            c.fillStyle = neb;
+            c.fillRect(0, 0, w, h);
+
+            // Blue nebula (bottom-right)
+            neb = c.createRadialGradient(
+                w * 0.85, h * 0.80, 0,
+                w * 0.85, h * 0.80, w * 0.30
+            );
+            neb.addColorStop(0, "rgba(80, 150, 255, 0.20)");
+            neb.addColorStop(1, "rgba(80, 150, 255, 0)");
+            c.fillStyle = neb;
+            c.fillRect(0, 0, w, h);
+
+            // Indigo nebula center
+            neb = c.createRadialGradient(
+                w * 0.50, h * 0.50, 0,
+                w * 0.50, h * 0.50, w * 0.25
+            );
+            neb.addColorStop(0, "rgba(120, 100, 255, 0.12)");
+            neb.addColorStop(1, "rgba(120, 100, 255, 0)");
+            c.fillStyle = neb;
+            c.fillRect(0, 0, w, h);
+
+            // Violet nebula (right-middle)
+            neb = c.createRadialGradient(
+                w * 0.90, h * 0.55, 0,
+                w * 0.90, h * 0.55, w * 0.30
+            );
+            neb.addColorStop(0, "rgba(190, 90, 255, 0.15)");
+            neb.addColorStop(1, "rgba(190, 90, 255, 0)");
+            c.fillStyle = neb;
+            c.fillRect(0, 0, w, h);
+
+            // Cyan nebula (left-mid)
+            neb = c.createRadialGradient(
+                w * 0.25, h * 0.60, 0,
+                w * 0.25, h * 0.60, w * 0.28
+            );
+            neb.addColorStop(0, "rgba(80, 255, 255, 0.10)");
+            neb.addColorStop(1, "rgba(80, 255, 255, 0)");
+            c.fillStyle = neb;
+            c.fillRect(0, 0, w, h);
         };
+
 
         const putPixel = (x: number, y: number, brightness: number) => {
             c.fillStyle = `rgba(${starColor[0]}, ${starColor[1]}, ${starColor[2]}, ${brightness})`;
