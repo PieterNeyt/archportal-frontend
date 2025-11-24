@@ -1,14 +1,18 @@
 import {User} from "@heroui/user";
 import {Avatar} from "@heroui/avatar";
 import SecurityContext from "@/context/SecurityContext.ts";
+import * as React from "react";
 import {useContext} from "react";
 import {useNavigate} from "react-router-dom";
+import {ChevronDown, ChevronUp} from "lucide-react";
 
 interface SidebarUserProfileProps {
     isOpen: boolean;
+    setDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    dropdownOpen: boolean;
 }
 
-export default function SidebarUserProfile({isOpen}: SidebarUserProfileProps) {
+export default function SidebarUserProfile({isOpen, dropdownOpen, setDropdownOpen}: SidebarUserProfileProps) {
     const {loggedInUser} = useContext(SecurityContext);
     const navigate = useNavigate();
 
@@ -40,6 +44,18 @@ export default function SidebarUserProfile({isOpen}: SidebarUserProfileProps) {
                     wrapper: "flex-1 min-w-0"
                 }}
             />
+            {dropdownOpen ? (
+                <ChevronUp onClick={(e) => {
+                    e.stopPropagation();
+                    setDropdownOpen(!dropdownOpen);
+                }}/>
+            ) : (
+                <ChevronDown onClick={(e) => {
+                    e.stopPropagation();
+                    setDropdownOpen(!dropdownOpen);
+                }}/>
+            )}
+
         </div>
     );
 }
