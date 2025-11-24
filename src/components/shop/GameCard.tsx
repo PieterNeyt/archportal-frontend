@@ -63,8 +63,7 @@ export function GameCard({title, description, image, price, gameId, onAddToCart,
             }}
         >
             <Card
-                isHoverable
-                className={"py-0 w-[250px] h-[380px] sm:w-[300px] bg-black/30 backdrop-blur-xl border border-white/10 hover:border-white/20 hover:bg-black/40 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl overflow-hidden"}
+                className={"py-0 w-[250px] h-[380px] sm:w-[300px] bg-black/30 backdrop-blur-xl border border-white/10 hover:border-purple-500/50 hover:bg-black/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/20 overflow-hidden"}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
             >
