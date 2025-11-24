@@ -20,7 +20,7 @@ export function CreateGameStudioForm() {
         mode: "onChange",
     });
 
-    const onSubmit = (data: CreateGameStudioValues) => {
+    const onSubmit = async (data: CreateGameStudioValues) => {
         AddGameStudio(data);
 
         if (isPending) {

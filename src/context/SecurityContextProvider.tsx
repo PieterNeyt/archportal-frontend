@@ -5,6 +5,7 @@ import {isExpired} from "react-jwt";
 import SecurityContext from "@/context/SecurityContext.ts";
 import {User} from "@/model/user.ts";
 import {useProfile} from "@/hooks/useProfile.ts"
+import {useGameStudioStatus} from "@/hooks/useGameStudio.ts";
 
 const keycloakConfig = {
     url: import.meta.env.VITE_KC_URL,
@@ -18,16 +19,17 @@ export default function SecurityContextProvider({children}: PropsWithChildren) {
     const [loggedInUser, setLoggedInUser] = useState<User | undefined>(undefined);
     const [isInitialised, setIsInitialised] = useState(false);
     const {profile, refetch} = useProfile();
+    const {gameStudioStatus, refetch: refetchStudio} = useGameStudioStatus();
 
     useEffect(() => {
         keycloak.init({onLoad: "check-sso"})
     }, []);
 
     useEffect(() => {
-        if (!profile) return;
+        if (!profile || !gameStudioStatus) return;
         const roles = keycloak.tokenParsed?.realm_access?.roles ?? [];
-        setLoggedInUser({...profile, roles});
-    }, [profile]);
+        setLoggedInUser({...profile, ...gameStudioStatus, roles});
+    }, [gameStudioStatus, profile]);
 
     keycloak.onReady = () => {
         setIsInitialised(true);
@@ -37,6 +39,7 @@ export default function SecurityContextProvider({children}: PropsWithChildren) {
         addAccessTokenToAuthHeader(keycloak.token);
         try {
             await refetch();
+            await refetchStudio();
         } catch (e) {
             console.error("Failed to fetch profile", e);
         }

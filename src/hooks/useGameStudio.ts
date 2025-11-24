@@ -1,6 +1,6 @@
-import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {CreateGameStudio} from "@/model/createGameStudio.ts";
-import {AddGameStudio} from "@/service/gameStudioService.ts";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {AddGameStudio, getMyStudioStatus} from "@/service/gameStudioService.ts";
+import {CreateGameStudio} from "@/model/GameStudio.ts";
 
 
 export function useAddGameStudio() {
@@ -23,4 +23,13 @@ export function useAddGameStudio() {
         isError,
         AddGameStudio: mutate
     }
+}
+
+export function useGameStudioStatus() {
+    const {isLoading, isError, refetch, data: gameStudioStatus} = useQuery({
+        queryKey: ["gameStudioStatus"],
+        queryFn: () => getMyStudioStatus(),
+        enabled: false
+    })
+    return {isLoading, isError, refetch, gameStudioStatus}
 }
