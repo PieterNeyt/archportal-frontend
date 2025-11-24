@@ -1,4 +1,4 @@
-import {useGames} from "@/hooks/useGames.ts";
+import {useGame} from "@/hooks/useGame.ts";
 import {useCart} from "@/hooks/useCart.ts";
 import {useCheckout} from "@/hooks/useCheckout.ts";
 import {GameCard} from "@/components/shop/GameCard.tsx";
@@ -13,7 +13,7 @@ import {Badge} from "@heroui/badge";
 const SKELETON_COUNT = 10;
 
 export function ShopPage() {
-    const {isError, isLoading, refetch, games} = useGames();
+    const {isError, isLoading, refetch, games} = useGame();
     const {cart, addToCart, removeFromCart, isAddingToCart, itemCount} = useCart();
     const {checkout, isCheckingOut} = useCheckout();
 
@@ -38,7 +38,7 @@ export function ShopPage() {
                             variant="flat"
                             onPress={() => setIsCartOpen(true)}
                         >
-                            <ShoppingCart size={24} />
+                            <ShoppingCart size={24}/>
                         </Button>
                     </Badge>
                 </div>
