@@ -38,7 +38,7 @@ export function GameCardToolTipContent({
 
             <div className={"flex justify-between items-start mb-2"}>
                 <h4 className={"text-xl font-bold text-card-foreground line-clamp-2"}>{title}</h4>
-                <p className={"text-xl font-extrabold text-primary ml-4 shrink-0"}>{price}</p>
+                <p className={"text-xl font-extrabold text-primary ml-4 shrink-0"}>€{price}</p>
             </div>
 
             <p className={"text-sm text-muted-foreground line-clamp-4"}>

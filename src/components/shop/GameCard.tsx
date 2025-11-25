@@ -1,20 +1,26 @@
 import {Card, CardBody, CardFooter, CardHeader} from "@heroui/card";
 import {Image} from "@heroui/image";
-import {useCallback, useEffect, useRef, useState} from "react";
-import {Gamepad2} from "lucide-react";
+import {useCallback, useContext, useEffect, useRef, useState} from "react";
+import {Gamepad2, ShoppingCart} from "lucide-react";
 import {Tooltip} from "@heroui/tooltip";
 import {GameCardToolTipContent} from "@/components/shop/GameCardToolTipContent.tsx";
+import {Button} from "@heroui/button";
+import SecurityContext from "@/context/SecurityContext.ts";
 
 interface ShopCardProps {
     title: string;
     description: string;
     image: string | null;
     price: number;
+    gameId: string;
+    onAddToCart: (gameId: string) => void;
+    isAddingToCart: boolean;
 }
 
-export function GameCard({title, description, image, price}: ShopCardProps) {
+export function GameCard({title, description, image, price, gameId, onAddToCart, isAddingToCart}: ShopCardProps) {
     const [imageFailed, setImageFailed] = useState(false);
     const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+    const {isAuthenticated, login} = useContext(SecurityContext);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
@@ -43,6 +49,13 @@ export function GameCard({title, description, image, price}: ShopCardProps) {
 
         setIsTooltipOpen(false);
     }, []);
+
+    const addToCart = () => {
+        if (isAuthenticated())
+            onAddToCart(gameId);
+        else
+            login();
+    }
 
     return (
         <Tooltip
@@ -84,17 +97,21 @@ export function GameCard({title, description, image, price}: ShopCardProps) {
                         </div>
                     )}
                 </CardBody>
-
-                <div className="flex flex-col flex-1 backdrop-blur-xl bg-black/20">
-                    <CardHeader className={"pt-4 px-4 pb-2 flex-col items-start"}>
-                        <h4 className={"font-bold text-lg text-white line-clamp-2 w-full"}>{title}</h4>
-                    </CardHeader>
-
-                    <CardFooter className={"pt-2 px-4 pb-4 flex-col items-start mt-auto"}>
-                        <p className={"text-xs text-white/50 mb-1"}>Price:</p>
-                        <p className={"text-2xl font-bold text-white"}>€{price}</p>
-                    </CardFooter>
-                </div>
+                <CardHeader className={"pt-2 px-4 flex-col items-start"}>
+                    <h4 className={"font-bold text-large truncate w-full"}>{title}</h4>
+                    <p className={"text-xl font-bold text-primary"}>€{price.toFixed(2)}</p>
+                </CardHeader>
+                <CardFooter className={"pt-0 px-4 pb-4"}>
+                    <Button
+                        color="primary"
+                        className="w-full"
+                        startContent={<ShoppingCart size={18}/>}
+                        onPress={addToCart}
+                        isLoading={isAddingToCart}
+                    >
+                        Toevoegen
+                    </Button>
+                </CardFooter>
             </Card>
         </Tooltip>
     )
