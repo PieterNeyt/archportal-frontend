@@ -2,18 +2,7 @@ import {Card, CardBody, CardFooter, CardHeader} from "@heroui/card";
 import {Button} from "@heroui/button";
 import {ShoppingCart, Trash2, X, Gamepad2} from "lucide-react";
 import {Image} from "@heroui/image";
-
-interface Game {
-    id: string;
-    title: string;
-    price: number;
-    imageUrl?: string;
-}
-
-interface Cart {
-    items: Game[];
-    totalPrice: number;
-}
+import { Cart } from "@/model/shop";
 
 interface ShoppingCartProps {
     cart?: Cart;
