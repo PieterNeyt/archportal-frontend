@@ -9,3 +9,9 @@ export interface GameStudioStatus {
     studioId: string | undefined;
     name: string | undefined;
 }
+
+export interface GameStudio {
+    ownerId: string;
+    name: string;
+    studioId: string;
+}

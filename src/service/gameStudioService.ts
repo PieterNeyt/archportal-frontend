@@ -1,9 +1,9 @@
 import axios from "axios";
-import {CreateGameStudio, GameStudioStatus} from "@/model/GameStudio.ts";
+import {CreateGameStudio, GameStudio, GameStudioStatus} from "@/model/GameStudio.ts";
 
 
-export async function AddGameStudio(newGameStudio: CreateGameStudio) {
-    const {data: gameStudio} = await axios.post<CreateGameStudio>(`/api/gamestudio`, newGameStudio)
+export async function AddGameStudio(newGameStudio: CreateGameStudio): Promise<GameStudio> {
+    const {data: gameStudio} = await axios.post<GameStudio>(`/api/gamestudio`, newGameStudio)
     return gameStudio
 }
 

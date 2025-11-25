@@ -1,9 +1,13 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {AddGameStudio, getMyStudioStatus} from "@/service/gameStudioService.ts";
 import {CreateGameStudio} from "@/model/GameStudio.ts";
+import {useContext} from "react";
+import SecurityContext from "@/context/SecurityContext.ts";
 
 
 export function useAddGameStudio() {
+    const {updateGameStudioStatus} = useContext(SecurityContext);
+
     const queryClient = useQueryClient()
     const {
         mutate,
@@ -15,7 +19,10 @@ export function useAddGameStudio() {
             mutationFn: (newGameStudio: CreateGameStudio) => {
                 return AddGameStudio(newGameStudio)
             },
-            onSuccess: () => queryClient.invalidateQueries({queryKey: ['GameStudio']}),
+            onSuccess: (createdGame) => {
+                updateGameStudioStatus(createdGame);
+                queryClient.invalidateQueries({queryKey: ['GameStudio']});
+            },
         })
 
     return {

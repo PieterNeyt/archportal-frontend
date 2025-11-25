@@ -6,6 +6,7 @@ import SecurityContext from "@/context/SecurityContext.ts";
 import {User} from "@/model/user.ts";
 import {useProfile} from "@/hooks/useProfile.ts"
 import {useGameStudioStatus} from "@/hooks/useGameStudio.ts";
+import {GameStudio} from "@/model/GameStudio.ts";
 
 const keycloakConfig = {
     url: import.meta.env.VITE_KC_URL,
@@ -74,9 +75,24 @@ export default function SecurityContextProvider({children}: PropsWithChildren) {
         else return false;
     }
 
+    async function updateGameStudioStatus(gameStudio: GameStudio) {
+        try {
+            if (!loggedInUser) return;
+            if (gameStudio) {
+                setLoggedInUser({
+                    ...loggedInUser,
+                    hasStudio: true,
+                    name: gameStudio.name
+                })
+            }
+        } catch (e) {
+            console.error("Failed to update game studio", e);
+        }
+    }
+
     return (
         <SecurityContext.Provider
-            value={{isInitialised, isAuthenticated, loggedInUser, login, logout}}
+            value={{isInitialised, isAuthenticated, loggedInUser, login, logout, updateGameStudioStatus}}
         >
             {children}
         </SecurityContext.Provider>

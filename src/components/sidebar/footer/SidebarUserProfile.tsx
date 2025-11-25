@@ -5,6 +5,7 @@ import * as React from "react";
 import {useContext} from "react";
 import {useNavigate} from "react-router-dom";
 import {ChevronDown, ChevronUp} from "lucide-react";
+import {Button} from "@heroui/button";
 
 interface SidebarUserProfileProps {
     isOpen: boolean;
@@ -18,7 +19,7 @@ export default function SidebarUserProfile({isOpen, dropdownOpen, setDropdownOpe
 
     return (
         <div
-            className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent transition-all group cursor-pointer"
+            className="flex items-center justify-between gap-3 p-2 rounded-lg hover:bg-accent transition-all group cursor-pointer"
             onClick={(e) => {
                 e.stopPropagation()
                 navigate("#profile")
@@ -44,17 +45,18 @@ export default function SidebarUserProfile({isOpen, dropdownOpen, setDropdownOpe
                     wrapper: "flex-1 min-w-0"
                 }}
             />
-            {dropdownOpen ? (
-                <ChevronUp onClick={(e) => {
-                    e.stopPropagation();
-                    setDropdownOpen(!dropdownOpen);
-                }}/>
-            ) : (
-                <ChevronDown onClick={(e) => {
-                    e.stopPropagation();
-                    setDropdownOpen(!dropdownOpen);
-                }}/>
-            )}
+            {isOpen && <Button onPress={() => setDropdownOpen(!dropdownOpen)}
+                               isIconOnly
+                               className={"rounded-xl bg-white/10 text-white border border-white/20 backdrop-blur-sm shadow-lg hover:bg-white/15 hover:border-white/30 hover:shadow-xl hover:scale-105 transition-all duration-200 font-semibold"}
+                               aria-expanded={dropdownOpen}
+                               aria-label={"Toggle profile menu"}
+            >
+                {dropdownOpen ? (
+                    <ChevronUp size={20}/>
+                ) : (
+                    <ChevronDown size={20}/>
+                )}
+            </Button>}
 
         </div>
     );

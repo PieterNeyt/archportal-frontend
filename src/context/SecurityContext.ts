@@ -1,5 +1,6 @@
 import {createContext} from "react";
 import {User} from "@/model/user.ts";
+import {GameStudio} from "@/model/GameStudio.ts";
 
 export type SecurityContext = {
     isInitialised: boolean;
@@ -7,6 +8,7 @@ export type SecurityContext = {
     loggedInUser: User | undefined;
     login: () => void;
     logout: () => void;
+    updateGameStudioStatus: (gameStudio: GameStudio) => void;
 }
 
 export default createContext<SecurityContext>({
@@ -16,5 +18,7 @@ export default createContext<SecurityContext>({
     login: () => {
     },
     logout: () => {
+    },
+    updateGameStudioStatus: () => {
     }
 })
