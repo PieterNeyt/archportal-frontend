@@ -46,6 +46,6 @@ export async function checkout(): Promise<PaymentCreation> {
 }
 
 export async function AddGame(newGame: CreateGame) {
-    const {data: game} = await axios.post<CreateGame>(`/api/game`, newGame)
+    const {data: game} = await axios.post<CreateGame>(`/api/games`, newGame)
     return game
 }

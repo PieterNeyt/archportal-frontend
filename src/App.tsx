@@ -5,7 +5,8 @@ import {CreateGameStudioPage} from "@/pages/CreateStudioPage.tsx";
 import {ShopPage} from "@/pages/shop.tsx";
 import {HeroUIProvider} from "@heroui/system";
 import PaymentReturnPage from "@/pages/PaymentReturnPage.tsx";
-import { LibraryPage } from "./pages/LibraryPage";
+import {LibraryPage} from "@/pages/LibraryPage.tsx";
+import {CreateGamePage} from "@/pages/CreateGamePage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ function App() {
                         <Route path="/" element={<Navigate to={"/shop"}/>}/>
                         <Route element={<LibraryPage/>} path="/library"/>
                         <Route element={<CreateGameStudioPage/>} path="/create/gamestudio"/>
+                        <Route element={<CreateGamePage/>} path="/create/game"/>
                     </Routes>
                 </DefaultLayout>
             </HeroUIProvider>

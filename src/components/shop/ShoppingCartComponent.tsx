@@ -1,14 +1,8 @@
 import {Card, CardBody, CardFooter, CardHeader} from "@heroui/card";
 import {Button} from "@heroui/button";
-import {ShoppingCart, Trash2, X, Gamepad2} from "lucide-react";
+import {Gamepad2, ShoppingCart, Trash2, X} from "lucide-react";
 import {Image} from "@heroui/image";
-
-interface Game {
-    id: string;
-    title: string;
-    price: number;
-    imageUrl?: string;
-}
+import {Game} from "@/model/game";
 
 interface Cart {
     items: Game[];
@@ -80,7 +74,8 @@ export function ShoppingCartComponent({
                                                     removeWrapper
                                                 />
                                             ) : (
-                                                <div className="w-20 h-20 flex items-center justify-center bg-muted rounded">
+                                                <div
+                                                    className="w-20 h-20 flex items-center justify-center bg-muted rounded">
                                                     <Gamepad2 size={32} className="text-muted-foreground"/>
                                                 </div>
                                             )}
