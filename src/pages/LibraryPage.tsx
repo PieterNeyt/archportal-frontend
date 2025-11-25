@@ -72,7 +72,7 @@ export function LibraryPage() {
                 {isError && (
                     <div className="text-center py-20">
                         <Gamepad2 size={64} className="text-white/40 mx-auto mb-4"/>
-                        <p className="text-white/60 text-xl">Er is iets misgegaan bij het laden van je library</p>
+                        <p className="text-white/60 text-xl">Oops! Something went wrong while loading your library</p>
                     </div>
                 )}
 
@@ -96,7 +96,7 @@ export function LibraryPage() {
                             {searchQuery ? "Geen games gevonden" : "Je library is nog leeg"}
                         </p>
                         {!searchQuery && (
-                            <p className="text-white/40">Bezoek de shop om games toe te voegen!</p>
+                            <p className="text-white/40">Visit the shop to add games to your library!</p>
                         )}
                     </div>
                 )}
