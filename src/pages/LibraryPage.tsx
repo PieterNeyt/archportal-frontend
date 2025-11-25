@@ -5,6 +5,7 @@ import {Gamepad2, Search, Grid3x3, List} from "lucide-react";
 import {useLibrary} from "@/hooks/useLibrary";
 import {LibraryGameCard} from "@/components/library/LibraryGameCard";
 import {LibrarySkeletonCard} from "@/components/library/LibrarySkeletonCard";
+import {inputClasses} from "@/styles/customClasses.ts";
 
 export function LibraryPage() {
     const {isLoading, isError, games} = useLibrary();
@@ -36,10 +37,7 @@ export function LibraryPage() {
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             startContent={<Search size={20} className="text-white/40"/>}
-                            classNames={{
-                                input: "bg-transparent text-white",
-                                inputWrapper: "bg-black/30 backdrop-blur-xl border border-white/10 hover:border-white/20"
-                            }}
+                            classNames={inputClasses}
                         />
                     </div>
 

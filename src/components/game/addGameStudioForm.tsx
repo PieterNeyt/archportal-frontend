@@ -10,6 +10,7 @@ import {useAddGame} from "@/hooks/useGame.ts";
 import {useState} from "react";
 import {Image, Select, SelectItem} from "@heroui/react";
 import {GameGenre} from "@/model/GameGenre.ts";
+import {inputClasses, selectClasses} from "@/styles/customClasses.ts";
 
 
 export function CreateGameForm() {
@@ -42,21 +43,15 @@ export function CreateGameForm() {
         navigate("/shop");
     };
 
-    const inputClasses = {
-        input: "bg-white/5 text-white placeholder:text-white/40",
-        inputWrapper: "bg-white/5 border border-white/10 rounded-xl backdrop-blur-sm transition-all duration-200",
-        label: "text-white/90 font-medium text-sm",
-    };
-
     return (
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center w-full">
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="w-full max-w-lg flex flex-col gap-6 p-8 bg-black/20 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl"
+                className="w-full max-w-3xl flex flex-col gap-8 p-10 bg-black/20 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl"
             >
-                <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex flex-col md:flex-row gap-6">
                     <div
-                        className="w-40 h-40 bg-black border border-white/10 rounded-xl flex justify-center items-center overflow-hidden flex-shrink-0"
+                        className="w-48 h-48 bg-black border border-white/10 rounded-xl flex justify-center items-center overflow-hidden flex-shrink-0"
                     >
                         {imagePreview ? (
                             <Image
@@ -69,7 +64,7 @@ export function CreateGameForm() {
                             <span className="text-white/40 text-sm">Preview</span>
                         )}
                     </div>
-                    <div className="flex-1 flex flex-col gap-4">
+                    <div className="flex-1 flex flex-col gap-5">
                         <Input
                             isRequired
                             errorMessage={errors.title?.message}
@@ -101,12 +96,13 @@ export function CreateGameForm() {
                     labelPlacement="outside"
                     placeholder="Describe your game"
                     type="textarea"
+                    minRows={4}
                     classNames={inputClasses}
                     {...register("description")}
                 />
 
                 {/* Price and Genre side by side */}
-                <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex flex-col md:flex-row gap-6">
                     <Input
                         isRequired
                         errorMessage={errors.price?.message}
@@ -123,7 +119,7 @@ export function CreateGameForm() {
                         labelPlacement="outside"
                         placeholder="Select a genre"
                         errorMessage={errors.genre?.message}
-                        classNames={inputClasses}
+                        classNames={selectClasses}
                         {...register("genre")}
                     >
                         {Object.values(GameGenre).map((genre) => (
@@ -149,7 +145,7 @@ export function CreateGameForm() {
                         color="primary"
                         type="submit"
                         disabled={isPending}
-                        className="px-12 py-6 rounded-xl bg-white/10 text-white border border-white/20 backdrop-blur-sm shadow-lg hover:bg-white/15 hover:border-white/30 hover:shadow-xl hover:scale-105 transition-all duration-200 font-semibold"
+                        className="px-16 py-7 rounded-xl bg-white/10 text-white text-lg border border-white/20 backdrop-blur-sm shadow-lg hover:bg-white/15 hover:border-white/30 hover:shadow-xl hover:scale-105 transition-all duration-200 font-semibold"
                     >
                         {isPending ? <CircularProgress size="sm"/> : "Create Game"}
                     </Button>
