@@ -5,6 +5,7 @@ import {CreateGameStudioPage} from "@/pages/CreateStudioPage.tsx";
 import {ShopPage} from "@/pages/shop.tsx";
 import {HeroUIProvider} from "@heroui/system";
 import SecurityContextProvider from "@/context/SecurityContextProvider.tsx";
+import RouteGuardGameStudio from "@/components/security/RouteGuardGameStudio.tsx";
 
 const queryClient = new QueryClient();
 
@@ -17,7 +18,8 @@ function App() {
                         <Routes>
                             <Route element={<ShopPage/>} path="/shop"/>
                             <Route path="/" element={<Navigate to={"/shop"}/>}/>
-                            <Route element={<CreateGameStudioPage/>} path="/create/gamestudio"/>
+                            <Route element={<RouteGuardGameStudio><CreateGameStudioPage/></RouteGuardGameStudio>}
+                                   path="/create/gamestudio"/>
                         </Routes>
                     </DefaultLayout>
                 </SecurityContextProvider>
