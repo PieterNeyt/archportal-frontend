@@ -29,7 +29,7 @@ export const menuSections: MenuSection[] = [
     {
         title: 'Social',
         items: [
-            {icon: Users, label: 'Vrienden', href: '#friends'},
+            {icon: Users, label: 'Friends', href: '#friends'},
             {icon: MessageSquare, label: 'Chats', href: '#chats'},
             {icon: Gamepad2, label: 'Lobbys', href: '#lobbys'},
         ]

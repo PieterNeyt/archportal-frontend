@@ -20,11 +20,11 @@ export function LibraryPage() {
             <div className="max-w-[1800px] mx-auto">
                 {/* Header */}
                 <div className="mb-8">
-                    <h1 className="text-5xl font-bold mb-2 bg-gradient-to-r from-white via-purple-200 to-blue-200 bg-clip-text text-transparent">
-                        Mijn Library
+                    <h1 className="text-5xl font-bold mb-2 bg-gradient-to-r from-white via-purple-200 to-blue-200 bg-clip-text text-transparent pb-2">
+                        My Library
                     </h1>
                     <p className="text-white/60 text-lg">
-                        {games?.length || 0} games in je collectie
+                        {games?.length || 0} games in your collection
                     </p>
                 </div>
 
@@ -32,7 +32,7 @@ export function LibraryPage() {
                 <div className="mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
                     <div className="flex-1 max-w-md">
                         <Input
-                            placeholder="Zoek in je library..."
+                            placeholder="Search in your library..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             startContent={<Search size={20} className="text-white/40"/>}

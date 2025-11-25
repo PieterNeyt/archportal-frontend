@@ -114,7 +114,7 @@ export function LibraryGameCard({ game, viewMode }: LibraryGameCardProps) {
                     href={game.gameUrl}
                     target="_blank"
                 >
-                    Spelen
+                    Play
                 </Button>
             </CardFooter>
         </Card>

@@ -99,7 +99,7 @@ export function GameCard({title, description, image, price, gameId, onAddToCart,
                         onPress={() => onAddToCart(gameId)}
                         isLoading={isAddingToCart}
                     >
-                        Toevoegen
+                        Add
                     </Button>
                 </CardFooter>
             </Card>
