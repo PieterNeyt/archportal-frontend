@@ -4,6 +4,8 @@ import { Image } from "@heroui/image";
 import { Button } from "@heroui/button";
 import { Gamepad2, Play } from "lucide-react";
 import { LibraryGame } from "@/model/library";
+import { useStartSinglePlayerGame } from "@/hooks/useLobbies";
+
 
 interface LibraryGameCardProps {
     game: LibraryGame;
@@ -13,6 +15,7 @@ interface LibraryGameCardProps {
 export function LibraryGameCard({ game, viewMode }: LibraryGameCardProps) {
     const [imageFailed, setImageFailed] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+    const startGame = useStartSinglePlayerGame();
 
     if (viewMode === 'list') {
         return (
@@ -108,11 +111,22 @@ export function LibraryGameCard({ game, viewMode }: LibraryGameCardProps) {
                 </div>
                 <Button
                     color="primary"
-                    className="w-full"
                     startContent={<Play size={18} />}
-                    as="a"
-                    href={game.gameUrl}
-                    target="_blank"
+                    className="w-full"
+                    isLoading={startGame.isPending}
+                    onPress={() => {
+                        startGame.mutate(
+                            { gameId: game.id },
+                            {
+                                onSuccess: (resp) => {
+                                    window.location.href = resp.launchUrl;
+                                },
+                                onError: () => {
+                                    alert("Kon het spel niet starten.");
+                                }
+                            }
+                        );
+                    }}
                 >
                     Play
                 </Button>
