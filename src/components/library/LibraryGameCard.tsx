@@ -76,9 +76,10 @@ export function LibraryGameCard({game, viewMode}: LibraryGameCardProps) {
     }
     const handleStartGame = async () => {
         const response: SinglePlayerLaunchResponse = await startSinglePlayer(game.id)
-        if (!isError)
-            window.location.href = response.launchUrl;
-
+        if (!isError) {
+            window.open(response.launchUrl, "_blank", "noopener,noreferrer");
+            return;
+        }
         return alert("Er is een fout opgetreden bij het starten van het spel.");
 
     }
