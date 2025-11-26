@@ -1,4 +1,4 @@
-import {Coins, Gamepad2, Library, LucideIcon, MessageSquare, ShoppingCart, User, Users} from "lucide-react";
+import {Coins, Gamepad2, Library, LucideIcon, MessageSquare, Plus, ShoppingCart, User, Users} from "lucide-react";
 
 interface MenuItem {
     icon: LucideIcon;
@@ -37,7 +37,7 @@ export const menuSections: MenuSection[] = [
     {
         title: 'GameStudio',
         items: [
-            {icon: Gamepad2, label: 'Create Game', href: '/create/game'},
+            {icon: Plus, label: 'Create Game', href: '/create/game'},
         ]
     }
 ];

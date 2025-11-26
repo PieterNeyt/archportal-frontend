@@ -1,15 +1,14 @@
 import {ReactNode} from "react";
 import {GameLauncherSidebar} from "@/components/SiderBar/sidebar.tsx";
 import Starfield from "@/layouts/background.tsx";
-import {HeroUIProvider,} from "@heroui/system";
+import {HeroUIProvider} from "@heroui/system";
 import {ToastProvider} from "@heroui/toast";
-
 
 function DefaultLayout({children}: { children: ReactNode }) {
     return (
-        <div className="flex h-screen relative overflow-hidden">
+        <div className="flex h-screen relative overflow-hidden bg-black">
             <Starfield
-                starCount={1000}
+                starCount={1500}
                 starColor={[255, 255, 255]}
                 speedFactor={0.05}
             />
@@ -27,4 +26,5 @@ function DefaultLayout({children}: { children: ReactNode }) {
         </div>
     );
 }
+
 export default DefaultLayout;
