@@ -6,6 +6,11 @@ import { Gamepad2, Play } from "lucide-react";
 import { LibraryGame } from "@/model/library";
 import { useStartSinglePlayerGame } from "@/hooks/useLobbies";
 
+interface SinglePlayerLaunchResponse {
+    launchUrl: string;
+    lobbyId: string;
+    sessionId: string;
+}
 
 interface LibraryGameCardProps {
     game: LibraryGame;
@@ -15,7 +20,7 @@ interface LibraryGameCardProps {
 export function LibraryGameCard({ game, viewMode }: LibraryGameCardProps) {
     const [imageFailed, setImageFailed] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
-    const startGame = useStartSinglePlayerGame();
+    const {isPending,isError,startSinglePlayer} = useStartSinglePlayerGame();
 
     if (viewMode === 'list') {
         return (
@@ -73,7 +78,14 @@ export function LibraryGameCard({ game, viewMode }: LibraryGameCardProps) {
             </Card>
         );
     }
+    const handleStartGame = async () => {
+        const response:SinglePlayerLaunchResponse = await startSinglePlayer(game.id)
+        if (isError)
+            return <div>ERROR!!!!!</div>;
 
+        window.location.href = response.launchUrl;
+
+    }
     return (
         <Card
             className="bg-black/30 backdrop-blur-xl border border-white/10 hover:border-purple-500/50 hover:bg-black/50 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 hover:scale-[1.02] overflow-hidden group"
@@ -113,20 +125,8 @@ export function LibraryGameCard({ game, viewMode }: LibraryGameCardProps) {
                     color="primary"
                     startContent={<Play size={18} />}
                     className="w-full"
-                    isLoading={startGame.isPending}
-                    onPress={() => {
-                        startGame.mutate(
-                            { gameId: game.id },
-                            {
-                                onSuccess: (resp) => {
-                                    window.location.href = resp.launchUrl;
-                                },
-                                onError: () => {
-                                    alert("Kon het spel niet starten.");
-                                }
-                            }
-                        );
-                    }}
+                    isLoading={isPending}
+                    onPress={handleStartGame}
                 >
                     Play
                 </Button>
