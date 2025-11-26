@@ -5,12 +5,7 @@ import { Button } from "@heroui/button";
 import { Gamepad2, Play } from "lucide-react";
 import { LibraryGame } from "@/model/library";
 import { useStartSinglePlayerGame } from "@/hooks/useLobbies";
-
-interface SinglePlayerLaunchResponse {
-    launchUrl: string;
-    lobbyId: string;
-    sessionId: string;
-}
+import { SinglePlayerLaunchResponse } from "@/model/SinglePlayerLaunchResponse.ts";
 
 interface LibraryGameCardProps {
     game: LibraryGame;
@@ -81,7 +76,7 @@ export function LibraryGameCard({ game, viewMode }: LibraryGameCardProps) {
     const handleStartGame = async () => {
         const response:SinglePlayerLaunchResponse = await startSinglePlayer(game.id)
         if (isError)
-            return <div>ERROR!!!!!</div>;
+            return alert("Er is een fout opgetreden bij het starten van het spel.");
 
         window.location.href = response.launchUrl;
 
