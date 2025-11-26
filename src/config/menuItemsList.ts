@@ -33,5 +33,11 @@ export const menuSections: MenuSection[] = [
             {icon: MessageSquare, label: 'Chats', href: '#chats'},
             {icon: Gamepad2, label: 'Lobbys', href: '#lobbys'},
         ]
+    },
+    {
+        title: 'GameStudio',
+        items: [
+            {icon: Gamepad2, label: 'Create Game', href: '/create/game'},
+        ]
     }
 ];

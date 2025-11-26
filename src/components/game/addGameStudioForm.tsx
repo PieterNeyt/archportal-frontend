@@ -30,7 +30,6 @@ export function CreateGameForm() {
 
     const onSubmit = async (data: CreateGameValues) => {
         AddGame({studioId, ...data});
-
         if (isError) {
             addToast({
                 title: "Failed to create game",
@@ -121,9 +120,10 @@ export function CreateGameForm() {
                         errorMessage={errors.genre?.message}
                         classNames={selectClasses}
                         {...register("genre")}
+                        data-a11y-ignore="aria-hidden-focus"
                     >
                         {Object.values(GameGenre).map((genre) => (
-                            <SelectItem key={genre}>
+                            <SelectItem key={genre} textValue={genre+""}>
                                 {genre}
                             </SelectItem>
                         ))}
