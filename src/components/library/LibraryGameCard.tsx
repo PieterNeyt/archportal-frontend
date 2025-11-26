@@ -56,7 +56,7 @@ export function LibraryGameCard({ game, viewMode }: LibraryGameCardProps) {
                                 href={game.gameUrl}
                                 target="_blank"
                             >
-                                Spelen
+                                Play
                             </Button>
                             <Button
                                 variant="bordered"
@@ -82,7 +82,7 @@ export function LibraryGameCard({ game, viewMode }: LibraryGameCardProps) {
                     {(imageFailed || !game.imageUrl) ? (
                         <div className="w-full h-full flex flex-col items-center justify-center bg-white/5">
                             <Gamepad2 size={48} className="text-white/40 mb-2" />
-                            <p className="text-sm text-white/40">Geen afbeelding</p>
+                            <p className="text-sm text-white/40">No Image</p>
                         </div>
                     ) : (
                         <Image
