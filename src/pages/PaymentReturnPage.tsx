@@ -56,7 +56,7 @@ export default function PaymentReturnPage() {
                     {status === 'success' && (
                         <div className="mt-4 p-4 bg-green-50 rounded-lg w-full">
                             <p className="text-sm text-green-700">
-                                Je wordt automatisch doorgestuurd naar de shop...
+                                You will be redirected to the shop...
                             </p>
                         </div>
                     )}
@@ -65,16 +65,16 @@ export default function PaymentReturnPage() {
                         <div className="mt-4 flex gap-2">
                             <Button
                                 color="primary"
-                                onClick={() => window.location.href = '/shop'}
+                                onPress={() => window.location.href = '/shop'}
                             >
-                                Terug naar Shop
+                                Back to Shop
                             </Button>
                             <Button
                                 color="default"
                                 variant="bordered"
-                                onClick={() => window.location.reload()}
+                                onPress={() => window.location.reload()}
                             >
-                                Opnieuw Proberen
+                                Try Again
                             </Button>
                         </div>
                     )}
