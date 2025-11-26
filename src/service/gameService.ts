@@ -1,3 +1,4 @@
+import {CreateGame} from "@/model/createGame";
 import {Game} from "@/model/game.ts";
 import {Cart, PaymentCreation} from "@/model/shop";
 import axios from "axios";
@@ -42,4 +43,9 @@ export async function checkout(): Promise<PaymentCreation> {
         params: {profileId: PROFILE_ID}
     });
     return payment;
+}
+
+export async function AddGame(newGame: CreateGame) {
+    const {data: game} = await axios.post<CreateGame>(`/api/games`, newGame)
+    return game
 }

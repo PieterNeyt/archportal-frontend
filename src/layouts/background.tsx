@@ -39,16 +39,85 @@ export default function Starfield(props: Props) {
             }));
         };
 
-        let stars = makeStars(starCount);
+        const stars = makeStars(starCount);
 
-        // Clear met gradient
         const clear = () => {
-            const gradient = c.createLinearGradient(0, 0, 0, h);
-            gradient.addColorStop(0, '#4B0082'); // indigo / paars
-            gradient.addColorStop(1, 'BLUE');
+            const gradient = c.createLinearGradient(0, 0, w, h);
+            gradient.addColorStop(0, "rgba(60, 20, 100, 1)");     // lighter purple
+            gradient.addColorStop(0.5, "rgba(35, 15, 80, 1)");    // lighter indigo core
+            gradient.addColorStop(1, "rgba(15, 25, 70, 1)");      // lighter blue
             c.fillStyle = gradient;
             c.fillRect(0, 0, w, h);
+
+            // --- NEBULA BLOBS - lichter en meer gecentreerd --- //
+
+            // Purple nebula (top-left quadrant center)
+            let neb = c.createRadialGradient(
+                w * 0.25, h * 0.25, 0,
+                w * 0.25, h * 0.25, w * 0.30
+            );
+            neb.addColorStop(0, "rgba(180, 100, 255, 0.4)");  // meer opacity
+            neb.addColorStop(0.5, "rgba(180, 100, 255, 0.2)");
+            neb.addColorStop(1, "rgba(180, 100, 255, 0)");
+            c.fillStyle = neb;
+            c.fillRect(0, 0, w, h);
+
+            // Blue nebula (bottom-right quadrant center)
+            neb = c.createRadialGradient(
+                w * 0.75, h * 0.75, 0,
+                w * 0.75, h * 0.75, w * 0.28
+            );
+            neb.addColorStop(0, "rgba(100, 180, 255, 0.35)");
+            neb.addColorStop(0.5, "rgba(100, 180, 255, 0.18)");
+            neb.addColorStop(1, "rgba(100, 180, 255, 0)");
+            c.fillStyle = neb;
+            c.fillRect(0, 0, w, h);
+
+            // Indigo nebula (center)
+            neb = c.createRadialGradient(
+                w * 0.50, h * 0.50, 0,
+                w * 0.50, h * 0.50, w * 0.22
+            );
+            neb.addColorStop(0, "rgba(140, 120, 255, 0.25)");
+            neb.addColorStop(0.5, "rgba(140, 120, 255, 0.12)");
+            neb.addColorStop(1, "rgba(140, 120, 255, 0)");
+            c.fillStyle = neb;
+            c.fillRect(0, 0, w, h);
+
+            // Violet nebula (right-middle quadrant)
+            neb = c.createRadialGradient(
+                w * 0.75, h * 0.50, 0,
+                w * 0.75, h * 0.50, w * 0.26
+            );
+            neb.addColorStop(0, "rgba(210, 120, 255, 0.3)");
+            neb.addColorStop(0.5, "rgba(210, 120, 255, 0.15)");
+            neb.addColorStop(1, "rgba(210, 120, 255, 0)");
+            c.fillStyle = neb;
+            c.fillRect(0, 0, w, h);
+
+            // Cyan nebula (left-middle quadrant)
+            neb = c.createRadialGradient(
+                w * 0.25, h * 0.50, 0,
+                w * 0.25, h * 0.50, w * 0.24
+            );
+            neb.addColorStop(0, "rgba(100, 255, 255, 0.22)");
+            neb.addColorStop(0.5, "rgba(100, 255, 255, 0.11)");
+            neb.addColorStop(1, "rgba(100, 255, 255, 0)");
+            c.fillStyle = neb;
+            c.fillRect(0, 0, w, h);
+
+            // Pink nebula (bottom-left quadrant)
+            neb = c.createRadialGradient(
+                w * 0.25, h * 0.75, 0,
+                w * 0.25, h * 0.75, w * 0.25
+            );
+            neb.addColorStop(0, "rgba(255, 120, 200, 0.28)");
+            neb.addColorStop(0.5, "rgba(255, 120, 200, 0.14)");
+            neb.addColorStop(1, "rgba(255, 120, 200, 0)");
+            c.fillStyle = neb;
+            c.fillRect(0, 0, w, h);
         };
+
 
         const putPixel = (x: number, y: number, brightness: number) => {
             c.fillStyle = `rgba(${starColor[0]}, ${starColor[1]}, ${starColor[2]}, ${brightness})`;
@@ -56,7 +125,7 @@ export default function Starfield(props: Props) {
         };
 
         const moveStars = (distance: number) => {
-            for (let s of stars) {
+            for (const s of stars) {
                 s.z -= distance;
                 if (s.z <= 1) s.z += 1000;
             }
@@ -79,7 +148,7 @@ export default function Starfield(props: Props) {
             const cx = w / 2;
             const cy = h / 2;
 
-            for (let star of stars) {
+            for (const star of stars) {
                 const x = cx + star.x / (star.z * 0.001);
                 const y = cy + star.y / (star.z * 0.001);
 

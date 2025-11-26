@@ -1,10 +1,10 @@
-import {useState} from "react";
-import {Card, CardBody, CardFooter} from "@heroui/card";
-import {Image} from "@heroui/image";
-import {Button} from "@heroui/button";
-import {Gamepad2, Play} from "lucide-react";
-import {LibraryGame} from "@/model/library";
-import {useStartSinglePlayerGame} from "@/hooks/useLobbies";
+import { useState } from "react";
+import { Card, CardBody, CardFooter } from "@heroui/card";
+import { Image } from "@heroui/image";
+import { Button } from "@heroui/button";
+import { Gamepad2, Play } from "lucide-react";
+import { LibraryGame } from "@/model/library";
+import {useStartSinglePlayerGame} from "@/hooks/useLobbies.ts";
 import {SinglePlayerLaunchResponse} from "@/model/SinglePlayerLaunchResponse.ts";
 
 interface LibraryGameCardProps {
@@ -12,7 +12,7 @@ interface LibraryGameCardProps {
     viewMode: 'grid' | 'list';
 }
 
-export function LibraryGameCard({game, viewMode}: LibraryGameCardProps) {
+export function LibraryGameCard({ game, viewMode }: LibraryGameCardProps) {
     const [imageFailed, setImageFailed] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const {isPending, isError, startSinglePlayer} = useStartSinglePlayerGame();
@@ -28,7 +28,7 @@ export function LibraryGameCard({game, viewMode}: LibraryGameCardProps) {
                     <div className="w-48 h-full relative overflow-hidden">
                         {(imageFailed || !game.imageUrl) ? (
                             <div className="w-full h-full flex items-center justify-center bg-white/5">
-                                <Gamepad2 size={48} className="text-white/40"/>
+                                <Gamepad2 size={48} className="text-white/40" />
                             </div>
                         ) : (
                             <Image
@@ -40,9 +40,8 @@ export function LibraryGameCard({game, viewMode}: LibraryGameCardProps) {
                             />
                         )}
                         {isHovered && (
-                            <div
-                                className="absolute inset-0 bg-black/60 flex items-center justify-center transition-all duration-300">
-                                <Play className="text-white" size={48}/>
+                            <div className="absolute inset-0 bg-black/60 flex items-center justify-center transition-all duration-300">
+                                <Play className="text-white" size={48} />
                             </div>
                         )}
                     </div>
@@ -54,13 +53,13 @@ export function LibraryGameCard({game, viewMode}: LibraryGameCardProps) {
                         <div className="flex gap-2">
                             <Button
                                 color="primary"
-                                startContent={<Play size={18}/>}
+                                startContent={<Play size={18} />}
                                 className="font-semibold"
                                 as="a"
                                 href={game.gameUrl}
                                 target="_blank"
                             >
-                                Spelen
+                                Play
                             </Button>
                             <Button
                                 variant="bordered"
@@ -83,6 +82,7 @@ export function LibraryGameCard({game, viewMode}: LibraryGameCardProps) {
         return alert("Er is een fout opgetreden bij het starten van het spel.");
 
     }
+
     return (
         <Card
             className="bg-black/30 backdrop-blur-xl border border-white/10 hover:border-purple-500/50 hover:bg-black/50 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 hover:scale-[1.02] overflow-hidden group"
@@ -93,8 +93,8 @@ export function LibraryGameCard({game, viewMode}: LibraryGameCardProps) {
                 <div className="h-48 relative overflow-hidden">
                     {(imageFailed || !game.imageUrl) ? (
                         <div className="w-full h-full flex flex-col items-center justify-center bg-white/5">
-                            <Gamepad2 size={48} className="text-white/40 mb-2"/>
-                            <p className="text-sm text-white/40">Geen afbeelding</p>
+                            <Gamepad2 size={48} className="text-white/40 mb-2" />
+                            <p className="text-sm text-white/40">No Image</p>
                         </div>
                     ) : (
                         <Image
@@ -107,9 +107,8 @@ export function LibraryGameCard({game, viewMode}: LibraryGameCardProps) {
                         />
                     )}
                     {isHovered && (
-                        <div
-                            className="absolute inset-0 bg-black/60 flex items-center justify-center transition-all duration-300">
-                            <Play className="text-white" size={64}/>
+                        <div className="absolute inset-0 bg-black/60 flex items-center justify-center transition-all duration-300">
+                            <Play className="text-white" size={64} />
                         </div>
                     )}
                 </div>
@@ -125,6 +124,7 @@ export function LibraryGameCard({game, viewMode}: LibraryGameCardProps) {
                     className="w-full"
                     isLoading={isPending}
                     onPress={handleStartGame}
+                    target="_blank"
                 >
                     Play
                 </Button>
