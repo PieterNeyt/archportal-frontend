@@ -23,13 +23,13 @@ export const menuSections: MenuSection[] = [
         title: 'My Profile',
         items: [
             {icon: User, label: 'Profile', href: '#profile'},
-            {icon: Library, label: 'Library', href: '#library'},
+            {icon: Library, label: 'Library', href: '/library'},
         ]
     },
     {
         title: 'Social',
         items: [
-            {icon: Users, label: 'Vrienden', href: '#friends'},
+            {icon: Users, label: 'Friends', href: '#friends'},
             {icon: MessageSquare, label: 'Chats', href: '#chats'},
             {icon: Gamepad2, label: 'Lobbys', href: '#lobbys'},
         ]
