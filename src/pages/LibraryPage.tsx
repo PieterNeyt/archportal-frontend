@@ -1,12 +1,12 @@
 import {useState} from "react";
 import {Button} from "@heroui/button";
 import {Input} from "@heroui/input";
-import {Gamepad2, Search, Grid3x3, List} from "lucide-react";
+import {Gamepad2, Grid3x3, List, Search} from "lucide-react";
 import {useLibrary} from "@/hooks/useLibrary";
 import {LibraryGameCard} from "@/components/library/LibraryGameCard";
 import {LibrarySkeletonCard} from "@/components/library/LibrarySkeletonCard";
 
-export function LibraryPage() {
+export default function LibraryPage() {
     const {isLoading, isError, games} = useLibrary();
     const [searchQuery, setSearchQuery] = useState("");
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');

@@ -12,7 +12,7 @@ import {Badge} from "@heroui/badge";
 
 const SKELETON_COUNT = 10;
 
-export function ShopPage() {
+export default function ShopPage() {
     const {isError, isLoading, refetch, games} = useGames();
     const {cart, addToCart, removeFromCart, isAddingToCart, itemCount} = useCart();
     const {checkout, isCheckingOut} = useCheckout();

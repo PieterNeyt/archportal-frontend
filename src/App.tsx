@@ -2,12 +2,12 @@ import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {Navigate, Route, Routes} from "react-router-dom";
 import DefaultLayout from "@/layouts/default.tsx";
 import {CreateGameStudioPage} from "@/pages/CreateStudioPage.tsx";
-import {ShopPage} from "@/pages/shop.tsx";
 import {HeroUIProvider} from "@heroui/system";
 import SecurityContextProvider from "@/context/SecurityContextProvider.tsx";
 import RouteGuardGameStudio from "@/components/security/RouteGuardGameStudio.tsx";
 import PaymentReturnPage from "@/pages/PaymentReturnPage.tsx";
-import { LibraryPage } from "./pages/LibraryPage";
+import LibraryPage from "./pages/LibraryPage";
+import ShopPage from "@/pages/shop.tsx";
 
 const queryClient = new QueryClient();
 
