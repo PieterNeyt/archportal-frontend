@@ -15,7 +15,7 @@ import {inputClasses, selectClasses} from "@/styles/customClasses.ts";
 
 export function CreateGameForm() {
     const {isPending, isError, AddGame} = useAddGame();
-    const studioId = "1";
+    const studioId = "3f071d5d-5d2e-4b5f-9c12-7cf7e902b113";
     const navigate = useNavigate();
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
