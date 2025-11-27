@@ -38,7 +38,7 @@ export default function PaymentReturnPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 p-4">
+        <div className="min-h-screen flex items-center justify-center  p-4">
             <Card className="max-w-md w-full">
                 <CardBody className="flex flex-col items-center text-center p-8 gap-4">
                     <div className="mb-2">
@@ -56,7 +56,7 @@ export default function PaymentReturnPage() {
                     {status === 'success' && (
                         <div className="mt-4 p-4 bg-green-50 rounded-lg w-full">
                             <p className="text-sm text-green-700">
-                                Je wordt automatisch doorgestuurd naar de shop...
+                                You will be redirected to the shop...
                             </p>
                         </div>
                     )}
@@ -67,14 +67,14 @@ export default function PaymentReturnPage() {
                                 color="primary"
                                 onPress={() => window.location.href = '/shop'}
                             >
-                                Terug naar Shop
+                                Back to Shop
                             </Button>
                             <Button
                                 color="default"
                                 variant="bordered"
                                 onPress={() => window.location.reload()}
                             >
-                                Opnieuw Proberen
+                                Try Again
                             </Button>
                         </div>
                     )}

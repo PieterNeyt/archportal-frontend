@@ -7,6 +7,7 @@ import {useAddGameStudio} from "@/hooks/useGameStudio.ts";
 import {useNavigate} from "react-router-dom";
 import {CircularProgress} from "@heroui/progress";
 import {addToast} from "@heroui/toast";
+import { inputClasses } from "@/styles/customClasses";
 
 export function CreateGameStudioForm() {
     const {isPending, isError, AddGameStudio} = useAddGameStudio();
@@ -35,12 +36,6 @@ export function CreateGameStudioForm() {
             });
         }
         return navigate("/shop");
-    };
-
-    const inputClasses = {
-        input: "bg-white/5 text-white placeholder:text-white/40",
-        inputWrapper: "bg-white/5 border border-white/10 rounded-xl backdrop-blur-sm transition-all duration-200",
-        label: "text-white/90 font-medium text-sm"
     };
 
     return (

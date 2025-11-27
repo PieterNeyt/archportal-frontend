@@ -8,6 +8,7 @@ import RouteGuardGameStudio from "@/components/security/RouteGuardGameStudio.tsx
 import PaymentReturnPage from "@/pages/PaymentReturnPage.tsx";
 import LibraryPage from "./pages/LibraryPage";
 import ShopPage from "@/pages/shop.tsx";
+import {CreateGamePage} from "@/pages/CreateGamePage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ function App() {
                             <Route element={<LibraryPage/>} path="/library"/>
                             <Route element={<RouteGuardGameStudio><CreateGameStudioPage/></RouteGuardGameStudio>}
                                    path="/create/gamestudio"/>
+                            <Route element={<CreateGamePage/>} path="/create/game"/>
                         </Routes>
                     </DefaultLayout>
                 </SecurityContextProvider>
