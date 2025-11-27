@@ -15,7 +15,6 @@ import {inputClasses, selectClasses} from "@/styles/customClasses.ts";
 
 export function CreateGameForm() {
     const {isPending, isError, AddGame} = useAddGame();
-    const studioId = "3f071d5d-5d2e-4b5f-9c12-7cf7e902b113";
     const navigate = useNavigate();
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -29,7 +28,7 @@ export function CreateGameForm() {
     });
 
     const onSubmit = async (data: CreateGameValues) => {
-        AddGame({studioId, ...data});
+        AddGame(data);
         if (isError) {
             addToast({
                 title: "Failed to create game",
@@ -123,7 +122,7 @@ export function CreateGameForm() {
                         data-a11y-ignore="aria-hidden-focus"
                     >
                         {Object.values(GameGenre).map((genre) => (
-                            <SelectItem key={genre} textValue={genre+""}>
+                            <SelectItem key={genre} textValue={genre + ""}>
                                 {genre}
                             </SelectItem>
                         ))}
