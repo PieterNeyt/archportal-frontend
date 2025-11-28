@@ -2,6 +2,7 @@ import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {AddGame, getGames} from "@/service/gameService.ts";
 import {CreateGame} from "@/model/createGame.ts";
 import {addToast} from "@heroui/toast";
+import {AxiosError} from "axios";
 
 export function useGame() {
     const {isLoading, isError, refetch, data: games} = useQuery({
@@ -26,11 +27,20 @@ export function useAddGame() {
                 return AddGame(newGame)
             },
             onSuccess: () => queryClient.invalidateQueries({queryKey: ['games']}),
-            onError: () => addToast({
-                title: "Failed to create game",
-                description: "Something went wrong. Try again or contact support.",
-                color: "warning",
-            })
+            onError: (error) => {
+                let errorMessage = "Failed to add to cart";
+
+                if (error instanceof AxiosError && error.response?.data?.message) {
+                    errorMessage = error.response.data.message;
+                } else if (error.message) {
+                    errorMessage = error.message;
+                }
+                addToast({
+                    title: "Failed to create game",
+                    description: errorMessage,
+                    color: "danger",
+                })
+            }
         })
 
     return {
