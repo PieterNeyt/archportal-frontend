@@ -35,9 +35,9 @@ export const menuSections: MenuSection[] = [
         ]
     },
     {
-        title: 'GameStudio',
+        title: 'Game Studio',
         items: [
-            {icon: Plus, label: 'Create Game', href: '/create/game'},
+            {icon: Plus, label: 'My Game Studio', href: '/gamestudio'},
         ]
     }
 ];

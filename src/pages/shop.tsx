@@ -15,7 +15,7 @@ const SKELETON_COUNT = 10;
 
 export function ShopPage() {
     const {isError, isLoading, refetch, games} = useGame();
-    const {cart, addToCart, removeFromCart, isAddingToCart, itemCount} = useCart();
+    const {cart, addToCart, removeFromCart, itemCount} = useCart();
     const {checkout, isCheckingOut} = useCheckout();
     const [searchQuery, setSearchQuery] = useState("");
 
@@ -70,12 +70,10 @@ export function ShopPage() {
                                 <GameCard
                                     key={game.id}
                                     title={game.title}
-                                    description={game.description}
                                     image={game.imageUrl}
                                     price={game.price}
                                     gameId={game.id}
                                     onAddToCart={addToCart}
-                                    isAddingToCart={isAddingToCart}
                                 />
                             )
                         )
