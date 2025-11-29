@@ -6,7 +6,7 @@ import {useNavigate} from "react-router-dom";
 import {CircularProgress} from "@heroui/progress";
 import {createGameSchema, CreateGameValues} from "@/validation/createGameValidation.ts";
 import {useAddGame} from "@/hooks/useGame.ts";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {Image, Select, SelectItem} from "@heroui/react";
 import {GameGenre} from "@/model/GameGenre.ts";
 import {inputClasses, selectClasses} from "@/styles/customClasses.ts";
@@ -45,9 +45,8 @@ export function CreateGameForm() {
                           message={"Youre game has been successfully created. Go to youre gamestudio to see the game and updated if needed!"}
                           action={() => {
                               setIsOpen(false);
-                              navigate(`/gamestudio/${loggedInUser.studioId}`)
-                          }
-                          }
+                              navigate(`/gamestudio/${loggedInUser?.studioId}`)
+                          }}
                           open={isOpen}
             />
             <form

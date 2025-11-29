@@ -95,16 +95,17 @@ export function CreateGameStudioForm() {
                     {...register("description")}
                 />
 
-            <div className="flex justify-center mt-6">
-                <Button
-                    color="primary"
-                    type="submit"
-                    disabled={isPending}
-                    className="px-14 py-3 rounded-xl bg-white/10 text-white border border-white/20 backdrop-blur-sm shadow-lg hover:bg-white/15 hover:border-white/30 hover:shadow-xl hover:scale-105 transition-all duration-200 font-semibold text-large"
-                >
-                    {isPending ? <CircularProgress size="sm"/> : "Create Studio"}
-                </Button>
-            </div>
-        </form>
+                <div className="flex justify-center mt-6">
+                    <Button
+                        color="primary"
+                        type="submit"
+                        disabled={isPending}
+                        className="px-14 py-3 rounded-xl bg-white/10 text-white border border-white/20 backdrop-blur-sm shadow-lg hover:bg-white/15 hover:border-white/30 hover:shadow-xl hover:scale-105 transition-all duration-200 font-semibold text-large"
+                    >
+                        {isPending ? <CircularProgress size="sm"/> : "Create Studio"}
+                    </Button>
+                </div>
+            </form>
+        </>
     );
 }
