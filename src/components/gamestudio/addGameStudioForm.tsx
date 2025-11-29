@@ -6,12 +6,15 @@ import {Button} from "@heroui/button";
 import {useAddGameStudio} from "@/hooks/useGameStudio.ts";
 import {useNavigate} from "react-router-dom";
 import {CircularProgress} from "@heroui/progress";
-import {addToast} from "@heroui/toast";
-import { inputClasses } from "@/styles/customClasses";
+import {inputClasses} from "@/styles/customClasses";
+import {useState} from "react";
+import {MessageModal} from "@/components/MessageModal.tsx";
 
 export function CreateGameStudioForm() {
     const {isPending, isError, AddGameStudio} = useAddGameStudio();
     const navigate = useNavigate();
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+
     const {
         register,
         handleSubmit,
@@ -22,69 +25,75 @@ export function CreateGameStudioForm() {
     });
 
     const onSubmit = async (data: CreateGameStudioValues) => {
-        AddGameStudio(data);
+        await AddGameStudio(data);
 
         if (isPending) {
             return <CircularProgress aria-label="Loading..."/>;
         }
 
-        if (isError) {
-            return addToast({
-                title: "Failed to create account",
-                description: "Something went wrong. Try again or contact support.",
-                color: "warning",
-            });
+
+        if (!isError) {
+            setIsOpen(true);
         }
-        return navigate("/shop");
     };
 
     return (
-        <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="w-full max-w-xl mx-auto flex flex-col gap-6 p-8 bg-black/20 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl"
-        >
-            <div className="relative my-4">
-                <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-white/10"/>
-                </div>
-                <div className="relative flex justify-center">
-                    <span className="px-4 text-lg text-white/50 font-semibold">Studio Details</span>
-                </div>
-            </div>
-            <div className="flex flex-col md:flex-row gap-4">
-                <Input
-                    isRequired
-                    errorMessage={errors.name?.message}
-                    label="Studio name"
-                    labelPlacement="outside"
-                    placeholder="Enter your studio name"
-                    type="text"
-                    classNames={inputClasses}
-                    {...register("name")}
-                />
-
-                <Input
-                    isRequired
-                    errorMessage={errors.IBAN?.message}
-                    label="IBAN"
-                    labelPlacement="outside"
-                    placeholder="Enter your IBAN"
-                    type="text"
-                    classNames={inputClasses}
-                    {...register("IBAN")}
-                />
-            </div>
-
-            <Input
-                isRequired
-                errorMessage={errors.description?.message}
-                label="Description"
-                labelPlacement="outside"
-                placeholder="Tell us about your studio"
-                type="textarea"
-                classNames={inputClasses}
-                {...register("description")}
+        <>
+            <MessageModal title={"Game Studio successfully created"}
+                          message={"Youre game studio has been successfully created. Go to you're Game Studio to see more information and to start releasing games!"}
+                          action={() => {
+                              setIsOpen(false);
+                              navigate(`/gamestudio`)
+                          }
+                          }
+                          open={isOpen}
             />
+            <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="w-full max-w-xl mx-auto flex flex-col gap-6 p-8 bg-black/20 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl"
+            >
+                <div className="relative my-4">
+                    <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-white/10"/>
+                    </div>
+                    <div className="relative flex justify-center">
+                        <span className="px-4 text-lg text-white/50 font-semibold">Studio Details</span>
+                    </div>
+                </div>
+                <div className="flex flex-col md:flex-row gap-4">
+                    <Input
+                        isRequired
+                        errorMessage={errors.name?.message}
+                        label="Studio name"
+                        labelPlacement="outside"
+                        placeholder="Enter your studio name"
+                        type="text"
+                        classNames={inputClasses}
+                        {...register("name")}
+                    />
+
+                    <Input
+                        isRequired
+                        errorMessage={errors.IBAN?.message}
+                        label="IBAN"
+                        labelPlacement="outside"
+                        placeholder="Enter your IBAN"
+                        type="text"
+                        classNames={inputClasses}
+                        {...register("IBAN")}
+                    />
+                </div>
+
+                <Input
+                    isRequired
+                    errorMessage={errors.description?.message}
+                    label="Description"
+                    labelPlacement="outside"
+                    placeholder="Tell us about your studio"
+                    type="textarea"
+                    classNames={inputClasses}
+                    {...register("description")}
+                />
 
             <div className="flex justify-center mt-6">
                 <Button

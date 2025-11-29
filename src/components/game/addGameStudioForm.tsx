@@ -4,19 +4,22 @@ import {Input, Textarea} from "@heroui/input";
 import {Button} from "@heroui/button";
 import {useNavigate} from "react-router-dom";
 import {CircularProgress} from "@heroui/progress";
-import {addToast} from "@heroui/toast";
 import {createGameSchema, CreateGameValues} from "@/validation/createGameValidation.ts";
 import {useAddGame} from "@/hooks/useGame.ts";
 import {useState} from "react";
 import {Image, Select, SelectItem} from "@heroui/react";
 import {GameGenre} from "@/model/GameGenre.ts";
 import {inputClasses, selectClasses} from "@/styles/customClasses.ts";
+import {MessageModal} from "@/components/MessageModal.tsx";
+import SecurityContext from "@/context/SecurityContext.ts";
 
 
 export function CreateGameForm() {
     const {isPending, isError, AddGame} = useAddGame();
+    const {loggedInUser} = useContext(SecurityContext);
     const navigate = useNavigate();
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [isOpen, setIsOpen] = useState<boolean>(false);
 
     const {
         register,
@@ -28,21 +31,25 @@ export function CreateGameForm() {
     });
 
     const onSubmit = async (data: CreateGameValues) => {
-        AddGame(data);
-        if (isError) {
-            addToast({
-                title: "Failed to create game",
-                description: "Something went wrong. Try again or contact support.",
-                color: "warning",
-            });
-            return;
+        await AddGame(data);
+
+        if (!isError) {
+            setIsOpen(true);
         }
 
-        navigate("/shop");
     };
 
     return (
         <div className="flex justify-center items-center w-full">
+            <MessageModal title={"Game successfully created"}
+                          message={"Youre game has been successfully created. Go to youre gamestudio to see the game and updated if needed!"}
+                          action={() => {
+                              setIsOpen(false);
+                              navigate(`/gamestudio/${loggedInUser.studioId}`)
+                          }
+                          }
+                          open={isOpen}
+            />
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="w-full max-w-3xl flex flex-col gap-8 p-10 bg-black/20 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl"
