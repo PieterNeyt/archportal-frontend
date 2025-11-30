@@ -4,7 +4,6 @@ import {Cart, PaymentCreation} from "@/model/shop";
 import axios from "axios";
 
 // voor nu zo hardcoded maar moet later als inlogfunctionaliteit er is opgelost worden
-const PROFILE_ID = "550e8400-e29b-41d4-a716-446655440000";
 
 export async function getGames(): Promise<Game[]> {
     const {data: games} = await axios.get<Game[]>('/api/shop/games');
@@ -12,16 +11,13 @@ export async function getGames(): Promise<Game[]> {
 }
 
 export async function getCart(): Promise<Cart> {
-    const {data: cart} = await axios.get<Cart>('/api/shop/cart', {
-        params: {profileId: PROFILE_ID}
-    });
+    const {data: cart} = await axios.get<Cart>('/api/shop/cart');
     return cart;
 }
 
 export async function addToCart(gameId: string): Promise<Cart> {
     const {data: cart} = await axios.put<Cart>('/api/shop/cart/add', null, {
         params: {
-            profileId: PROFILE_ID,
             gameId
         }
     });
@@ -31,7 +27,6 @@ export async function addToCart(gameId: string): Promise<Cart> {
 export async function removeFromCart(gameId: string): Promise<Cart> {
     const {data: cart} = await axios.put<Cart>('/api/shop/cart/remove', null, {
         params: {
-            profileId: PROFILE_ID,
             gameId
         }
     });
@@ -39,9 +34,7 @@ export async function removeFromCart(gameId: string): Promise<Cart> {
 }
 
 export async function checkout(): Promise<PaymentCreation> {
-    const {data: payment} = await axios.post<PaymentCreation>('/api/shop/checkout', null, {
-        params: {profileId: PROFILE_ID}
-    });
+    const {data: payment} = await axios.post<PaymentCreation>('/api/shop/checkout');
     return payment;
 }
 

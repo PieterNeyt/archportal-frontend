@@ -1,11 +1,15 @@
-import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {CreateGameStudio} from "@/model/createGameStudio.ts";
-import {AddGameStudio} from "@/service/gameStudioService.ts";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {AddGameStudio, getMyStudioStatus} from "@/service/gameStudioService.ts";
 import {addToast} from "@heroui/toast";
 import {AxiosError} from "axios";
+import {CreateGameStudio} from "@/model/GameStudio.ts";
+import {useContext} from "react";
+import SecurityContext from "@/context/SecurityContext.ts";
 
 
 export function useAddGameStudio() {
+    const {updateGameStudioStatus} = useContext(SecurityContext);
+
     const queryClient = useQueryClient()
     const {
         mutateAsync,
@@ -17,7 +21,10 @@ export function useAddGameStudio() {
             mutationFn: (newGameStudio: CreateGameStudio) => {
                 return AddGameStudio(newGameStudio)
             },
-            onSuccess: () => queryClient.invalidateQueries({queryKey: ['GameStudio']}),
+            onSuccess: (createdGame) => {
+                updateGameStudioStatus(createdGame);
+                queryClient.invalidateQueries({queryKey: ['GameStudio']});
+            },
             onError: (error) => {
                 let errorMessage = "Failed to add to cart";
 
@@ -39,4 +46,13 @@ export function useAddGameStudio() {
         isError,
         AddGameStudio: mutateAsync
     }
+}
+
+export function useGameStudioStatus() {
+    const {isLoading, isError, refetch, data: gameStudioStatus} = useQuery({
+        queryKey: ["gameStudioStatus"],
+        queryFn: () => getMyStudioStatus(),
+        enabled: false
+    })
+    return {isLoading, isError, refetch, gameStudioStatus}
 }

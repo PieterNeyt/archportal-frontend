@@ -2,11 +2,14 @@ import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {Navigate, Route, Routes} from "react-router-dom";
 import DefaultLayout from "@/layouts/default.tsx";
 import {CreateGameStudioPage} from "@/pages/CreateStudioPage.tsx";
-import {ShopPage} from "@/pages/shop.tsx";
 import {HeroUIProvider} from "@heroui/system";
+import SecurityContextProvider from "@/context/SecurityContextProvider.tsx";
+import RouteGuardGameStudio from "@/components/security/RouteGuardGameStudio.tsx";
 import PaymentReturnPage from "@/pages/PaymentReturnPage.tsx";
-import {LibraryPage} from "@/pages/LibraryPage.tsx";
+import LibraryPage from "./pages/LibraryPage";
+import ShopPage from "@/pages/shop.tsx";
 import {CreateGamePage} from "@/pages/CreateGamePage.tsx";
+import RouteGuardCreateGame from "@/components/security/RouteGuardCreateGame.tsx";
 import {GameStudioPage} from "@/pages/GameStudioPage.tsx";
 
 const queryClient = new QueryClient();
@@ -15,17 +18,21 @@ function App() {
     return (
         <QueryClientProvider client={queryClient}>
             <HeroUIProvider>
-                <DefaultLayout>
-                    <Routes>
-                        <Route element={<ShopPage/>} path="/shop"/>
-                        <Route element={<PaymentReturnPage/>} path="/payment-return"/>
-                        <Route path="/" element={<Navigate to={"/shop"}/>}/>
-                        <Route element={<LibraryPage/>} path="/library"/>
-                        <Route element={<CreateGameStudioPage/>} path="/create/gamestudio"/>
-                        <Route element={<CreateGamePage/>} path="/create/game"/>
-                        <Route element={<GameStudioPage/>} path="/gamestudio/:id"/>
-                    </Routes>
-                </DefaultLayout>
+                <SecurityContextProvider>
+                    <DefaultLayout>
+                        <Routes>
+                            <Route element={<ShopPage/>} path="/shop"/>
+                            <Route element={<PaymentReturnPage/>} path="/payment-return"/>
+                            <Route path="/" element={<Navigate to={"/shop"}/>}/>
+                            <Route element={<LibraryPage/>} path="/library"/>
+                            <Route element={<RouteGuardGameStudio><CreateGameStudioPage/></RouteGuardGameStudio>}
+                                   path="/create/gamestudio"/>
+                            <Route element={<RouteGuardCreateGame><CreateGamePage/></RouteGuardCreateGame>}
+                                   path="/create/game"/>
+                            <Route element={<GameStudioPage/>} path="/gamestudio/:id"/>
+                        </Routes>
+                    </DefaultLayout>
+                </SecurityContextProvider>
             </HeroUIProvider>
         </QueryClientProvider>
     );

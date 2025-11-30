@@ -1,8 +1,9 @@
 import {Card, CardBody, CardFooter, CardHeader} from "@heroui/card";
 import {Image} from "@heroui/image";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {Gamepad2, ShoppingCart} from "lucide-react";
 import {Button} from "@heroui/button";
+import SecurityContext from "@/context/SecurityContext.ts";
 
 interface ShopCardProps {
     title: string;
@@ -14,11 +15,19 @@ interface ShopCardProps {
 
 export function GameCard({title, image, price, gameId, onAddToCart}: ShopCardProps) {
     const [imageFailed, setImageFailed] = useState(false);
+    const {isAuthenticated, login} = useContext(SecurityContext);
 
     const handleImageError = () => {
         setImageFailed(true);
     }
 
+
+    const addToCart = () => {
+        if (isAuthenticated())
+            onAddToCart(gameId);
+        else
+            login();
+    }
 
     return (
             <Card
@@ -52,9 +61,8 @@ export function GameCard({title, image, price, gameId, onAddToCart}: ShopCardPro
                     <Button
                         color="primary"
                         className="w-full"
-                        startContent={<ShoppingCart size={18} />}
-                        onPress={() =>
-                            onAddToCart(gameId)}
+                        startContent={<ShoppingCart size={18}/>}
+                        onPress={addToCart}
                     >
                         Add
                     </Button>

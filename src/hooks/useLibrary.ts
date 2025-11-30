@@ -1,13 +1,16 @@
-import { useQuery } from "@tanstack/react-query";
-import { getLibrary } from "@/service/libraryService";
-
-const PROFILE_ID = "550e8400-e29b-41d4-a716-446655440000";
+import {useQuery} from "@tanstack/react-query";
+import {getLibrary} from "@/service/libraryService";
+import {useContext} from "react";
+import SecurityContext from "@/context/SecurityContext.ts";
 
 export function useLibrary() {
-    const { isLoading, isError, refetch, data: games } = useQuery({
-        queryKey: ["library", PROFILE_ID],
-        queryFn: () => getLibrary()
+    const {isAuthenticated} = useContext(SecurityContext)
+
+    const {isLoading, isError, refetch, data: games} = useQuery({
+        queryKey: ["library"],
+        queryFn: () => getLibrary(),
+        enabled: isAuthenticated(),
     });
 
-    return { isLoading, isError, refetch, games };
+    return {isLoading, isError, refetch, games};
 }

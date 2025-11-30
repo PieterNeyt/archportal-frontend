@@ -4,6 +4,10 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
+    base: '/',
+    build: {
+        outDir: 'dist',
+    },
     plugins: [react(), tsconfigPaths(), tailwindcss()],
     server: {
         proxy: {

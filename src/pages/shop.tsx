@@ -13,7 +13,7 @@ import {Input} from "@heroui/input";
 
 const SKELETON_COUNT = 10;
 
-export function ShopPage() {
+export default function ShopPage() {
     const {isError, isLoading, refetch, games} = useGame();
     const {cart, addToCart, removeFromCart, itemCount} = useCart();
     const {checkout, isCheckingOut} = useCheckout();

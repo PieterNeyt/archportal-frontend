@@ -1,14 +1,18 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {addToCart, getCart, removeFromCart} from "@/service/gameService.ts";
+import {useContext} from "react";
+import SecurityContext from "@/context/SecurityContext.ts";
 import {addToast} from "@heroui/toast";
 import {AxiosError} from "axios";
 
 export function useCart() {
     const queryClient = useQueryClient();
+    const {isAuthenticated} = useContext(SecurityContext)
 
     const {data: cart, isLoading: isCartLoading} = useQuery({
         queryKey: ["cart"],
-        queryFn: () => getCart()
+        queryFn: () => getCart(),
+        enabled: isAuthenticated()
     });
 
     const addToCartMutation = useMutation({

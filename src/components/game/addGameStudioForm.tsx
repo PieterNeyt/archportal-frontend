@@ -6,16 +6,17 @@ import {useNavigate} from "react-router-dom";
 import {CircularProgress} from "@heroui/progress";
 import {createGameSchema, CreateGameValues} from "@/validation/createGameValidation.ts";
 import {useAddGame} from "@/hooks/useGame.ts";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {Image, Select, SelectItem} from "@heroui/react";
 import {GameGenre} from "@/model/GameGenre.ts";
 import {inputClasses, selectClasses} from "@/styles/customClasses.ts";
 import {MessageModal} from "@/components/MessageModal.tsx";
+import SecurityContext from "@/context/SecurityContext.ts";
 
 
 export function CreateGameForm() {
     const {isPending, isError, AddGame} = useAddGame();
-    const studioId = "3f071d5d-5d2e-4b5f-9c12-7cf7e902b113";
+    const {loggedInUser} = useContext(SecurityContext);
     const navigate = useNavigate();
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -30,7 +31,7 @@ export function CreateGameForm() {
     });
 
     const onSubmit = async (data: CreateGameValues) => {
-        await AddGame({studioId, ...data});
+        await AddGame(data);
 
         if (!isError) {
             setIsOpen(true);
@@ -44,9 +45,8 @@ export function CreateGameForm() {
                           message={"Youre game has been successfully created. Go to youre gamestudio to see the game and updated if needed!"}
                           action={() => {
                               setIsOpen(false);
-                              navigate(`/gamestudio/${studioId}`)
-                          }
-                          }
+                              navigate(`/gamestudio/${loggedInUser?.studioId}`)
+                          }}
                           open={isOpen}
             />
             <form
