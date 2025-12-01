@@ -32,7 +32,6 @@ export function CreateGameForm() {
 
     const onSubmit = async (data: CreateGameValues) => {
         await AddGame(data);
-
         if (!isError) {
             setIsOpen(true);
         }
@@ -134,15 +133,27 @@ export function CreateGameForm() {
                         ))}
                     </Select>
                 </div>
-                <Input
-                    isRequired
-                    errorMessage={errors.gameUrl?.message}
-                    label="Game URL"
-                    labelPlacement="outside"
-                    placeholder="Enter game URL"
-                    classNames={inputClasses}
-                    {...register("gameUrl")}
-                />
+                <div className="flex flex-col md:flex-row gap-6">
+                    <Input
+                        isRequired
+                        errorMessage={errors.maxlobbysize?.message}
+                        label="Max Lobby Size"
+                        labelPlacement="outside"
+                        placeholder="Enter Max Lobby Size"
+                        type="number"
+                        classNames={inputClasses}
+                        {...register("maxlobbysize", {valueAsNumber: true})}
+                    />
+                    <Input
+                        isRequired
+                        errorMessage={errors.gameUrl?.message}
+                        label="Game URL"
+                        labelPlacement="outside"
+                        placeholder="Enter game URL"
+                        classNames={inputClasses}
+                        {...register("gameUrl")}
+                    />
+                </div>
 
                 {/* Submit Button */}
                 <div className="flex justify-center mt-6">
