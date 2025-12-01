@@ -32,7 +32,6 @@ export function CreateGameForm() {
 
     const onSubmit = async (data: CreateGameValues) => {
         await AddGame(data);
-
         if (!isError) {
             setIsOpen(true);
         }
