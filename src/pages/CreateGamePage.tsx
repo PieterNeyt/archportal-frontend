@@ -1,4 +1,4 @@
-import {CreateGameForm} from "@/components/game/addGameStudioForm.tsx";
+import {CreateGameForm} from "@/components/game/addGameForm.tsx";
 
 export function CreateGamePage() {
     return (
