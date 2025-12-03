@@ -1,34 +1,18 @@
 import {Input} from "@heroui/input";
-import {Search, UserPlus} from "lucide-react";
+import {Gamepad2, Search} from "lucide-react";
 import {useState} from "react";
-import {Button} from "@heroui/button";
 import {useFriends} from "@/hooks/useFriends.ts";
-import {Profile} from "@/model/profile.ts";
 import FriendSkeletonCard from "@/components/friend/FriendSkeletonCard.tsx";
 import FriendCard from "@/components/friend/FriendCard.tsx";
-
-const testProfiles: Profile[] = [
-    {firstName: "Bart", lastName: "Peeters", icon: "", gamerTag: "sub bitch"},
-    {firstName: "Bart", lastName: "Peeters", icon: "https://badurl.com/nonexistent.png", gamerTag: "sub bitch"},
-    {firstName: "Bart", lastName: "Peeters", icon: "icon bitch", gamerTag: "sub bitch"},
-    {firstName: "Bart", lastName: "Peeters", icon: "icon bitch", gamerTag: "sub bitch"},
-    {firstName: "Bart", lastName: "Peeters", icon: "icon bitch", gamerTag: "sub bitch"},
-    {firstName: "Bart", lastName: "Peeters", icon: "icon bitch", gamerTag: "sub bitch"},
-    {firstName: "Bart", lastName: "Peeters", icon: "icon bitch", gamerTag: "sub bitch"},
-    {firstName: "Bart", lastName: "Peeters", icon: "icon bitch", gamerTag: "sub bitch"},
-]
+import AddFriendModal from "@/components/friend/AddFriendModal.tsx";
 
 export default function FriendsPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const {isLoading, isError, profiles} = useFriends();
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
-    if (isError) {
-        return <div>Error...</div>;
-    }
+    const filteredProfiles = profiles?.filter(profile =>
+        profile.gamerTag.toLowerCase().includes(searchQuery.toLowerCase())
+    ) || [];
 
     return (
         <div className={"max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8"}>
@@ -44,27 +28,47 @@ export default function FriendsPage() {
                     }}
                 />
 
-                <Button
-                    color={"primary"}
-                    onPress={() => console.log("add friend")}
-                    className={"h-10 flex-shrink-0 font-semibold"}
-                    startContent={<UserPlus size={20}/>}
-                >
-                    Add a friend
-                </Button>
+                <AddFriendModal/>
             </div>
             <h2 className={"text-xl font-bold text-foreground mb-4"}>
                 Your friends
             </h2>
-            <div className={"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"}>
-                {isLoading ? (
-                    Array(10).fill(0).map((_, i) => (
+
+            {isError && (
+                <div className="text-center py-20">
+                    <Gamepad2 size={64} className="text-white/40 mx-auto mb-4"/>
+                    <p className="text-white/60 text-xl">Oops! Something went wrong while loading your friends list</p>
+                </div>
+            )}
+
+            {isLoading && (
+                <div className={"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"}>
+                    {Array(10).fill(0).map((_, i) => (
                         <FriendSkeletonCard key={i}/>
-                    ))
-                ) : (testProfiles.map((profile, i) => (
-                    <FriendCard key={i} {...profile}/>
-                )))}
-            </div>
+                    ))}
+                </div>
+            )}
+
+            {!isLoading && !isError && filteredProfiles.length === 0 && (
+                <div className="text-center py-20">
+                    <Gamepad2 size={64} className="text-white/40 mx-auto mb-4"/>
+                    <p className="text-white/60 text-xl mb-2">
+                        {searchQuery ? "No friends found" : "Your friends list is empty"}
+                    </p>
+                    {!searchQuery && (
+                        <p className="text-white/40">Add some friends to your friends list!</p>
+                    )}
+                </div>
+            )}
+
+            {!isLoading && !isError && filteredProfiles.length > 0 && (
+                <div className={"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"}>
+                    {filteredProfiles.map((profile, i) => (
+                        <FriendCard key={i} {...profile}/>
+                    ))}
+                </div>
+            )}
+
         </div>
     );
 }
