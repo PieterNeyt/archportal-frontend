@@ -30,9 +30,9 @@ export function SidebarFooter({isOpen}: FooterProps) {
                 <div
                     className="absolute bottom-full mb-2 left-0 w-48 bg-card border border-border rounded-lg shadow-lg flex flex-col overflow-hidden z-50"
                 >
-                    <DropdownButton text={"User Account"} onClick={() => {
+                    <DropdownButton text={"Settings"} onClick={() => {
                         setDropdownOpen(false);
-                        navigate("#profile");
+                        navigate("/user/settings");
                     }}/>
                     {loggedInUser?.hasStudio ? (
                         <DropdownButton text={"Game studio"} onClick={() => {
