@@ -8,8 +8,8 @@ import FriendSkeletonCard from "@/components/friend/FriendSkeletonCard.tsx";
 import FriendCard from "@/components/friend/FriendCard.tsx";
 
 const testProfiles: Profile[] = [
-    {firstName: "Bart", lastName: "Peeters", icon: "icon bitch", gamerTag: "sub bitch"},
-    {firstName: "Bart", lastName: "Peeters", icon: "icon bitch", gamerTag: "sub bitch"},
+    {firstName: "Bart", lastName: "Peeters", icon: "", gamerTag: "sub bitch"},
+    {firstName: "Bart", lastName: "Peeters", icon: "https://badurl.com/nonexistent.png", gamerTag: "sub bitch"},
     {firstName: "Bart", lastName: "Peeters", icon: "icon bitch", gamerTag: "sub bitch"},
     {firstName: "Bart", lastName: "Peeters", icon: "icon bitch", gamerTag: "sub bitch"},
     {firstName: "Bart", lastName: "Peeters", icon: "icon bitch", gamerTag: "sub bitch"},
@@ -40,14 +40,14 @@ export default function FriendsPage() {
                     startContent={<Search size={20} className="text-white/40"/>}
                     classNames={{
                         input: "bg-transparent text-white",
-                        inputWrapper: "bg-black/30 backdrop-blur-xl border border-white/10 hover:border-white/20"
+                        inputWrapper: "h-11 bg-black/30 backdrop-blur-xl border border-white/10 hover:border-white/20"
                     }}
                 />
 
                 <Button
                     color={"primary"}
                     onPress={() => console.log("add friend")}
-                    className={"h-12 flex-shrink-0 font-semibold"}
+                    className={"h-10 flex-shrink-0 font-semibold"}
                     startContent={<UserPlus size={20}/>}
                 >
                     Add a friend

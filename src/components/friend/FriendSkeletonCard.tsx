@@ -5,7 +5,7 @@ export default function FriendSkeletonCard() {
 
     return (
         <div
-            className={"flex items-center justify-between p-3 rounded-xl bg-card border border-border hover:bg-accent transition-colors cursor-pointer shadow-md"}
+            className={"backdrop-blur-sm flex items-center justify-between p-3 rounded-xl border border-border hover:bg-accent transition-colors cursor-pointer shadow-md"}
         >
             <div className="flex items-center space-x-3">
                 <Skeleton

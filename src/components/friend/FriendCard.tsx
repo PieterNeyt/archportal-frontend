@@ -9,19 +9,18 @@ interface UserProps {
 export default function FriendCard({gamerTag, icon}: UserProps) {
     return (
         <div
-            className={"flex items-center justify-between p-3 rounded-xl bg-card border border-border hover:bg-accent transition-colors cursor-pointer shadow-md"}
+            className={"backdrop-blur-sm flex items-center justify-between p-3 rounded-xl border border-border hover:backdrop-blur-3xl transition-colors cursor-pointer shadow-md"}
             onClick={() => console.log("navigate to profile")}
         >
             <User
                 avatarProps={{
                     src: icon,
-                    isBordered: true,
                     fallback: (
                         <Avatar
                             showFallback
-                            src={icon}
                         />
                     ),
+                    name: gamerTag,
                     className: "w-10 h-10 flex-shrink-0"
                 }}
                 name={gamerTag}
