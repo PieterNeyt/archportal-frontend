@@ -7,4 +7,5 @@ export interface CreateGame {
     price: number;
     gameUrl: string;
     genre: GameGenre;
+    maxlobbysize:number;
 }
