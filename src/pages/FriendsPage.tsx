@@ -1,5 +1,5 @@
 import {Input} from "@heroui/input";
-import {Gamepad2, Search} from "lucide-react";
+import {Gamepad2, Search, Users} from "lucide-react";
 import {useState} from "react";
 import {useFriends} from "@/hooks/useFriends.ts";
 import FriendSkeletonCard from "@/components/friend/FriendSkeletonCard.tsx";
@@ -51,7 +51,7 @@ export default function FriendsPage() {
 
             {!isLoading && !isError && filteredProfiles.length === 0 && (
                 <div className="text-center py-20">
-                    <Gamepad2 size={64} className="text-white/40 mx-auto mb-4"/>
+                    <Users size={64} className="text-white/40 mx-auto mb-4"/>
                     <p className="text-white/60 text-xl mb-2">
                         {searchQuery ? "No friends found" : "Your friends list is empty"}
                     </p>
