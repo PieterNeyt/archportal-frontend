@@ -13,6 +13,7 @@ import RouteGuardCreateGame from "@/components/security/RouteGuardCreateGame.tsx
 import {GameStudioPage} from "@/pages/GameStudioPage.tsx";
 import FriendsPage from "@/pages/FriendsPage.tsx";
 import {ProfileSettingsPage} from "@/pages/ProfileSettings.tsx";
+import RouteGuardLoggedIn from "@/components/security/RouteGuardLoggedIn.tsx";
 
 const queryClient = new QueryClient();
 
@@ -26,14 +27,16 @@ function App() {
                             <Route element={<ShopPage/>} path="/shop"/>
                             <Route element={<PaymentReturnPage/>} path="/payment-return"/>
                             <Route path="/" element={<Navigate to={"/shop"}/>}/>
-                            <Route element={<LibraryPage/>} path="/library"/>
+                            <Route element={<GameStudioPage/>} path="/gamestudio/:id"/>
+
+                            <Route element={<RouteGuardLoggedIn><LibraryPage/></RouteGuardLoggedIn>} path="/library"/>
                             <Route element={<RouteGuardGameStudio><CreateGameStudioPage/></RouteGuardGameStudio>}
                                    path="/create/gamestudio"/>
                             <Route element={<RouteGuardCreateGame><CreateGamePage/></RouteGuardCreateGame>}
                                    path="/create/game"/>
-                            <Route element={<GameStudioPage/>} path="/gamestudio/:id"/>
-                            <Route element={<ProfileSettingsPage/>} path="/user/settings"/>
-                            <Route element={<FriendsPage/>} path={"/friends"}/>
+                            <Route element={<RouteGuardLoggedIn><ProfileSettingsPage/></RouteGuardLoggedIn>}
+                                   path="/user/settings"/>
+                            <Route element={<RouteGuardLoggedIn><FriendsPage/></RouteGuardLoggedIn>} path={"/friends"}/>
                         </Routes>
                     </DefaultLayout>
                 </SecurityContextProvider>
