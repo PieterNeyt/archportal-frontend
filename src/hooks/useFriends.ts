@@ -1,5 +1,5 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {getFriendRequests, getFriends, sendFriendRequest} from "@/service/friendService.ts";
+import {acceptFriendRequest, getFriendRequests, getFriends, sendFriendRequest} from "@/service/friendService.ts";
 import {useContext} from "react";
 import SecurityContext from "@/context/SecurityContext.ts";
 import {AxiosError} from "axios";
@@ -54,9 +54,43 @@ export function useGetFriendRequests() {
     const {isAuthenticated, isInitialised} = useContext(SecurityContext);
 
     const {isLoading, isError, data: profiles} = useQuery({
-        queryKey: ["friendrequests"],
+        queryKey: ["friend requests"],
         queryFn: () => getFriendRequests(),
         enabled: isAuthenticated() && isInitialised,
     });
     return {isLoading, isError, profiles};
+}
+
+export function useAcceptFriendRequest() {
+    const queryClient = useQueryClient();
+    const {isPending, isError, mutateAsync} = useMutation({
+        mutationFn: (gamerTag: string) => {
+            return acceptFriendRequest(gamerTag);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["friends"]})
+            queryClient.invalidateQueries({queryKey: ["friend requests"]})
+            addToast({
+                title: "Friend request accepted",
+                description: "You accepted the friend request.",
+                color: "success"
+            })
+        },
+        onError: (error) => {
+            let errorMessage = "Failed to accept friend request";
+
+            if (error instanceof AxiosError && error.response?.data?.message) {
+                errorMessage = error.response.data.message;
+            } else if (error.message) {
+                errorMessage = error.message;
+            }
+            addToast({
+                title: "Failed to accept friend request",
+                description: errorMessage,
+                color: "danger"
+            })
+        }
+    })
+
+    return {isPending, isError, acceptFriendRequest: mutateAsync}
 }

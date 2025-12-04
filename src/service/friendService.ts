@@ -17,3 +17,9 @@ export async function getFriendRequests(): Promise<Profile[]> {
     const {data: profiles} = await axios.get<Profile[]>("/api/friends/requests");
     return profiles;
 }
+
+export async function acceptFriendRequest(gamertag: string): Promise<void> {
+    await axios.put("/api/friends/accept", {
+        gamerTag: gamertag,
+    })
+}
