@@ -6,9 +6,9 @@ export async function getFriends(): Promise<Profile[]> {
     return friends;
 }
 
-export async function sendFriendRequest(gamertag: string) {
+export async function sendFriendRequest(gamertag: string): Promise<void> {
     const {data: profile} = await axios.post("/api/friends/request", {
-        receiverId: gamertag,
+        gamerTag: gamertag,
     })
     return profile;
 }

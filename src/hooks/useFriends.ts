@@ -18,11 +18,18 @@ export function useFriends() {
 
 export function useSendFriendRequest() {
     const queryClient = useQueryClient();
-    const {mutateAsync, isPending, isError} = useMutation({
+    const {mutateAsync, isPending, isError, reset} = useMutation({
         mutationFn: (gamertag: string) => {
             return sendFriendRequest(gamertag);
         },
-        onSuccess: () => queryClient.invalidateQueries({queryKey: ["friends"]}),
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["friends"]})
+            addToast({
+                title: "Friend request send",
+                description: "Your friend request has been sent.",
+                color: "success"
+            })
+        },
         onError: (error) => {
             let errorMessage = "Failed to send friend request";
 
@@ -35,9 +42,10 @@ export function useSendFriendRequest() {
                 title: "Failed to send friend request",
                 description: errorMessage,
                 color: "danger",
+
             })
         }
     })
 
-    return {isPending, isError, sendFriendRequest: mutateAsync}
+    return {isPending, isError, sendFriendRequest: mutateAsync, reset}
 }

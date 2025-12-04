@@ -5,27 +5,34 @@ import {useSendFriendRequest} from "@/hooks/useFriends.ts";
 import {CircularProgress} from "@heroui/progress";
 import {Send, UserPlus} from "lucide-react";
 import {Button} from "@heroui/button";
+import {inputClasses} from "@/styles/customClasses.ts";
+import axios from "axios";
 
 export default function AddFriendModal() {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [username, setUsername] = useState('');
-    const {isPending, isError, sendFriendRequest} = useSendFriendRequest();
+    const {isPending, isError, sendFriendRequest, reset} = useSendFriendRequest();
 
     const handleSendFriendRequest = async (onClose: () => void) => {
         if (!username.trim() || isPending) return;
-
-        const success = await sendFriendRequest(username);
-        if (success) {
-            setUsername("");
+        try {
+            await sendFriendRequest(username);
             onClose();
+        } catch (error) {
+            if (axios.isAxiosError(error))
+                console.error(error.response?.data?.message);
+            else console.error("An unknown error occurred: ", error);
         }
     }
 
-    const inputClasses = {
-        input: "bg-transparent text-white placeholder:text-white/40",
-        inputWrapper: "bg-black/30 backdrop-blur-xl border border-white/10 hover:border-white/20",
+    const handleOpenChange = (open: boolean) => {
+        if (!open) {
+            reset();
+            setUsername("");
+        }
+        onOpenChange();
     }
-
+    
     return (
         <>
             <Button
@@ -37,21 +44,23 @@ export default function AddFriendModal() {
                 Add friend
             </Button>
 
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement={"center"}>
+            <Modal isOpen={isOpen} onOpenChange={handleOpenChange} placement={"center"}
+                   className={"bg-black/30 backdrop-blur-xl border border-white/10"}>
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader className={"flex flex-col gap-1 text-foreground"}>
+                            <ModalHeader className={"flex flex-col gap-1 "}>
                                 Send friend request
                             </ModalHeader>
                             <ModalBody>
-                                <p className={"text-sm text-muted-foreground mb-2"}>
+                                <p className={"text-sm mb-2"}>
                                     Enter the username of the person you want to send a request to.
                                 </p>
 
                                 <Input
                                     isRequired
                                     label={"Username"}
+                                    aria-label={"Username"}
                                     placeholder={"Enter username"}
                                     value={username}
                                     onChange={(e) => setUsername(e.target.value)}
@@ -64,10 +73,7 @@ export default function AddFriendModal() {
                                 <Button
                                     color={"danger"}
                                     variant={"light"}
-                                    onPress={() => {
-                                        setUsername("");
-                                        onClose();
-                                    }}
+                                    onPress={onClose}
                                     isDisabled={isPending}
                                 >
                                     Cancel
