@@ -1,5 +1,5 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {getFriends, sendFriendRequest} from "@/service/friendService.ts";
+import {getFriendRequests, getFriends, sendFriendRequest} from "@/service/friendService.ts";
 import {useContext} from "react";
 import SecurityContext from "@/context/SecurityContext.ts";
 import {AxiosError} from "axios";
@@ -48,4 +48,15 @@ export function useSendFriendRequest() {
     })
 
     return {isPending, isError, sendFriendRequest: mutateAsync, reset}
+}
+
+export function useGetFriendRequests() {
+    const {isAuthenticated, isInitialised} = useContext(SecurityContext);
+
+    const {isLoading, isError, data: profiles} = useQuery({
+        queryKey: ["friendrequests"],
+        queryFn: () => getFriendRequests(),
+        enabled: isAuthenticated() && isInitialised,
+    });
+    return {isLoading, isError, profiles};
 }

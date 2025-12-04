@@ -12,3 +12,8 @@ export async function sendFriendRequest(gamertag: string): Promise<void> {
     })
     return profile;
 }
+
+export async function getFriendRequests(): Promise<Profile[]> {
+    const {data: profiles} = await axios.get<Profile[]>("/api/friends/requests");
+    return profiles;
+}
