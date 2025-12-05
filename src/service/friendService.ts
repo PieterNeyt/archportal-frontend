@@ -20,6 +20,14 @@ export async function getFriendRequests(): Promise<Profile[]> {
 
 export async function acceptFriendRequest(gamertag: string): Promise<void> {
     await axios.put("/api/profile/friend-request/accept", {
-        gamerTag: gamertag,
+        gamerTag: gamertag
+    })
+}
+
+export async function declineFriendRequest(gamertag: string): Promise<void> {
+    await axios.delete("/api/profile/friend-request/decline", {
+        data: {
+            gamerTag: gamertag
+        }
     })
 }

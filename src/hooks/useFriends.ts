@@ -1,5 +1,11 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {acceptFriendRequest, getFriendRequests, getFriends, sendFriendRequest} from "@/service/friendService.ts";
+import {
+    acceptFriendRequest,
+    declineFriendRequest,
+    getFriendRequests,
+    getFriends,
+    sendFriendRequest
+} from "@/service/friendService.ts";
 import {useContext} from "react";
 import SecurityContext from "@/context/SecurityContext.ts";
 import {AxiosError} from "axios";
@@ -93,4 +99,37 @@ export function useAcceptFriendRequest() {
     })
 
     return {isPending, isError, acceptFriendRequest: mutateAsync}
+}
+
+export function useDeclineFriendRequest() {
+    const queryClient = useQueryClient();
+    const {isPending, isError, mutateAsync} = useMutation({
+        mutationFn: (gamerTag: string) => {
+            return declineFriendRequest(gamerTag);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["friend requests"]})
+            addToast({
+                title: "Friend request declined",
+                description: "You declined the friend request.",
+                color: "success"
+            })
+        },
+        onError: (error) => {
+            let errorMessage = "Failed to decline friend request";
+
+            if (error instanceof AxiosError && error.response?.data?.message) {
+                errorMessage = error.response.data.message;
+            } else if (error.message) {
+                errorMessage = error.message;
+            }
+            addToast({
+                title: "Failed to decline friend request",
+                description: errorMessage,
+                color: "danger"
+            })
+        }
+    })
+
+    return {isPending, isError, declineFriendRequest: mutateAsync}
 }

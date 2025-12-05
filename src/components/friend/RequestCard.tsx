@@ -2,7 +2,7 @@ import {User} from "@heroui/user";
 import {Avatar} from "@heroui/avatar";
 import {Button, ButtonGroup} from "@heroui/button";
 import {AlertTriangle, Check, X} from "lucide-react";
-import {useAcceptFriendRequest} from "@/hooks/useFriends.ts";
+import {useAcceptFriendRequest, useDeclineFriendRequest} from "@/hooks/useFriends.ts";
 import {CircularProgress} from "@heroui/progress";
 
 interface RequestCardProps {
@@ -11,15 +11,25 @@ interface RequestCardProps {
 }
 
 export default function RequestCard({icon, gamerTag}: RequestCardProps) {
-    const {isPending, isError, acceptFriendRequest} = useAcceptFriendRequest();
+    const {isPending: isPendingAccept, isError: isErrorAccept, acceptFriendRequest} = useAcceptFriendRequest();
+    const {isPending: isPendingDecline, isError: isErrorDecline, declineFriendRequest} = useDeclineFriendRequest();
 
     let acceptButtonContent;
-    if (isPending) {
+    if (isPendingAccept) {
         acceptButtonContent = <CircularProgress size="sm" color="default"/>;
-    } else if (isError) {
+    } else if (isErrorAccept) {
         acceptButtonContent = <AlertTriangle size={20}/>;
     } else {
         acceptButtonContent = <Check size={20}/>;
+    }
+
+    let declineButtonContent;
+    if (isPendingDecline) {
+        declineButtonContent = <CircularProgress size="sm" color="default"/>;
+    } else if (isErrorDecline) {
+        declineButtonContent = <AlertTriangle size={20}/>;
+    } else {
+        declineButtonContent = <X size={20}/>;
     }
 
     return (
@@ -47,7 +57,7 @@ export default function RequestCard({icon, gamerTag}: RequestCardProps) {
             <ButtonGroup size={"sm"} className={"ml-4 flex-shrink-0"}>
                 <Button
                     isIconOnly
-                    disabled={isPending}
+                    disabled={isPendingAccept || isPendingDecline}
                     color={"success"}
                     variant={"shadow"}
                     aria-label={"Accept friend request"}
@@ -57,15 +67,13 @@ export default function RequestCard({icon, gamerTag}: RequestCardProps) {
                 </Button>
                 <Button
                     isIconOnly
-                    disabled={isPending}
+                    disabled={isPendingDecline || isPendingAccept}
                     color={"danger"}
                     variant={"shadow"}
                     aria-label={"Decline friend request"}
-                    onPress={() => {
-                        console.log("Decline friend request")
-                    }}
+                    onPress={() => declineFriendRequest(gamerTag)}
                 >
-                    <X size={20}/>
+                    {declineButtonContent}
                 </Button>
             </ButtonGroup>
         </div>
