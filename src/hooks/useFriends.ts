@@ -2,8 +2,9 @@ import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {
     acceptFriendRequest,
     declineFriendRequest,
-    getFriendRequests,
     getFriends,
+    getIncomingFriendRequests,
+    getOutgoingFriendRequests,
     sendFriendRequest
 } from "@/service/friendService.ts";
 import {useContext} from "react";
@@ -56,12 +57,23 @@ export function useSendFriendRequest() {
     return {isPending, isError, sendFriendRequest: mutateAsync, reset}
 }
 
-export function useGetFriendRequests() {
+export function useGetIncomingFriendRequests() {
     const {isAuthenticated, isInitialised} = useContext(SecurityContext);
 
     const {isLoading, isError, data: profiles} = useQuery({
-        queryKey: ["friend requests"],
-        queryFn: () => getFriendRequests(),
+        queryKey: ["outgoing friend requests"],
+        queryFn: () => getIncomingFriendRequests(),
+        enabled: isAuthenticated() && isInitialised,
+    });
+    return {isLoading, isError, profiles};
+}
+
+export function useGetOutgoingFriendRequests() {
+    const {isAuthenticated, isInitialised} = useContext(SecurityContext);
+
+    const {isLoading, isError, data: profiles} = useQuery({
+        queryKey: ["incoming friend requests"],
+        queryFn: () => getOutgoingFriendRequests(),
         enabled: isAuthenticated() && isInitialised,
     });
     return {isLoading, isError, profiles};
@@ -75,7 +87,7 @@ export function useAcceptFriendRequest() {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ["friends"]})
-            queryClient.invalidateQueries({queryKey: ["friend requests"]})
+            queryClient.invalidateQueries({queryKey: ["outgoing friend requests"]})
             addToast({
                 title: "Friend request accepted",
                 description: "You accepted the friend request.",
@@ -108,7 +120,7 @@ export function useDeclineFriendRequest() {
             return declineFriendRequest(gamerTag);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ["friend requests"]})
+            queryClient.invalidateQueries({queryKey: ["outgoing friend requests"]})
             addToast({
                 title: "Friend request declined",
                 description: "You declined the friend request.",

@@ -1,7 +1,7 @@
 import {Input} from "@heroui/input";
 import {Search, UserPlus, Users} from "lucide-react";
 import {useState} from "react";
-import {useFriends, useGetFriendRequests} from "@/hooks/useFriends.ts";
+import {useFriends} from "@/hooks/useFriends.ts";
 import AddFriendModal from "@/components/friend/AddFriendModal.tsx";
 import {Button, ButtonGroup} from "@heroui/button";
 import FriendsTab from "@/components/friend/FriendsTab.tsx";
@@ -13,13 +13,8 @@ export default function FriendsPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [activeTab, setActiveTab] = useState<tab>("friends");
     const {isLoading, isError, profiles} = useFriends();
-    const {isLoading: isLoadingRequests, isError: isErrorRequests, profiles: requestProfiles} = useGetFriendRequests();
 
     const filteredProfiles = profiles?.filter(profile =>
-        profile.gamerTag.toLowerCase().includes(searchQuery.toLowerCase())
-    ) || [];
-
-    const filteredRequestProfiles = requestProfiles?.filter(profile =>
         profile.gamerTag.toLowerCase().includes(searchQuery.toLowerCase())
     ) || [];
 
@@ -74,8 +69,7 @@ export default function FriendsPage() {
             )}
 
             {activeTab === "requests" && (
-                <RequestsTab isLoading={isLoadingRequests} isError={isErrorRequests}
-                             filteredProfiles={filteredRequestProfiles}/>
+                <RequestsTab searchQuery={searchQuery}/>
             )}
 
         </div>
