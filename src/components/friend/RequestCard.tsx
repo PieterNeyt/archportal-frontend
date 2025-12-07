@@ -2,10 +2,9 @@ import {User} from "@heroui/user";
 import {Avatar} from "@heroui/avatar";
 import {Button, ButtonGroup} from "@heroui/button";
 import {AlertTriangle, Check, X} from "lucide-react";
-import {useAcceptFriendRequest, useDeclineFriendRequest} from "@/hooks/useFriends.ts";
+import {useAcceptFriendRequest, useCancelFriendRequest, useDeclineFriendRequest} from "@/hooks/useFriends.ts";
 import {CircularProgress} from "@heroui/progress";
-import {addToast} from "@heroui/toast";
-import {AxiosError} from "axios";
+import useToastEffect from "@/hooks/useToastEffect.ts";
 
 interface RequestCardProps {
     icon: string;
@@ -14,83 +13,18 @@ interface RequestCardProps {
 }
 
 export default function RequestCard({icon, gamerTag, type}: RequestCardProps) {
-    const {
-        isPending: isPendingAccept,
-        isError: isErrorAccept,
-        isSuccess: isSuccessAccept,
-        error: errorAccept,
-        acceptFriendRequest
-    } = useAcceptFriendRequest();
-    const {
-        isPending: isPendingDecline,
-        isError: isErrorDecline,
-        isSuccess: isSuccessDecline,
-        error: errorDecline,
-        declineFriendRequest
-    } = useDeclineFriendRequest();
+    const accept = useAcceptFriendRequest();
+    const decline = useDeclineFriendRequest();
+    const cancel = useCancelFriendRequest();
 
-    if (isSuccessAccept) {
-        addToast({
-            title: "Friend request accepted",
-            description: "You accepted the friend request.",
-            color: "success"
-        })
-    }
+    useToastEffect(accept, "Friend request accepted", "Failed to accept friend request", "You accepted the friend request.");
+    useToastEffect(decline, "Friend request declined", "Failed to accept friend request", "You declined the friend request.");
+    useToastEffect(cancel, "Friend request cancelled", "Failed to accept friend request", "You canceled the friend request.");
 
-    if (isErrorAccept) {
-        let errorMessage = "Failed to accept friend request";
-
-        if (errorAccept instanceof AxiosError && errorAccept.response?.data?.message) {
-            errorMessage = errorAccept.response.data.message;
-        } else if (errorAccept instanceof Error) {
-            errorMessage = errorAccept.message;
-        }
-        addToast({
-            title: "Failed to accept friend request",
-            description: errorMessage,
-            color: "danger"
-        })
-    }
-
-    if (isSuccessDecline) {
-        addToast({
-            title: "Friend request declined",
-            description: "You declined the friend request.",
-            color: "success"
-        })
-    }
-
-    if (isErrorDecline) {
-        let errorMessage = "Failed to decline friend request";
-
-        if (errorDecline instanceof AxiosError && errorDecline.response?.data?.message) {
-            errorMessage = errorDecline.response.data.message;
-        } else if (errorDecline instanceof Error) {
-            errorMessage = errorDecline.message;
-        }
-        addToast({
-            title: "Failed to decline friend request",
-            description: errorMessage,
-            color: "danger"
-        })
-    }
-
-    let acceptButtonContent;
-    if (isPendingAccept) {
-        acceptButtonContent = <CircularProgress size="sm" color="default"/>;
-    } else if (isErrorAccept) {
-        acceptButtonContent = <AlertTriangle size={20}/>;
-    } else {
-        acceptButtonContent = <Check size={20}/>;
-    }
-
-    let declineButtonContent;
-    if (isPendingDecline) {
-        declineButtonContent = <CircularProgress size="sm" color="default"/>;
-    } else if (isErrorDecline) {
-        declineButtonContent = <AlertTriangle size={20}/>;
-    } else {
-        declineButtonContent = <X size={20}/>;
+    const getButtonContent = (action: typeof accept | typeof decline | typeof cancel, successIcon: JSX.Element, errorIcon: JSX.Element) => {
+        if (action.isPending) return <CircularProgress size="sm" color="default"/>;
+        if (action.isError) return errorIcon;
+        return successIcon;
     }
 
     return (
@@ -119,23 +53,23 @@ export default function RequestCard({icon, gamerTag, type}: RequestCardProps) {
                 <ButtonGroup size={"sm"} className={"ml-4 flex-shrink-0"}>
                     <Button
                         isIconOnly
-                        disabled={isPendingAccept || isPendingDecline}
+                        disabled={accept.isPending || decline.isPending}
                         color={"success"}
                         variant={"shadow"}
                         aria-label={"Accept friend request"}
-                        onPress={() => acceptFriendRequest(gamerTag)}
+                        onPress={() => accept.acceptFriendRequest(gamerTag)}
                     >
-                        {acceptButtonContent}
+                        {getButtonContent(accept, <Check size={20}/>, <AlertTriangle size={20}/>)}
                     </Button>
                     <Button
                         isIconOnly
-                        disabled={isPendingDecline || isPendingAccept}
+                        disabled={decline.isPending || accept.isPending}
                         color={"danger"}
                         variant={"shadow"}
                         aria-label={"Decline friend request"}
-                        onPress={() => declineFriendRequest(gamerTag)}
+                        onPress={() => decline.declineFriendRequest(gamerTag)}
                     >
-                        {declineButtonContent}
+                        {getButtonContent(decline, <X size={20}/>, <AlertTriangle size={20}/>)}
                     </Button>
                 </ButtonGroup>)
             }
@@ -143,13 +77,13 @@ export default function RequestCard({icon, gamerTag, type}: RequestCardProps) {
             {type === "outgoing" && (
                 <Button
                     isIconOnly
-                    disabled={isPendingDecline || isPendingAccept}
+                    disabled={cancel.isPending}
                     color={"danger"}
                     variant={"shadow"}
                     aria-label={"Cancel friend request"}
-                    onPress={() => console.log("Cancel friend request")}
+                    onPress={() => cancel.cancelFriendRequest(gamerTag)}
                 >
-                    {declineButtonContent}
+                    {getButtonContent(cancel, <X size={20}/>, <AlertTriangle size={20}/>)}
                 </Button>
             )}
         </div>
