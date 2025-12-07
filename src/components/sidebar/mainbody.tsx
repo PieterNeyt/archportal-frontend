@@ -1,16 +1,23 @@
 import { menuSections } from "@/config/menuItemsList.ts";
-import React from "react";
-import {NotificationButton} from "@/components/notifications/notificationButton.tsx";
+import React, {useContext} from "react";
+import { NotificationButton } from "@/components/notifications/notificationButton.tsx";
+import securityContext from "@/context/SecurityContext.ts";
 
 interface MainBodyProps {
     isOpen: boolean;
 }
 
 export function SidebarMainBody({ isOpen }: MainBodyProps) {
+    const {isAuthenticated,isInitialised}= useContext(securityContext)
+
+    const visibleSections = isAuthenticated() && isInitialised
+        ? menuSections
+        : menuSections.filter(section => section.title === 'Store');
+
     return (
         <nav className="flex-1 p-4 overflow-y-auto flex flex-col">
             <div className="flex-1">
-                {menuSections.map((section, sectionIndex) => (
+                {visibleSections.map((section, sectionIndex) => (
                     <div key={sectionIndex} className={sectionIndex > 0 ? 'mt-6' : ''}>
                         {isOpen && (
                             <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-3">
@@ -50,9 +57,11 @@ export function SidebarMainBody({ isOpen }: MainBodyProps) {
                 ))}
             </div>
 
-            <div className="mt-auto pt-4">
-                <NotificationButton open={isOpen}/>
-            </div>
+            { (isAuthenticated() && isInitialised) && (
+                <div className="mt-auto pt-4">
+                    <NotificationButton open={isOpen}/>
+                </div>
+            )}
 
         </nav>
     );
