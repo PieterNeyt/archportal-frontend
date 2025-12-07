@@ -34,3 +34,8 @@ export async function getNotificaitonAmount(): Promise<number> {
     const {data: amountOfNotifications} = await axios.get<number>(`/api/notification/total`);
     return amountOfNotifications;
 }
+
+export async function RemoveNotification(notificationId:string): Promise<Notification> {
+    const {data: notifiaction} = await axios.delete<Notification>(`/api/notification/read/${notificationId}`);
+    return notifiaction;
+}

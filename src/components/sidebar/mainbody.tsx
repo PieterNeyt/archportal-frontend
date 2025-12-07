@@ -1,6 +1,6 @@
 import { menuSections } from "@/config/menuItemsList.ts";
 import React from "react";
-import {NotificationButton} from "@/components/sidebar/notificationButton.tsx";
+import {NotificationButton} from "@/components/notifications/notificationButton.tsx";
 
 interface MainBodyProps {
     isOpen: boolean;

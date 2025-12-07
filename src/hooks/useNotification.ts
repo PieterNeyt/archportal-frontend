@@ -1,7 +1,12 @@
 import {useContext} from "react";
 import securityContext from "@/context/SecurityContext.ts";
-import {useQuery} from "@tanstack/react-query";
-import {getFirstFiveNotificaiton, getNotificaitonAmount, getNotificaitons} from "@/service/notificationService.ts";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {
+    getFirstFiveNotificaiton,
+    getNotificaitonAmount,
+    getNotificaitons,
+    RemoveNotification
+} from "@/service/notificationService.ts";
 
 export function useFirstFiveNotifications() {
     const {isAuthenticated,isInitialised}= useContext(securityContext)
@@ -37,4 +42,31 @@ export function useNotificationAmount() {
     })
 
     return {isLoading, isError, refetch, notificationsAmount}
+}
+
+
+export function useRemoveNotification() {
+    const queryClient = useQueryClient()
+    const {
+        mutateAsync,
+        isPending,
+        isError,
+
+    } = useMutation(
+        {
+            mutationFn: (notifiactionId: string) => {
+                return RemoveNotification(notifiactionId)
+            },
+            onSuccess: () => {
+                queryClient.invalidateQueries({queryKey: ['amountOfNotifications']});
+                queryClient.invalidateQueries({queryKey: ['notifications']});
+                queryClient.invalidateQueries({queryKey: ['firstFiveNotification']});
+            }
+        })
+
+    return {
+        isPending,
+        isError,
+        RemoveNotification: mutateAsync
+    }
 }
