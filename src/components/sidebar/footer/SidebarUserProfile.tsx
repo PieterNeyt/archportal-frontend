@@ -38,7 +38,7 @@ export default function SidebarUserProfile({isOpen, dropdownOpen, setDropdownOpe
 
                     className: "w-10 h-10 flex-shrink-0"
                 }}
-                name={isOpen ? loggedInUser!.firstName + " " + loggedInUser!.lastName : ""}
+                name={isOpen ? loggedInUser!.gamerTag : ""}
 
                 classNames={{
                     name: "text-sm font-bold text-foreground",
