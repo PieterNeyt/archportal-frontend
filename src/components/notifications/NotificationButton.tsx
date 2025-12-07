@@ -1,12 +1,12 @@
 import { Bell } from "lucide-react";
 import { Badge } from "@heroui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@heroui/react";
-import { NotificationList } from "@/components/notifications/notificationList.tsx";
+import { NotificationList } from "@/components/notifications/NotificationList.tsx";
 import {useNotificationAmount, useRemoveNotification} from "@/hooks/useNotification.ts";
 import { useState } from "react";
-import { NotificationModal } from "@/components/notifications/notificationModal.tsx";
+import { NotificationModal } from "@/components/notifications/NotificationModal.tsx";
 import { Notification } from "@/model/notification.ts";
-import { AllNotificationsModal } from "@/components/notifications/allNotificationsModal.tsx";
+import { AllNotificationsModal } from "@/components/notifications/AllNotificationsModal.tsx";
 
 export interface NotificationProps {
     open: boolean;

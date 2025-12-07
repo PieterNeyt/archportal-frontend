@@ -1,6 +1,6 @@
 import { menuSections } from "@/config/menuItemsList.ts";
 import React, {useContext} from "react";
-import { NotificationButton } from "@/components/notifications/notificationButton.tsx";
+import { NotificationButton } from "@/components/notifications/NotificationButton.tsx";
 import securityContext from "@/context/SecurityContext.ts";
 
 interface MainBodyProps {
