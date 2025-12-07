@@ -6,6 +6,7 @@ import {
     getFriends,
     getIncomingFriendRequests,
     getOutgoingFriendRequests,
+    removeFriend,
     sendFriendRequest
 } from "@/service/friendService.ts";
 import {useContext} from "react";
@@ -99,4 +100,18 @@ export function useCancelFriendRequest() {
     })
 
     return {isPending, isError, isSuccess, error, cancelFriendRequest: mutateAsync}
+}
+
+export function useRemoveFriend() {
+    const queryClient = useQueryClient();
+    const {isPending, isError, isSuccess, error, mutateAsync} = useMutation({
+        mutationFn: (gamerTag: string) => {
+            return removeFriend(gamerTag);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["friends"]})
+        }
+    })
+
+    return {isPending, isError, isSuccess, error, removeFriend: mutateAsync}
 }

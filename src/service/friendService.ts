@@ -44,3 +44,11 @@ export async function cancelFriendRequest(gamertag: string): Promise<void> {
         }
     })
 }
+
+export async function removeFriend(gamertag: string): Promise<void> {
+    await axios.delete("/api/profile/friends", {
+        data: {
+            gamerTag: gamertag
+        }
+    })
+}
