@@ -89,7 +89,7 @@ export default function ShopPage() {
                     <div className="flex flex-1 flex-wrap gap-4 w-full max-w-4xl items-center">
                         <Input
                             className="w-full sm:w-auto sm:flex-1 min-w-[200px]"
-                            placeholder="Search in your library..."
+                            placeholder="Search in your shop..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             startContent={<Search size={20} className="text-white/40" />}
