@@ -19,7 +19,7 @@ enum SortOption {
     ALPHABETICAL = "ALPHABETICAL",
     PRICE_LOW_HIGH = "PRICE_LOW_HIGH",
     PRICE_HIGH_LOW = "PRICE_HIGH_LOW"
-}&
+}
 
 const SKELETON_COUNT = 10;
 
