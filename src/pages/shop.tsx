@@ -7,7 +7,7 @@ import { GameLoadError } from "@/components/shop/GameLoadError.tsx";
 import { ShoppingCartComponent } from "@/components/shop/ShoppingCartComponent.tsx";
 import { useMemo, useState } from "react";
 import { Button } from "@heroui/button";
-import { Search, ShoppingCart, Filter, ArrowUpDown } from "lucide-react"; // X weggehaald
+import { Search, ShoppingCart, Filter, ArrowUpDown } from "lucide-react";
 import { Badge } from "@heroui/badge";
 import { Input } from "@heroui/input";
 import { Select, SelectItem } from "@heroui/select";
@@ -19,7 +19,7 @@ enum SortOption {
     ALPHABETICAL = "ALPHABETICAL",
     PRICE_LOW_HIGH = "PRICE_LOW_HIGH",
     PRICE_HIGH_LOW = "PRICE_HIGH_LOW"
-}
+}&
 
 const SKELETON_COUNT = 10;
 
