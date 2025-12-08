@@ -38,7 +38,7 @@ export function NotificationList({ notificationsSize, onNotificationClick, onVie
             </div>
 
             {isLoading && <CenterBox><CircularProgress color="primary" /></CenterBox>}
-            {(isError || !notifications) && !isLoading && <CenterBox>Er ging iets mis</CenterBox>}
+            {(isError || !notifications) && !isLoading && <CenterBox>Somthing went wrong while loading you're Notifications</CenterBox>}
             {notifications && notifications.length === 0 && !isLoading && <CenterBox>No Notifications found</CenterBox>}
 
             {notifications && notifications.length > 0 && (
