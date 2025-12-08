@@ -1,4 +1,4 @@
-import {ChangeChannelType} from "@/components/profile/changeChannelType.tsx";
+import {ChangeChannelType} from "@/components/profile/ChangeChannelType.tsx";
 
 export function ProfileSettingsPage() {
 

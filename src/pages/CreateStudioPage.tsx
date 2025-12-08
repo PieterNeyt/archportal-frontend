@@ -1,4 +1,4 @@
-import {CreateGameStudioForm} from "@/components/gamestudio/addGameStudioForm.tsx";
+import {CreateGameStudioForm} from "@/components/gamestudio/AddGameStudioForm.tsx";
 import {Image} from "@heroui/image";
 
 export function CreateGameStudioPage() {

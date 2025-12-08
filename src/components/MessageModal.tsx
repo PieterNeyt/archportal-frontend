@@ -11,7 +11,6 @@ interface MessageModalProps {
 export function MessageModal({title, message, open, action}: MessageModalProps) {
     return (
         <Modal
-            backdrop="blur"
             isDismissable={false}
             isKeyboardDismissDisabled={true}
             isOpen={open}
@@ -28,7 +27,7 @@ export function MessageModal({title, message, open, action}: MessageModalProps) 
                     </ModalBody>
                     <ModalFooter>
                         <Button color="primary" onPress={action}>
-                            Action
+                            Ok
                         </Button>
                     </ModalFooter>
                 </>

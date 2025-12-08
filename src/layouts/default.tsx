@@ -1,5 +1,5 @@
 import {ReactNode} from "react";
-import {GameLauncherSidebar} from "@/components/sidebar/sidebar.tsx";
+import {GameLauncherSidebar} from "@/components/sidebar/Sidebar.tsx";
 import Starfield from "@/layouts/background.tsx";
 import {HeroUIProvider} from "@heroui/system";
 import {ToastProvider} from "@heroui/toast";
