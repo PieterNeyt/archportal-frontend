@@ -6,13 +6,13 @@ import {CircularProgress} from "@heroui/progress";
 import {Send, UserPlus} from "lucide-react";
 import {Button} from "@heroui/button";
 import {inputClasses} from "@/styles/customClasses.ts";
-import axios, {AxiosError} from "axios";
+import {AxiosError} from "axios";
 import {addToast} from "@heroui/toast";
 
 export default function AddFriendModal() {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [username, setUsername] = useState('');
-    const {isPending, isError, error, sendFriendRequest, reset} = useSendFriendRequest();
+    const {isPending, isError, sendFriendRequest, reset} = useSendFriendRequest();
 
     const handleSendFriendRequest = async (onClose: () => void) => {
         if (!username.trim() || isPending) return;
@@ -25,26 +25,20 @@ export default function AddFriendModal() {
                 color: "success"
             })
         } catch (error) {
-            if (axios.isAxiosError(error))
-                console.error(error.response?.data?.message);
-            else console.error("An unknown error occurred: ", error);
+            let errorMessage = "Failed to send friend request";
+
+            if (error instanceof AxiosError && error.response?.data?.message) {
+                errorMessage = error.response.data.message;
+            } else if (error instanceof Error) {
+                errorMessage = error.message;
+            }
+            addToast({
+                title: "Failed to send friend request",
+                description: errorMessage,
+                color: "danger",
+
+            })
         }
-    }
-
-    if (isError) {
-        let errorMessage = "Failed to send friend request";
-
-        if (error instanceof AxiosError && error.response?.data?.message) {
-            errorMessage = error.response.data.message;
-        } else if (error instanceof Error) {
-            errorMessage = error.message;
-        }
-        addToast({
-            title: "Failed to send friend request",
-            description: errorMessage,
-            color: "danger",
-
-        })
     }
 
     const handleOpenChange = (open: boolean) => {

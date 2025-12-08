@@ -1,10 +1,12 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {
     acceptFriendRequest,
+    cancelFriendRequest,
     declineFriendRequest,
     getFriends,
     getIncomingFriendRequests,
     getOutgoingFriendRequests,
+    removeFriend,
     sendFriendRequest
 } from "@/service/friendService.ts";
 import {useContext} from "react";
@@ -23,7 +25,7 @@ export function useFriends() {
 
 export function useSendFriendRequest() {
     const queryClient = useQueryClient();
-    const {mutateAsync, isPending, isError, error, reset} = useMutation({
+    const {mutateAsync, isPending, isError, reset} = useMutation({
         mutationFn: (gamertag: string) => {
             return sendFriendRequest(gamertag);
         },
@@ -32,7 +34,7 @@ export function useSendFriendRequest() {
         }
     })
 
-    return {isPending, isError, error, sendFriendRequest: mutateAsync, reset}
+    return {isPending, isError, sendFriendRequest: mutateAsync, reset}
 }
 
 export function useGetIncomingFriendRequests() {
@@ -84,4 +86,32 @@ export function useDeclineFriendRequest() {
     })
 
     return {isPending, isError, isSuccess, error, declineFriendRequest: mutateAsync}
+}
+
+export function useCancelFriendRequest() {
+    const queryClient = useQueryClient();
+    const {isPending, isError, isSuccess, error, mutateAsync} = useMutation({
+        mutationFn: (gamerTag: string) => {
+            return cancelFriendRequest(gamerTag);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["outgoing friend requests"]})
+        }
+    })
+
+    return {isPending, isError, isSuccess, error, cancelFriendRequest: mutateAsync}
+}
+
+export function useRemoveFriend() {
+    const queryClient = useQueryClient();
+    const {isPending, isError, isSuccess, error, mutateAsync} = useMutation({
+        mutationFn: (gamerTag: string) => {
+            return removeFriend(gamerTag);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["friends"]})
+        }
+    })
+
+    return {isPending, isError, isSuccess, error, removeFriend: mutateAsync}
 }
