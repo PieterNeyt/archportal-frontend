@@ -11,3 +11,13 @@ export async function getMyStudioStatus(): Promise<GameStudioStatus> {
     const {data: gameStudioStatus} = await axios.get<GameStudioStatus>(`/api/gamestudio/me`);
     return gameStudioStatus;
 }
+
+export async function getGameStudio(): Promise<GameStudio> {
+    const {data: studio} = await axios.get<GameStudio>(`/api/gamestudio`);
+    return studio;
+}
+
+export async function updateGameStudio(gameStudio:GameStudio): Promise<GameStudio> {
+    const {data: studio} = await axios.put<GameStudio>(`/api/gamestudio`,gameStudio);
+    return studio;
+}
