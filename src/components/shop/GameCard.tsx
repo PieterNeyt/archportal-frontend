@@ -11,16 +11,16 @@ interface ShopCardProps {
     price: number;
     gameId: string;
     onAddToCart: (gameId: string) => void;
+    onPress?: () => void;
 }
 
-export function GameCard({title, image, price, gameId, onAddToCart}: ShopCardProps) {
+export function GameCard({title, image, price, gameId, onAddToCart, onPress}: ShopCardProps) {
     const [imageFailed, setImageFailed] = useState(false);
     const {isAuthenticated, login} = useContext(SecurityContext);
 
     const handleImageError = () => {
         setImageFailed(true);
     }
-
 
     const addToCart = () => {
         if (isAuthenticated())
@@ -30,34 +30,41 @@ export function GameCard({title, image, price, gameId, onAddToCart}: ShopCardPro
     }
 
     return (
-            <Card
-                className={"py-0 w-[250px] h-[380px] sm:w-[300px] bg-black/30 backdrop-blur-xl border border-white/10 hover:border-purple-500/50 hover:bg-black/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/20 overflow-hidden"}
-            >
-                <CardBody className={"p-0 overflow-hidden"}>
-                    {(imageFailed || !image) ? (
-                        <div
-                            className="flex flex-col items-center justify-center h-[300px] bg-white/5 backdrop-blur-sm border-b border-white/10">
-                            <Gamepad2 size={"64"} className={"text-white/40 mb-2"}/>
-                            <p className={"text-sm text-white/40"}>Image missing</p>
-                        </div>
-                    ) : (
-                        <div className="h-[300px] overflow-hidden border-b border-white/10">
-                            <Image
-                                alt={title}
-                                className={"object-cover w-full h-full"}
-                                src={image}
-                                onError={handleImageError}
-                                isBlurred
-                                removeWrapper
-                            />
-                        </div>
-                    )}
-                </CardBody>
-                <CardHeader className={"pt-2 px-4 flex-col items-start"}>
-                    <h4 className={"font-bold text-large truncate w-full"}>{title}</h4>
-                    <p className={"text-xl font-bold text-primary"}>€{price.toFixed(2)}</p>
-                </CardHeader>
-                <CardFooter className={"pt-0 px-4 pb-4"}>
+        <Card
+            isPressable
+            onPress={onPress}
+            className={"py-0 w-[250px] h-[380px] sm:w-[300px] bg-black/30 backdrop-blur-xl border border-white/10 hover:border-purple-500/50 hover:bg-black/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/20 overflow-hidden cursor-pointer"}
+        >
+            <CardBody className={"p-0 overflow-hidden"}>
+                {(imageFailed || !image) ? (
+                    <div
+                        className="flex flex-col items-center justify-center h-[300px] bg-white/5 backdrop-blur-sm border-b border-white/10">
+                        <Gamepad2 size={"64"} className={"text-white/40 mb-2"}/>
+                        <p className={"text-sm text-white/40"}>Image missing</p>
+                    </div>
+                ) : (
+                    <div className="h-[300px] overflow-hidden border-b border-white/10">
+                        <Image
+                            alt={title}
+                            className={"object-cover w-full h-full"}
+                            src={image}
+                            onError={handleImageError}
+                            isBlurred
+                            removeWrapper
+                        />
+                    </div>
+                )}
+            </CardBody>
+            <CardHeader className={"pt-2 px-4 flex-col items-start"}>
+                <h4 className={"font-bold text-large truncate w-full"}>{title}</h4>
+                <p className={"text-xl font-bold text-primary"}>€{price.toFixed(2)}</p>
+            </CardHeader>
+            <CardFooter className={"pt-0 px-4 pb-4"}>
+                <div
+                    className="w-full"
+                    onClick={(e) => e.stopPropagation()}
+                    onKeyDown={(e) => e.stopPropagation()}
+                >
                     <Button
                         color="primary"
                         className="w-full"
@@ -66,7 +73,8 @@ export function GameCard({title, image, price, gameId, onAddToCart}: ShopCardPro
                     >
                         Add
                     </Button>
-                </CardFooter>
-            </Card>
+                </div>
+            </CardFooter>
+        </Card>
     )
 }
