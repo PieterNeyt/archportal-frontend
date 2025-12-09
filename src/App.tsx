@@ -14,6 +14,7 @@ import {GameStudioPage} from "@/pages/GameStudioPage.tsx";
 import FriendsPage from "@/pages/FriendsPage.tsx";
 import {ProfileSettingsPage} from "@/pages/ProfileSettings.tsx";
 import RouteGuardLoggedIn from "@/components/security/RouteGuardLoggedIn.tsx";
+import ChatPage from "@/pages/ChatPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ function App() {
                             <Route element={<RouteGuardLoggedIn><ProfileSettingsPage/></RouteGuardLoggedIn>}
                                    path="/user/settings"/>
                             <Route element={<RouteGuardLoggedIn><FriendsPage/></RouteGuardLoggedIn>} path={"/friends"}/>
+                            <Route element={<RouteGuardLoggedIn><ChatPage/></RouteGuardLoggedIn>} path={"/chats"}/>
                         </Routes>
                     </DefaultLayout>
                 </SecurityContextProvider>
