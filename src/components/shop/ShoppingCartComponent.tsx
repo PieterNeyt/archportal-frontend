@@ -3,6 +3,7 @@ import {Button} from "@heroui/button";
 import {Gamepad2, ShoppingCart, Trash2, X} from "lucide-react";
 import {Image} from "@heroui/image";
 import {Game} from "@/model/game";
+import {closeAll} from "@heroui/toast";
 
 interface Cart {
     items: Game[];
@@ -27,6 +28,8 @@ export function ShoppingCartComponent({
                                           isCheckingOut
                                       }: ShoppingCartProps) {
     if (!isOpen) return null;
+
+    closeAll();
 
     const itemCount = cart?.items?.length ?? 0;
 

@@ -114,10 +114,9 @@ export function GameShopPage() {
                                     src={game.imageUrl}
                                     alt={game.title}
                                     className="object-cover w-full h-full"
-                                    width="100%"
-                                    height="100%"
                                     onError={() => setImageFailed(true)}
                                     isBlurred
+                                    removeWrapper
                                 />
                             )}
                         </div>
