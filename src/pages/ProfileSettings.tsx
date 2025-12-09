@@ -26,8 +26,8 @@ export function ProfileSettingsPage() {
                     <Button
                         className="bg-white text-black font-semibold shadow-none hover:bg-white/90 border-none"
                         radius="full"
-                        onPress={() => console.log("Navigate to edit")}
-                    >
+                        onPress={() => window.open("http://localhost:8180/auth/realms/ArchPortal/account", "_blank")
+                    }                    >
                         Edit Profile
                     </Button>
                 </CardHeader>
