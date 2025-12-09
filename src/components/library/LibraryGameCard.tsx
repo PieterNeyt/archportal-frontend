@@ -29,7 +29,7 @@ export function LibraryGameCard({ game, viewMode }: LibraryGameCardProps) {
             window.open(response.launchUrl, "_blank", "noopener,noreferrer");
             return;
         }
-        return alert("Er is een fout opgetreden bij het starten van het spel.");
+        return alert("There was an error launching the game.");
     };
 
     if (viewMode === 'list') {

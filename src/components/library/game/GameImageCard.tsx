@@ -3,8 +3,12 @@ import { Image } from "@heroui/image";
 import { Gamepad2 } from "lucide-react";
 import { useState } from "react";
 
-export function GameImageCard({ title, imageUrl }: { title: string; imageUrl?: string }) {
-    const [failed, setFailed] = useState(false);
+interface GameImageCardProps {
+    title: string;
+    imageUrl?: string;
+}
+
+export function GameImageCard({ title, imageUrl }: GameImageCardProps) {    const [failed, setFailed] = useState(false);
 
     return (
         <Card className="bg-black/30 backdrop-blur-xl border border-white/10 overflow-hidden">

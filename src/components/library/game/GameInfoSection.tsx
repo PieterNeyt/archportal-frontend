@@ -1,17 +1,19 @@
 import { Button } from "@heroui/button";
 import { Play } from "lucide-react";
 
+interface GameInfoSectionProps {
+    title: string;
+    description: string;
+    isPending: boolean;
+    onStart: () => void;
+}
+
 export function GameInfoSection({
                                     title,
                                     description,
                                     isPending,
                                     onStart,
-                                }: {
-    title: string;
-    description: string;
-    isPending: boolean;
-    onStart: () => void;
-}) {
+                                }: GameInfoSectionProps) {
     return (
         <div className="flex flex-col gap-6">
             <div>

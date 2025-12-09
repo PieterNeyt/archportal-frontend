@@ -1,17 +1,16 @@
 import { Card, CardBody } from "@heroui/card";
 import { Trophy, Target, Clock } from "lucide-react";
-import React from "react";
+import {StatCard} from "@/components/library/game/StatCard.tsx";
 
-export function GameStatisticsCard({
-                                       stats,
-                                       isLoading,
-                                   }: {
-    stats: {
+export interface GameStatisticsCardProps {
+    stats?: {
         totalPlayTimeMinutes: number;
         winnerRecords: { PlayedAt: string; Winner: string }[];
-    };
+    } | null;
     isLoading: boolean;
-}) {
+}
+
+export function GameStatisticsCard({ stats, isLoading }: GameStatisticsCardProps) {
     return (
         <Card className="bg-black/30 backdrop-blur-xl border border-white/10">
             <CardBody className="p-6">
@@ -65,22 +64,3 @@ export function GameStatisticsCard({
     );
 }
 
-function StatCard({
-                      icon,
-                      label,
-                      value,
-                  }: {
-    icon: React.ReactNode;
-    label: string;
-    value: string | number;
-}) {
-    return (
-        <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-            <div className="flex items-center gap-2 mb-2">
-                {icon}
-                <span className="text-white/60 text-sm">{label}</span>
-            </div>
-            <p className="text-2xl font-bold text-white">{value}</p>
-        </div>
-    );
-}
