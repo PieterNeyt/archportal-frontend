@@ -10,6 +10,11 @@ export async function getGames(): Promise<Game[]> {
     return games;
 }
 
+export async function getGame(id:string): Promise<Game> {
+    const {data: game} = await axios.get<Game>(`/api/shop/game/${id}`);
+    return game;
+}
+
 export async function getCart(): Promise<Cart> {
     const {data: cart} = await axios.get<Cart>('/api/shop/cart');
     return cart;

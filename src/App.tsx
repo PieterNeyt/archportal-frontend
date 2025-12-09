@@ -14,6 +14,7 @@ import {GameStudioPage} from "@/pages/GameStudioPage.tsx";
 import FriendsPage from "@/pages/FriendsPage.tsx";
 import {ProfileSettingsPage} from "@/pages/ProfileSettings.tsx";
 import RouteGuardLoggedIn from "@/components/security/RouteGuardLoggedIn.tsx";
+import {GameShopPage} from "@/pages/GameShopPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -28,7 +29,7 @@ function App() {
                             <Route element={<PaymentReturnPage/>} path="/payment-return"/>
                             <Route path="/" element={<Navigate to={"/shop"}/>}/>
                             <Route element={<GameStudioPage/>} path="/gamestudio/:id"/>
-
+                            <Route element={<GameShopPage/>} path="/shop/game/:id"/>
                             <Route element={<RouteGuardLoggedIn><LibraryPage/></RouteGuardLoggedIn>} path="/library"/>
                             <Route element={<RouteGuardGameStudio><CreateGameStudioPage/></RouteGuardGameStudio>}
                                    path="/create/gamestudio"/>

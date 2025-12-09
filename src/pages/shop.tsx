@@ -1,4 +1,4 @@
-import { useGame } from "@/hooks/useGame.ts";
+import { useGames } from "@/hooks/useGames.ts";
 import { useCart } from "@/hooks/useCart.ts";
 import { useCheckout } from "@/hooks/useCheckout.ts";
 import { GameCard } from "@/components/shop/GameCard.tsx";
@@ -14,6 +14,8 @@ import { Select, SelectItem } from "@heroui/select";
 import { GameGenre } from "@/model/library.ts";
 import { selectClasses } from "@/styles/customClasses.ts";
 import { Game } from "@/model/game.ts";
+// 1. Import useNavigate
+import { useNavigate } from "react-router-dom";
 
 enum SortOption {
     ALPHABETICAL = "ALPHABETICAL",
@@ -28,21 +30,21 @@ const formatLabel = (label: string) => {
 };
 
 export default function ShopPage() {
-    const { isError, isLoading, refetch, games } = useGame();
+    const { isError, isLoading, refetch, games } = useGames();
     const { cart, addToCart, removeFromCart, itemCount } = useCart();
     const { checkout, isCheckingOut } = useCheckout();
+
+    const navigate = useNavigate();
 
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedGenres, setSelectedGenres] = useState<Set<string>>(new Set([]));
     const [sortOption, setSortOption] = useState<Set<string>>(new Set([SortOption.ALPHABETICAL]));
     const [isCartOpen, setIsCartOpen] = useState(false);
 
-    // Helper om te checken of er actieve filters zijn
     const hasActiveFilters = searchQuery !== "" ||
         selectedGenres.size > 0 ||
         !sortOption.has(SortOption.ALPHABETICAL);
 
-    // Reset functie
     const handleReset = () => {
         setSearchQuery("");
         setSelectedGenres(new Set([]));
@@ -174,6 +176,7 @@ export default function ShopPage() {
                                 price={game.price}
                                 gameId={game.id}
                                 onAddToCart={addToCart}
+                                onPress={() => navigate(`/shop/game/${game.id}`)}
                             />
                         ))
                     ) : (
