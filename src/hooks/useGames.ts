@@ -1,5 +1,5 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {AddGame, getGame, getGames} from "@/service/gameService.ts";
+import {AddGame, getGame, getGames, getGamesFromStudio} from "@/service/gameService.ts";
 import {CreateGame} from "@/model/createGame.ts";
 import {addToast} from "@heroui/toast";
 import {AxiosError} from "axios";

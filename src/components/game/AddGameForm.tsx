@@ -5,12 +5,12 @@ import {Button} from "@heroui/button";
 import {useNavigate} from "react-router-dom";
 import {CircularProgress} from "@heroui/progress";
 import {createGameSchema, CreateGameValues} from "@/validation/createGameValidation.ts";
-import {useAddGame} from "@/hooks/useGame.ts";
 import {useState} from "react";
 import {Image, Select, SelectItem} from "@heroui/react";
 import {GameGenre} from "@/model/GameGenre.ts";
 import {inputClasses, selectClasses} from "@/styles/customClasses.ts";
 import {MessageModal} from "@/components/MessageModal.tsx";
+import {useAddGame} from "@/hooks/useGames.ts";
 
 
 export function CreateGameForm() {

@@ -1,5 +1,4 @@
 import {useGameStudio} from "@/hooks/useGameStudio.ts";
-import {useGameFromStudio} from "@/hooks/useGame.ts";
 import {Gamepad2, Plus} from "lucide-react";
 import {StudioLoadError} from "@/components/gamestudio/StudioLoadError.tsx";
 import {GamesList} from "@/components/gamestudio/GamesList.tsx";
@@ -8,6 +7,7 @@ import {GameStudioInfoCard} from "@/components/gamestudio/GameStudioInfoCard.tsx
 import {GameStudioPageSkeleton} from "@/components/gamestudio/GameStudioPageSkeleton.tsx";
 import {Button} from "@heroui/button";
 import {useNavigate} from "react-router-dom";
+import {useGameFromStudio} from "@/hooks/useGames.ts";
 
 export function GameStudioPage() {
     const navigate = useNavigate();
