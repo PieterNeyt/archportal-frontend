@@ -10,6 +10,11 @@ export async function getGames(): Promise<Game[]> {
     return games;
 }
 
+export async function getGame(id:string): Promise<Game> {
+    const {data: game} = await axios.get<Game>(`/api/shop/game/${id}`);
+    return game;
+}
+
 export async function getGamesFromStudio(): Promise<Game[]> {
     const {data: games} = await axios.get<Game[]>('/api/games/studio');
     return games;

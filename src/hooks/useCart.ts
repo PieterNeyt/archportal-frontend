@@ -2,8 +2,6 @@ import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {addToCart, getCart, removeFromCart} from "@/service/gameService.ts";
 import {useContext} from "react";
 import SecurityContext from "@/context/SecurityContext.ts";
-import {addToast} from "@heroui/toast";
-import {AxiosError} from "axios";
 
 export function useCart() {
     const queryClient = useQueryClient();
@@ -19,24 +17,6 @@ export function useCart() {
         mutationFn: (gameId: string) => addToCart(gameId),
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ["cart"]});
-            addToast({
-                title: "Game Added to cart",
-                color:"success",
-            })
-        },
-        onError: (error) => {
-            let errorMessage = "Failed to add to cart";
-
-            if (error instanceof AxiosError && error.response?.data?.message) {
-                errorMessage = error.response.data.message;
-            } else if (error.message) {
-                errorMessage = error.message;
-            }
-
-            addToast({
-                title: errorMessage,
-                color: "danger"
-            });
         }
     });
 
@@ -50,6 +30,7 @@ export function useCart() {
     return {
         cart,
         isCartLoading,
+        addToCartMutation,
         addToCart: addToCartMutation.mutate,
         removeFromCart: removeFromCartMutation.mutate,
         isAddingToCart: addToCartMutation.isPending,

@@ -1,19 +1,21 @@
-import { useGame } from "@/hooks/useGame.ts";
-import { useCart } from "@/hooks/useCart.ts";
-import { useCheckout } from "@/hooks/useCheckout.ts";
-import { GameCard } from "@/components/shop/GameCard.tsx";
-import { SkeletonCard } from "@/components/shop/SkeletonCard.tsx";
-import { GameLoadError } from "@/components/shop/GameLoadError.tsx";
-import { ShoppingCartComponent } from "@/components/shop/ShoppingCartComponent.tsx";
-import { useMemo, useState } from "react";
-import { Button } from "@heroui/button";
-import { Search, ShoppingCart, Filter, ArrowUpDown } from "lucide-react";
-import { Badge } from "@heroui/badge";
-import { Input } from "@heroui/input";
-import { Select, SelectItem } from "@heroui/select";
-import { GameGenre } from "@/model/library.ts";
-import { selectClasses } from "@/styles/customClasses.ts";
-import { Game } from "@/model/game.ts";
+import {useGames} from "@/hooks/useGames.ts";
+import {useCart} from "@/hooks/useCart.ts";
+import {useCheckout} from "@/hooks/useCheckout.ts";
+import {GameCard} from "@/components/shop/GameCard.tsx";
+import {SkeletonCard} from "@/components/shop/SkeletonCard.tsx";
+import {GameLoadError} from "@/components/shop/GameLoadError.tsx";
+import {ShoppingCartComponent} from "@/components/shop/ShoppingCartComponent.tsx";
+import {useMemo, useState} from "react";
+import {Button} from "@heroui/button";
+import {Search, ShoppingCart, Filter, ArrowUpDown} from "lucide-react";
+import {Badge} from "@heroui/badge";
+import {Input} from "@heroui/input";
+import {Select, SelectItem} from "@heroui/select";
+import {GameGenre} from "@/model/library.ts";
+import {selectClasses} from "@/styles/customClasses.ts";
+import {Game} from "@/model/game.ts";
+import {useNavigate} from "react-router-dom";
+import useToastEffect from "@/hooks/useToastEffect.ts";
 
 enum SortOption {
     ALPHABETICAL = "ALPHABETICAL",
@@ -28,26 +30,33 @@ const formatLabel = (label: string) => {
 };
 
 export default function ShopPage() {
-    const { isError, isLoading, refetch, games } = useGame();
-    const { cart, addToCart, removeFromCart, itemCount } = useCart();
-    const { checkout, isCheckingOut } = useCheckout();
+    const {isError, isLoading, refetch, games} = useGames();
+    const {cart, addToCartMutation, addToCart, removeFromCart, itemCount} = useCart();
+    const {checkout, isCheckingOut} = useCheckout();
+
+    const navigate = useNavigate();
 
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedGenres, setSelectedGenres] = useState<Set<string>>(new Set([]));
     const [sortOption, setSortOption] = useState<Set<string>>(new Set([SortOption.ALPHABETICAL]));
     const [isCartOpen, setIsCartOpen] = useState(false);
 
-    // Helper om te checken of er actieve filters zijn
     const hasActiveFilters = searchQuery !== "" ||
         selectedGenres.size > 0 ||
         !sortOption.has(SortOption.ALPHABETICAL);
 
-    // Reset functie
     const handleReset = () => {
         setSearchQuery("");
         setSelectedGenres(new Set([]));
         setSortOption(new Set([SortOption.ALPHABETICAL]));
     };
+
+
+    useToastEffect(addToCartMutation,
+        "Added to cart",
+        "Failed to add",
+        `Succesfully added Game to cart`
+    );
 
     const filteredAndSortedGames = useMemo(() => {
         if (!games) return [];
@@ -74,7 +83,7 @@ export default function ShopPage() {
 
 
     if (isError) {
-        return <GameLoadError onRetry={refetch} />
+        return <GameLoadError onRetry={refetch}/>
     }
 
     if (!isLoading && games?.length === 0) {
@@ -92,7 +101,7 @@ export default function ShopPage() {
                             placeholder="Search in your shop..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            startContent={<Search size={20} className="text-white/40" />}
+                            startContent={<Search size={20} className="text-white/40"/>}
                             classNames={{
                                 input: "bg-transparent text-white",
                                 inputWrapper: "bg-black/30 backdrop-blur-xl border border-white/10 hover:border-white/20"
@@ -107,7 +116,7 @@ export default function ShopPage() {
                             selectedKeys={selectedGenres}
                             onSelectionChange={(keys) => setSelectedGenres(keys as Set<string>)}
                             className="w-full sm:w-[200px]"
-                            startContent={<Filter size={18} className="text-white/40" />}
+                            startContent={<Filter size={18} className="text-white/40"/>}
                             classNames={selectClasses}
                         >
                             {(Object.values(GameGenre) as string[]).map((genre) => (
@@ -124,7 +133,7 @@ export default function ShopPage() {
                             selectedKeys={sortOption}
                             onSelectionChange={(keys) => setSortOption(keys as Set<string>)}
                             className="w-full sm:w-[180px]"
-                            startContent={<ArrowUpDown size={18} className="text-white/40" />}
+                            startContent={<ArrowUpDown size={18} className="text-white/40"/>}
                             classNames={selectClasses}
                         >
                             <SelectItem key={SortOption.ALPHABETICAL}>Title (A-Z)</SelectItem>
@@ -151,7 +160,7 @@ export default function ShopPage() {
                                 variant="flat"
                                 onPress={() => setIsCartOpen(true)}
                             >
-                                <ShoppingCart size={24} />
+                                <ShoppingCart size={24}/>
                             </Button>
                         </Badge>
                     </div>
@@ -163,7 +172,7 @@ export default function ShopPage() {
                      }}>
                     {isLoading ? (
                         Array(SKELETON_COUNT).fill(0).map((_, index) => (
-                            <SkeletonCard key={index} />
+                            <SkeletonCard key={index}/>
                         ))
                     ) : filteredAndSortedGames.length > 0 ? (
                         filteredAndSortedGames.map((game: Game) => (
@@ -174,10 +183,12 @@ export default function ShopPage() {
                                 price={game.price}
                                 gameId={game.id}
                                 onAddToCart={addToCart}
+                                onPress={() => navigate(`/shop/game/${game.id}`)}
                             />
                         ))
                     ) : (
-                        <div className="col-span-full flex flex-col items-center justify-center text-white/50 py-10 gap-4">
+                        <div
+                            className="col-span-full flex flex-col items-center justify-center text-white/50 py-10 gap-4">
                             <p>No games found matching your filters.</p>
                             <Button
                                 color="primary"
