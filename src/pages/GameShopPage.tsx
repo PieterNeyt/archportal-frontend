@@ -12,6 +12,8 @@ import { useContext, useState } from "react";
 import SecurityContext from "@/context/SecurityContext";
 import { ArrowLeft, ShoppingCart, LogIn, Gamepad2 } from "lucide-react";
 import useToastEffect from "@/hooks/useToastEffect";
+import {GameBody} from "@/components/shop/GameBody.tsx";
+import {GameBodyLoadError} from "@/components/shop/GameBodyLoadError.tsx";
 
 export function GameShopPage() {
     const { id } = useParams<{ id: string }>();
@@ -51,15 +53,7 @@ export function GameShopPage() {
 
     if (isGameError || !game) {
         return (
-            <div className="flex flex-col items-center justify-center w-full h-[60vh] gap-4">
-                <div className="text-center">
-                    <h2 className="text-2xl font-bold text-danger">Failed to load game</h2>
-                    <p className="text-default-500">Something went wrong while fetching the game data.</p>
-                </div>
-                <Button color="primary" variant="flat" onPress={() => navigate('/shop')}>
-                    Return to Shop
-                </Button>
-            </div>
+            <GameBodyLoadError/>
         );
     }
 
@@ -125,35 +119,7 @@ export function GameShopPage() {
                     {/* Details */}
                     <div className="flex flex-col justify-center space-y-6">
 
-                        <div>
-                            <div className="flex flex-wrap gap-2 mb-4">
-                                <Chip
-                                    startContent={<Gamepad2 size={14} />}
-                                    variant="flat"
-                                    color="secondary"
-                                    className="uppercase font-bold text-xs tracking-wider"
-                                >
-                                    {game.genre}
-                                </Chip>
-                            </div>
-
-                            <h1 className="text-4xl md:text-5xl font-bold mb-2 text-white">
-                                {game.title}
-                            </h1>
-
-                            <p className="text-3xl font-bold text-primary">
-                                €{game.price.toFixed(2)}
-                            </p>
-                        </div>
-
-                        <Divider className="my-4 bg-white/10" />
-
-                        <div className="space-y-2">
-                            <h3 className="text-lg font-semibold text-white/90">About this game</h3>
-                            <p className="text-default-400 leading-relaxed text-lg">
-                                {game.description || "No description provided for this title."}
-                            </p>
-                        </div>
+                        <GameBody game={game} />
 
                         <div className="pt-4">
                             <Button
