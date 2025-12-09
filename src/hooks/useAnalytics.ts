@@ -9,8 +9,8 @@ import { GameStatistics } from "@/model/GameStatistics";
  * @param profileId De ID van het profiel.
  * @returns Een object met de query-status en de GameStatistics data.
  */
-export function useGameStatistics(profileId: string, gameId: string) {
-    const queryKey = ["gameStatistics", profileId, gameId];
+export function useGameStatistics(gameId: string) {
+    const queryKey = ["gameStatistics", gameId];
 
     const {
         isLoading,
@@ -21,11 +21,11 @@ export function useGameStatistics(profileId: string, gameId: string) {
         error
     } = useQuery<GameStatistics, Error>({
         // De query is alleen actief als beide ID's aanwezig zijn (niet null of undefined)
-        enabled: !!profileId && !!gameId,
+        enabled: !!gameId,
 
         queryKey: queryKey,
 
-        queryFn: () => getGameStatistics(profileId, gameId)
+        queryFn: () => getGameStatistics(gameId)
     });
 
     return {
