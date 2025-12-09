@@ -49,7 +49,7 @@ export function GameStudioPage() {
                     <Button
                         color="primary"
                         endContent={<Plus size={20}/>}
-                        onPress={() => navigate("/game/create")}
+                        onPress={() => navigate("/create/game")}
                         className="font-semibold shadow-lg shadow-primary/20"
                     >
                         Create Game

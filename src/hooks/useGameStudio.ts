@@ -62,7 +62,7 @@ export function useGameStudio() {
     const {isAuthenticated,isInitialised}= useContext(securityContext)
 
     const {isLoading, isError, refetch, data: gameStudio} = useQuery({
-        queryKey: ["gamestudio"],
+        queryKey: ["GameStudio"],
         queryFn: () => getGameStudio(),
         enabled: isAuthenticated() && isInitialised
     })
