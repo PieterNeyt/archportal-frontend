@@ -9,3 +9,8 @@ export interface ChatMessage {
     text: string;
     timestamp: string;
 }
+
+export interface SendMessage {
+    id: string;
+    text: string;
+}
