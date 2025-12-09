@@ -14,7 +14,6 @@ import {Select, SelectItem} from "@heroui/select";
 import {GameGenre} from "@/model/library.ts";
 import {selectClasses} from "@/styles/customClasses.ts";
 import {Game} from "@/model/game.ts";
-// 1. Import useNavigate
 import {useNavigate} from "react-router-dom";
 import useToastEffect from "@/hooks/useToastEffect.ts";
 
