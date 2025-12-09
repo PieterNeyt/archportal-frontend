@@ -12,3 +12,6 @@ export const selectClasses = {
     listbox: "bg-transparent"
 };
 
+export const GLASS_CARD_STYLES = "bg-black/30 backdrop-blur-md border border-white/10 rounded-3xl";
+
+

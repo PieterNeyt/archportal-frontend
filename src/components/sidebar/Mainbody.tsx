@@ -8,10 +8,15 @@ interface MainBodyProps {
 }
 
 export function SidebarMainBody({ isOpen }: MainBodyProps) {
-    const {isAuthenticated,isInitialised}= useContext(securityContext)
+    const {isAuthenticated,isInitialised,loggedInUser}= useContext(securityContext)
 
     const visibleSections = isAuthenticated() && isInitialised
-        ? menuSections
+        ? menuSections.filter(section => {
+            if (section.title === 'Game Studio') {
+                return loggedInUser?.hasStudio;
+            }
+            return true;
+        })
         : menuSections.filter(section => section.title === 'Store');
 
     return (

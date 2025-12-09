@@ -29,6 +29,8 @@ function App() {
                             <Route element={<ShopPage/>} path="/shop"/>
                             <Route element={<PaymentReturnPage/>} path="/payment-return"/>
                             <Route path="/" element={<Navigate to={"/shop"}/>}/>
+                            <Route element={<RouteGuardLoggedIn><GameStudioPage/></RouteGuardLoggedIn>} path="/gamestudio"/>
+
                             <Route element={<GameStudioPage/>} path="/gamestudio/:id"/>
                             <Route element={<GameShopPage/>} path="/shop/game/:id"/>
                             <Route element={<RouteGuardLoggedIn><LibraryPage/></RouteGuardLoggedIn>} path="/library"/>
