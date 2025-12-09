@@ -1,16 +1,16 @@
 import {useGameStudio} from "@/hooks/useGameStudio.ts";
 import {useGameFromStudio} from "@/hooks/useGame.ts";
-import {Gamepad2, Plus} from "lucide-react"; // Plus icon toegevoegd
+import {Gamepad2, Plus} from "lucide-react";
 import {StudioLoadError} from "@/components/gamestudio/StudioLoadError.tsx";
 import {GamesList} from "@/components/gamestudio/GamesList.tsx";
 import {GLASS_CARD_STYLES} from "@/styles/customClasses.ts";
 import {GameStudioInfoCard} from "@/components/gamestudio/GameStudioInfoCard.tsx";
 import {GameStudioPageSkeleton} from "@/components/gamestudio/GameStudioPageSkeleton.tsx";
-import {Button} from "@heroui/button"; // Button import
-import {useNavigate} from "react-router-dom"; // Navigate import (zie notitie onderaan als je Next.js gebruikt)
+import {Button} from "@heroui/button";
+import {useNavigate} from "react-router-dom";
 
 export function GameStudioPage() {
-    const navigate = useNavigate(); // Hook initialiseren
+    const navigate = useNavigate();
 
     const {
         isLoading: isStudioLoading,
