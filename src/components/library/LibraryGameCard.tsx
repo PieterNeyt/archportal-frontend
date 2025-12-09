@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardBody, CardFooter } from "@heroui/card";
 import { Image } from "@heroui/image";
 import { Button } from "@heroui/button";
 import { Gamepad2, Play } from "lucide-react";
 import { LibraryGame } from "@/model/library";
-import {useStartSinglePlayerGame} from "@/hooks/useLobbies.ts";
-import {SinglePlayerLaunchResponse} from "@/model/SinglePlayerLaunchResponse.ts";
+import { useStartSinglePlayerGame } from "@/hooks/useLobbies.ts";
+import { SinglePlayerLaunchResponse } from "@/model/SinglePlayerLaunchResponse.ts";
 
 interface LibraryGameCardProps {
     game: LibraryGame;
@@ -13,16 +14,32 @@ interface LibraryGameCardProps {
 }
 
 export function LibraryGameCard({ game, viewMode }: LibraryGameCardProps) {
+    const navigate = useNavigate();
     const [imageFailed, setImageFailed] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
-    const {isPending, isError, startSinglePlayer} = useStartSinglePlayerGame();
+    const { isPending, isError, startSinglePlayer } = useStartSinglePlayerGame();
+
+    const handleCardClick = () => {
+        navigate(`/library/${game.id}`);
+    };
+
+    const handlePlayClick = async () => {
+        const response: SinglePlayerLaunchResponse = await startSinglePlayer(game.id);
+        if (!isError) {
+            window.open(response.launchUrl, "_blank", "noopener,noreferrer");
+            return;
+        }
+        return alert("There was an error launching the game.");
+    };
 
     if (viewMode === 'list') {
         return (
             <Card
-                className="bg-black/30 backdrop-blur-xl border border-white/10 hover:border-purple-500/50 hover:bg-black/50 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 h-32 group"
+                className="bg-black/30 backdrop-blur-xl border border-white/10 hover:border-purple-500/50 hover:bg-black/50 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 h-32 group cursor-pointer"
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
+                isPressable
+                onPress={handleCardClick}
             >
                 <CardBody className="p-0 flex flex-row overflow-hidden">
                     <div className="w-48 h-full relative overflow-hidden">
@@ -55,15 +72,15 @@ export function LibraryGameCard({ game, viewMode }: LibraryGameCardProps) {
                                 color="primary"
                                 startContent={<Play size={18} />}
                                 className="font-semibold"
-                                as="a"
-                                href={game.gameUrl}
-                                target="_blank"
+                                isLoading={isPending}
+                                onPress={handlePlayClick}
                             >
                                 Play
                             </Button>
                             <Button
                                 variant="bordered"
                                 className="border-white/20 text-white/80"
+                                onPress={handleCardClick}
                             >
                                 Details
                             </Button>
@@ -73,21 +90,14 @@ export function LibraryGameCard({ game, viewMode }: LibraryGameCardProps) {
             </Card>
         );
     }
-    const handleStartGame = async () => {
-        const response: SinglePlayerLaunchResponse = await startSinglePlayer(game.id)
-        if (!isError) {
-            window.open(response.launchUrl, "_blank", "noopener,noreferrer");
-            return;
-        }
-        return alert("Er is een fout opgetreden bij het starten van het spel.");
-
-    }
 
     return (
         <Card
-            className="bg-black/30 backdrop-blur-xl border border-white/10 hover:border-purple-500/50 hover:bg-black/50 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 hover:scale-[1.02] overflow-hidden group"
+            className="bg-black/30 backdrop-blur-xl border border-white/10 hover:border-purple-500/50 hover:bg-black/50 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 hover:scale-[1.02] overflow-hidden group cursor-pointer"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            isPressable
+            onPress={handleCardClick}
         >
             <CardBody className="p-0 overflow-hidden">
                 <div className="h-48 relative overflow-hidden">
@@ -120,11 +130,10 @@ export function LibraryGameCard({ game, viewMode }: LibraryGameCardProps) {
                 </div>
                 <Button
                     color="primary"
-                    startContent={<Play size={18}/>}
+                    startContent={<Play size={18} />}
                     className="w-full"
                     isLoading={isPending}
-                    onPress={handleStartGame}
-                    target="_blank"
+                    onPress={handlePlayClick}
                 >
                     Play
                 </Button>
