@@ -69,14 +69,18 @@ export function useGameStudio() {
     return {isLoading, isError, refetch, gameStudio}
 }
 
-export function useUpdateGameStudio(gameStudio:GameStudio) {
-    const {isAuthenticated,isInitialised}= useContext(securityContext)
+export function useUpdateGameStudio() {
+    const queryClient = useQueryClient()
 
-    const {isLoading, isError, refetch, data: gameStudioStatus} = useQuery({
-        queryKey: ["gamestudio"],
-        queryFn: () => updateGameStudio(gameStudio),
-        enabled: isAuthenticated() && isInitialised
+    const {mutateAsync: UpdateGameStudio, isError, isPending} = useMutation({
+        mutationFn: (gameStudio:GameStudio)=>{
+            return updateGameStudio(gameStudio)
+        },
+        onSuccess: async ()=>{
+            await queryClient.invalidateQueries({queryKey: ['GameStudio']});
+        }
     })
-    return {isLoading, isError, refetch, gameStudioStatus}
+
+    return {isPending, isError, UpdateGameStudio}
 }
 

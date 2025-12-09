@@ -1,4 +1,4 @@
-import {createGameStudioSchema, CreateGameStudioValues} from "@/validation/createGameStudioValidation.ts";
+import {gameStudioSchema, GameStudioValues} from "@/validation/createGameStudioValidation.ts";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Input} from "@heroui/input";
@@ -19,12 +19,12 @@ export function CreateGameStudioForm() {
         register,
         handleSubmit,
         formState: {errors},
-    } = useForm<CreateGameStudioValues>({
-        resolver: zodResolver(createGameStudioSchema),
+    } = useForm<GameStudioValues>({
+        resolver: zodResolver(gameStudioSchema),
         mode: "onChange",
     });
 
-    const onSubmit = async (data: CreateGameStudioValues) => {
+    const onSubmit = async (data: GameStudioValues) => {
         await AddGameStudio(data);
 
         if (isPending) {

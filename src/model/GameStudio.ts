@@ -15,5 +15,5 @@ export interface GameStudio {
     ownerId: string;
     name: string;
     description: string;
-    iban: string;
+    IBAN: string;
 }
