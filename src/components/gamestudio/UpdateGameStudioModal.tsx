@@ -11,9 +11,7 @@ export interface UpdateGameStudioModalProps {
     isOpen: boolean;
     onOpenChange: (isOpen: boolean) => void;
     gameStudio: GameStudio;
-}
-
-export function UpdateGameStudioModal({isOpen, onOpenChange, gameStudio}: UpdateGameStudioModalProps) {
+}export function UpdateGameStudioModal({isOpen, onOpenChange, gameStudio}: UpdateGameStudioModalProps) {
     const {
         isPending,
         isError,
@@ -46,20 +44,22 @@ export function UpdateGameStudioModal({isOpen, onOpenChange, gameStudio}: Update
             placement="center"
             backdrop="blur"
             classNames={{
-                base: "bg-black/80 border border-white/10 shadow-2xl",
-                header: "border-b border-white/10",
-                footer: "border-t border-white/10",
-                closeButton: "hover:bg-white/5 active:bg-white/10",
+                base: "bg-transparent",
+                backdrop: "bg-black/50",
             }}
         >
-            <ModalContent>
+            <ModalContent className="bg-black/30 backdrop-blur-xl border border-white/10 shadow-2xl">
                 {(onClose) => (
                     <>
-                        <ModalHeader className="flex flex-col gap-1">
+                        {/* Header */}
+                        <ModalHeader className="flex flex-col gap-1 px-6 py-4">
                             Update: <span className="text-primary">{gameStudio.name}</span>
                         </ModalHeader>
 
-                        <ModalBody className="py-6">
+                        <div className="border-t border-white/10"></div>
+
+                        {/* Body */}
+                        <ModalBody className="py-6 px-6">
                             <form
                                 id="update-studio-form"
                                 className="flex flex-col gap-4"
@@ -73,7 +73,10 @@ export function UpdateGameStudioModal({isOpen, onOpenChange, gameStudio}: Update
                             </form>
                         </ModalBody>
 
-                        <ModalFooter>
+                        <div className="border-t border-white/10"></div>
+
+                        {/* Footer */}
+                        <ModalFooter className="flex gap-2 justify-end px-6 py-4">
                             <Button
                                 color="danger"
                                 variant="flat"
@@ -92,7 +95,6 @@ export function UpdateGameStudioModal({isOpen, onOpenChange, gameStudio}: Update
                                 Save Changes
                             </Button>
                         </ModalFooter>
-
                     </>
                 )}
             </ModalContent>

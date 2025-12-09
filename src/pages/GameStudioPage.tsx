@@ -8,9 +8,15 @@ import {GameStudioPageSkeleton} from "@/components/gamestudio/GameStudioPageSkel
 import {Button} from "@heroui/button";
 import {useNavigate} from "react-router-dom";
 import {useGameFromStudio} from "@/hooks/useGames.ts";
+import {useContext} from "react";
+import SecurityContext from "@/context/SecurityContext.ts";
 
 export function GameStudioPage() {
     const navigate = useNavigate();
+    const {loggedInUser} = useContext(SecurityContext);
+
+    if(!loggedInUser?.hasStudio)
+        navigate("/create/gamestudio");
 
     const {
         isLoading: isStudioLoading,

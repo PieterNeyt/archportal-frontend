@@ -2,7 +2,7 @@ import { useState } from "react";
 import {GameStudio} from "@/model/GameStudio.ts";
 import {CreditCard, Edit, Hash} from "lucide-react";
 import {Button} from "@heroui/button";
-import {UpdateGameStudioModal} from "@/components/gamestudio/updateGameStudioModal.tsx";
+import {UpdateGameStudioModal} from "@/components/gamestudio/UpdateGameStudioModal.tsx";
 
 export interface GameStudioInfoProps {
     gameStudio: GameStudio;
