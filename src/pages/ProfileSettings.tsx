@@ -1,23 +1,54 @@
 import {ChangeChannelType} from "@/components/profile/ChangeChannelType.tsx";
+import {useProfile} from "@/hooks/useProfile.ts";
+import {Button, Card, CardBody, CardHeader, Divider} from "@heroui/react";
+import {ProfileSettingHeader} from "@/components/profile/ProfileSettingHeader.tsx";
+import {ProfileSettingBody} from "@/components/profile/ProfileSettingBody.tsx";
+import {ProfileLoadError} from "@/components/profile/ProfileLoadError.tsx";
+import {BLURRY_BACKGROUND} from "@/styles/customClasses.ts";
+import {ProfileCardSkeleton} from "@/components/profile/ProfileCardSkeleton.tsx";
 
 export function ProfileSettingsPage() {
+    const { isError, isLoading, profile } = useProfile();
 
+    if (isLoading) {
+        return <ProfileCardSkeleton/>
+    }
 
-    return (<div className="min-h-screen flex items-center justify-center">
-        <div className="w-full max-w-2xl bg-white/10 backdrop-blur-lg rounded-3xl shadow-2xl p-8">
-            {/* Header */}
-            <div className="mb-6">
-                <h1 className="text-3xl font-bold text-white mb-4">
-                    Change User Settings
-                </h1>
-                <button className="px-6 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-semibold rounded-lg transition-all duration-200 border border-white/30">
-                    Placeholder Button
-                </button>
-            </div>
+    if (isError || !profile) {
+        return <ProfileLoadError/>
+    }
 
-            <div>
-                <ChangeChannelType/>
-            </div>
+    return (
+        <div className="min-h-screen flex items-center justify-center p-4">
+            <Card className={BLURRY_BACKGROUND}>
+                <CardHeader className="flex justify-between items-start pb-6">
+                    <ProfileSettingHeader profile={profile}/>
+                    <Button
+                        className="bg-white text-black font-semibold shadow-none hover:bg-white/90 border-none"
+                        radius="full"
+                        onPress={() => console.log("Navigate to edit")}
+                    >
+                        Edit Profile
+                    </Button>
+                </CardHeader>
+
+                <Divider className="my-2 bg-white/10" />
+
+                <CardBody className="gap-8">
+                    {/* User Details Section */}
+                    <ProfileSettingBody profile={profile}/>
+
+                    <Divider className="bg-white/10" />
+
+                    <div>
+                        <h3 className="text-xl font-semibold text-white mb-2">Notification Channels</h3>
+                        <p className="text-sm text-white/50 mb-4">
+                            Toggle the chips to manage your active channels.
+                        </p>
+                        <ChangeChannelType />
+                    </div>
+                </CardBody>
+            </Card>
         </div>
-    </div>);
+    );
 }
