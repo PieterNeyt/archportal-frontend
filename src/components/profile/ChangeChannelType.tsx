@@ -1,100 +1,67 @@
-import {useNotificationSettings,useAddChannelType,useRemoveChannelType} from "@/hooks/useNotificationSettings.ts";
-import {CircularProgress} from "@heroui/progress";
-import {Chip} from "@heroui/chip";
-import {Select, SelectItem} from "@heroui/react";
-import {useState} from "react";
-import {ChannelType} from "@/model/notificationSettings.ts";
-import {Button} from "@heroui/button";
-import {selectClasses} from "@/styles/customClasses.ts";
+import { useNotificationSettings, useAddChannelType, useRemoveChannelType } from "@/hooks/useNotificationSettings.ts";
+import { CircularProgress } from "@heroui/progress";
+import { Chip } from "@heroui/chip";
+import { ChannelType } from "@/model/notificationSettings.ts";
+import { cn } from "@heroui/react";
+
+const CheckIcon = ({ className }: { className?: string }) => (
+    <svg aria-hidden="true" fill="none" focusable="false" height="1em" role="presentation" viewBox="0 0 24 24" width="1em" className={className}>
+        <path d="M18.71 7.21a1 1 0 00-1.42 0l-7.45 7.46-3.13-3.14A1 1 0 105.29 13l3.84 3.84a1 1 0 001.42 0l8.16-8.16a1 1 0 000-1.47z" fill="currentColor" />
+    </svg>
+);
 
 export function ChangeChannelType() {
     const { isError, isLoading, channelTypes } = useNotificationSettings();
-    const [value, setValue] = useState<ChannelType | null>(null);
+    const { isPending: addPending, AddChannelType } = useAddChannelType();
+    const { isPending: removePending, RemoveChannelType } = useRemoveChannelType();
 
-    const {isPending: AddPending, AddChannelType } = useAddChannelType();
-    const {isPending: RemovePending, RemoveChannelType } = useRemoveChannelType();
+    const allOptions = Object.values(ChannelType).filter(v => typeof v === 'string') as ChannelType[];
 
-    const handleAddChannel = async () => {
-        if (value) {
-            await AddChannelType(value);
-            setValue(null);
+    const handleToggle = async (type: ChannelType, isActive: boolean) => {
+        if (addPending || removePending) return;
+
+        if (isActive) {
+            await RemoveChannelType(type);
+        } else {
+            await AddChannelType(type);
         }
     };
 
     if (isLoading) {
-        return (
-            <div className="flex justify-center items-center p-8">
-                <CircularProgress />
-            </div>
-        );
+        return <div className="flex justify-start p-2"><CircularProgress size="sm" color="default" aria-label="Loading..." /></div>;
     }
 
     if (isError) {
-        return (
-            <div className="text-red-400 p-4 rounded-xl bg-red-500/10 border border-red-500/20">
-                Error loading notification settings
-            </div>
-        );
+        return <div className="text-danger-400 text-sm bg-danger-500/10 p-2 rounded-lg border border-danger-500/20">Failed to load settings.</div>;
     }
 
+    const isGlobalPending = addPending || removePending;
+
     return (
-        <div className="space-y-6">
-            <div className="flex gap-3 items-end">
-                <Select
-                    className="flex-1 max-w-xs"
-                    label="Channel Types"
-                    placeholder="Select a channel type"
-                    selectedKeys={value ? [value] : []}
-                    variant="bordered"
-                    classNames={selectClasses}
-                    onSelectionChange={(keys) => {
-                        const selected = Array.from(keys)[0] as ChannelType;
-                        setValue(selected);
-                    }}
-                >
-                    {Object.values(ChannelType)
-                        .filter(v => typeof v !== 'number')
-                        .map(v => (
-                            <SelectItem key={v}>
-                                {v}
-                            </SelectItem>
-                        ))}
-                </Select>
+        <div className="flex flex-wrap gap-3">
+            {allOptions.map((type) => {
+                const isActive = channelTypes?.channels.includes(type) ?? false;
 
-                <Button
-                    color="primary"
-                    variant="shadow"
-                    isDisabled={!value || AddPending}
-                    isLoading={AddPending}
-                    onPress={handleAddChannel}
-                    className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium"
-                >
-                    Add
-                </Button>
-            </div>
-
-            {channelTypes?.channels && channelTypes.channels.length > 0 ? (
-                <div className="space-y-3">
-                    <h3 className="text-white/90 font-medium text-sm">Active Channels</h3>
-                    <div className="flex flex-wrap gap-2">
-                        {channelTypes.channels.map(c => (
-                            <Chip
-                                key={c}
-                                variant="bordered"
-                                onClose={() => RemoveChannelType(c)}
-                                isDisabled={RemovePending}
-                                className="bg-white/5 border-white/20 text-white backdrop-blur-sm"
-                            >
-                                {c}
-                            </Chip>
-                        ))}
-                    </div>
-                </div>
-            ) : (
-                <div className="text-white/50 text-sm p-4 rounded-xl bg-white/5 border border-white/10 text-center">
-                    No active channels. Add one to get started.
-                </div>
-            )}
+                return (
+                    <Chip
+                        key={type}
+                        variant={isActive ? "solid" : "bordered"}
+                        color={isActive ? "success" : "default"}
+                        startContent={isActive ? <CheckIcon className="ml-1" /> : undefined}
+                        onClick={() => handleToggle(type, isActive)}
+                        className={cn(
+                            "cursor-pointer transition-all duration-300 select-none border",
+                            isActive
+                                ? ["bg-success-500/20 border-success-500/50 text-success-400 shadow-[0_0_7px_rgba(74,222,128,0.3)]"]
+                                : ["border-white/10 text-white/50 bg-transparent hover:bg-white/5 hover:text-white hover:border-white/30 shadow-none"],
+                            isGlobalPending && "opacity-50 cursor-not-allowed"
+                        )}
+                        isDisabled={isGlobalPending}
+                    >
+                        {type}
+                    </Chip>
+                );
+            })}
         </div>
     );
 }

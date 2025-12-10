@@ -75,6 +75,10 @@ export default function SecurityContextProvider({children}: PropsWithChildren) {
         else return false;
     }
 
+    function updateUser(){
+        keycloak.accountManagement();
+    }
+
     async function updateGameStudioStatus(gameStudio: GameStudio) {
         try {
             if (!loggedInUser) return;
@@ -92,7 +96,7 @@ export default function SecurityContextProvider({children}: PropsWithChildren) {
 
     return (
         <SecurityContext.Provider
-            value={{isInitialised, isAuthenticated, loggedInUser, login, logout, updateGameStudioStatus}}
+            value={{isInitialised, isAuthenticated, loggedInUser, login, logout, updateGameStudioStatus,updateUser}}
         >
             {children}
         </SecurityContext.Provider>

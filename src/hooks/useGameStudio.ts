@@ -1,10 +1,11 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {AddGameStudio, getMyStudioStatus} from "@/service/gameStudioService.ts";
+import {AddGameStudio, getGameStudio, getMyStudioStatus, updateGameStudio} from "@/service/gameStudioService.ts";
 import {addToast} from "@heroui/toast";
 import {AxiosError} from "axios";
-import {CreateGameStudio} from "@/model/GameStudio.ts";
+import {CreateGameStudio, GameStudio} from "@/model/GameStudio.ts";
 import {useContext} from "react";
 import SecurityContext from "@/context/SecurityContext.ts";
+import securityContext from "@/context/SecurityContext.ts";
 
 
 export function useAddGameStudio() {
@@ -56,3 +57,30 @@ export function useGameStudioStatus() {
     })
     return {isLoading, isError, refetch, gameStudioStatus}
 }
+
+export function useGameStudio() {
+    const {isAuthenticated,isInitialised}= useContext(securityContext)
+
+    const {isLoading, isError, refetch, data: gameStudio} = useQuery({
+        queryKey: ["GameStudio"],
+        queryFn: () => getGameStudio(),
+        enabled: isAuthenticated() && isInitialised
+    })
+    return {isLoading, isError, refetch, gameStudio}
+}
+
+export function useUpdateGameStudio() {
+    const queryClient = useQueryClient()
+
+    const {mutateAsync: UpdateGameStudio, isError, isPending} = useMutation({
+        mutationFn: (gameStudio:GameStudio)=>{
+            return updateGameStudio(gameStudio)
+        },
+        onSuccess: async ()=>{
+            await queryClient.invalidateQueries({queryKey: ['GameStudio']});
+        }
+    })
+
+    return {isPending, isError, UpdateGameStudio}
+}
+

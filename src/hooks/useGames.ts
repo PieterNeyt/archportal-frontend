@@ -1,16 +1,34 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {AddGame, getGames} from "@/service/gameService.ts";
+import {AddGame, getGame, getGames, getGamesFromStudio} from "@/service/gameService.ts";
 import {CreateGame} from "@/model/createGame.ts";
 import {addToast} from "@heroui/toast";
 import {AxiosError} from "axios";
 
-export function useGame() {
+export function useGames() {
     const {isLoading, isError, refetch, data: games} = useQuery({
         queryKey: ["games"],
         queryFn: () => getGames()
     });
 
     return {isLoading, isError, refetch, games};
+}
+
+export function useGameFromStudio() {
+    const {isLoading, isError, refetch, data: games} = useQuery({
+        queryKey: ["gamesStudio"],
+        queryFn: () => getGamesFromStudio()
+    });
+
+    return {isLoading, isError, refetch, games};
+}
+
+export function useGame(id:string) {
+    const {isLoading, isError, refetch, data: game} = useQuery({
+        queryKey: ["game"],
+        queryFn: () => getGame(id)
+    });
+
+    return {isLoading, isError, refetch, game};
 }
 
 

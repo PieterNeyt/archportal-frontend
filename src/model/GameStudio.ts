@@ -11,7 +11,9 @@ export interface GameStudioStatus {
 }
 
 export interface GameStudio {
+    id: string;
     ownerId: string;
     name: string;
-    studioId: string;
+    description: string;
+    IBAN: string;
 }
