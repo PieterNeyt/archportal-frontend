@@ -1,9 +1,10 @@
-import {useEffect, useRef} from "react";
+import { useEffect, useRef } from "react";
 import MessageCard from "@/components/chat/MessageCard.tsx";
-import {useGetChatRoom} from "@/hooks/useChatRooms.ts";
+import { useGetChatRoom } from "@/hooks/useChatRooms.ts";
 import MessageSkeletonCard from "@/components/chat/MessageSkeletonCard.tsx";
 import MessageError from "@/components/chat/MessageError.tsx";
-import {MessageCircle} from "lucide-react";
+import { MessageCircle } from "lucide-react";
+import { ScrollShadow } from "@heroui/react";
 
 interface MessageListProps {
     id: string;
@@ -11,44 +12,65 @@ interface MessageListProps {
 
 const SKELETON_COUNT = 5;
 
-export default function MessageList({id}: MessageListProps) {
-    const {isLoading, isError, chatRoom, refetch} = useGetChatRoom(id);
-    const messagesEndRef = useRef<null | HTMLDivElement>(null)
+export default function MessageList({ id }: MessageListProps) {
+    const { isLoading, isError, chatRoom, refetch } = useGetChatRoom(id);
+    const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({behavior: "instant"})
-    }
+        messagesEndRef.current?.scrollIntoView({ behavior: "instant" });
+    };
 
     useEffect(() => {
-        scrollToBottom()
+        scrollToBottom();
     }, [chatRoom]);
 
     if (isError) {
-        return <MessageError onRetry={() => refetch()}/>
+        return <MessageError onRetry={() => refetch()} />;
     }
 
-    return (
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {isLoading && (Array(SKELETON_COUNT).fill(0).map((_, i) => (
-                    <MessageSkeletonCard key={i}/>
-                ))
-            )}
+    const isEmpty = !isLoading && chatRoom && chatRoom.messages.length === 0;
 
-            {!isLoading && chatRoom && chatRoom.messages.length === 0 && (
-                <div className="text-center py-20">
-                    <MessageCircle size={64} className="text-white/40 mx-auto mb-4"/>
-                    <p className="text-white/60 text-xl mb-2">
-                        No messages found
-                    </p>
+    return (
+        <ScrollShadow
+            className="flex-1 p-4 space-y-4 h-full"
+            size={40}
+        >
+            {isLoading &&
+                Array(SKELETON_COUNT)
+                    .fill(0)
+                    .map((_, i) => <MessageSkeletonCard key={i} />)}
+
+            {/* Empty State */}
+            {isEmpty && (
+                <div className="h-full flex flex-col items-center justify-center space-y-4 opacity-60">
+                    <div className="p-4 bg-white/5 rounded-full ring-1 ring-white/10">
+                        <MessageCircle size={48} className="text-white/80" />
+                    </div>
+                    <div className="text-center space-y-1">
+                        <h3 className="text-xl font-semibold text-white">
+                            No messages yet
+                        </h3>
+                        <p className="text-sm text-white/50 max-w-xs">
+                            Start the conversation by typing a message below.
+                        </p>
+                    </div>
                 </div>
             )}
 
-            {!isLoading && chatRoom && chatRoom.messages.length > 0 && chatRoom.messages.map((message, index) => (
-                <MessageCard key={index} text={message.text} timestamp={message.timestamp}
-                             isYours={message.isYou}/>
-            ))}
+            {/* Messages List */}
+            {!isLoading &&
+                chatRoom &&
+                chatRoom.messages.length > 0 &&
+                chatRoom.messages.map((message, index) => (
+                    <MessageCard
+                        key={index}
+                        text={message.text}
+                        timestamp={message.timestamp}
+                        isYours={message.isYou}
+                    />
+                ))}
 
-            <div ref={messagesEndRef}/>
-        </div>
+            <div ref={messagesEndRef} />
+        </ScrollShadow>
     );
 }
