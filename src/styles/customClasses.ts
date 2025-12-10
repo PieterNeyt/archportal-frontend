@@ -14,4 +14,5 @@ export const selectClasses = {
 
 export const GLASS_CARD_STYLES = "bg-black/30 backdrop-blur-md border border-white/10 rounded-3xl";
 
+export const BLURRY_BACKGROUND = "w-full max-w-2xl bg-black/40 backdrop-blur-xl border border-white/10 p-4";
 

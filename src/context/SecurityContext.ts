@@ -9,6 +9,7 @@ export type SecurityContext = {
     login: () => void;
     logout: () => void;
     updateGameStudioStatus: (gameStudio: GameStudio) => void;
+    updateUser: () => void;
 }
 
 export default createContext<SecurityContext>({
@@ -20,5 +21,7 @@ export default createContext<SecurityContext>({
     logout: () => {
     },
     updateGameStudioStatus: () => {
-    }
+    },
+    updateUser: () => {
+    },
 })
