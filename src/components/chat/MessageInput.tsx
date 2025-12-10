@@ -1,8 +1,8 @@
-import {Input} from "@heroui/input";
+import {Textarea} from "@heroui/input";
 import {Button} from "@heroui/button";
 import {Send} from "lucide-react";
 import {inputClasses} from "@/styles/customClasses.ts";
-import {KeyboardEvent, useState} from "react";
+import {useState} from "react";
 
 interface MessageInputProps {
     onSend: (text: string) => Promise<void> | void;
@@ -14,15 +14,17 @@ export default function MessageInput({onSend, isSending = false}: MessageInputPr
 
     const send = async () => {
         if (!text.trim() || isSending) return;
-        try {
-            await onSend(text.trim());
+        // call onSend and return its promise; don't swallow errors here
+        const result = onSend(text.trim());
+        // only clear input if the send promise resolves
+        if (result && typeof (result as Promise<void>).then === "function") {
+            (result as Promise<void>).then(() => setText(""));
+        } else {
             setText("");
-        } catch (e) {
-            // caller handles errors
         }
     };
 
-    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyDown = (e: any) => {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             void send();
@@ -31,14 +33,17 @@ export default function MessageInput({onSend, isSending = false}: MessageInputPr
 
     return (
         <div className="mt-4 pt-4 border-t flex items-center gap-3">
-            <Input
+            <Textarea
                 value={text}
-                onChange={(e) => setText(e.target.value)}
+                onChange={(e: any) => setText(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={"Type a message..."}
                 classNames={inputClasses}
-                className={"flex-1"}
+                className={"flex-1 resize-none"}
+                minRows={1}
+                maxRows={6}
                 disabled={isSending}
+                autoComplete={"off"}
             />
             <Button color={"primary"} onPress={() => void send()} isIconOnly disabled={isSending}>
                 <Send/>

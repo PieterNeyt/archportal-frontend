@@ -19,7 +19,7 @@ export default function MessageCard({text, timestamp, isYours}: MessageCardProps
                             : 'bg-slate-800/80 text-white'
                     }`}
                 >
-                    <p className="text-sm">{text}</p>
+                    <p className="text-sm whitespace-pre-wrap break-words">{text}</p>
                 </div>
                 <span className="text-xs text-slate-500 mt-1 px-2">
                     {timestamp}
