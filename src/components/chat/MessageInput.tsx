@@ -1,21 +1,21 @@
-import { Textarea } from "@heroui/input";
-import { Button } from "@heroui/button";
-import { Send, Smile } from "lucide-react";
-import { inputClasses } from "@/styles/customClasses.ts";
-import { useSendMessage } from "@/hooks/useChatRooms.ts";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { sendMessageSchema, SendMessageValues } from "@/validation/sendMessageValidation.ts";
-import { KeyboardEvent, useState } from "react";
-import { Popover, PopoverTrigger, PopoverContent } from "@heroui/popover";
-import EmojiPicker, { Theme, EmojiClickData } from "emoji-picker-react";
+import {Textarea} from "@heroui/input";
+import {Button} from "@heroui/button";
+import {Send, Smile} from "lucide-react";
+import {inputClasses} from "@/styles/customClasses.ts";
+import {useSendMessage} from "@/hooks/useChatRooms.ts";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {sendMessageSchema, SendMessageValues} from "@/validation/sendMessageValidation.ts";
+import {KeyboardEvent, useState} from "react";
+import {Popover, PopoverContent, PopoverTrigger} from "@heroui/popover";
+import EmojiPicker, {EmojiClickData, Theme} from "emoji-picker-react";
 
 interface MessageInputProps {
     chatId: string;
 }
 
-export default function MessageInput({ chatId }: MessageInputProps) {
-    const { isPending, sendMessage } = useSendMessage();
+export default function MessageInput({chatId}: MessageInputProps) {
+    const {isPending, sendMessage} = useSendMessage();
     const [isEmojiOpen, setIsEmojiOpen] = useState(false);
 
     const {
@@ -24,7 +24,7 @@ export default function MessageInput({ chatId }: MessageInputProps) {
         reset,
         setValue,
         watch,
-        formState: { isValid },
+        formState: {isValid},
     } = useForm<SendMessageValues>({
         resolver: zodResolver(sendMessageSchema),
         defaultValues: {
@@ -35,11 +35,11 @@ export default function MessageInput({ chatId }: MessageInputProps) {
 
     const currentText = watch("text");
 
-    const onSubmit = (data: SendMessageValues) => {
+    const onSubmit = async (data: SendMessageValues) => {
         if (!data.text.trim()) return;
 
-        sendMessage(
-            { id: chatId, text: data.text },
+        await sendMessage(
+            {id: chatId, text: data.text},
             {
                 onSuccess: () => {
                     reset();
@@ -64,6 +64,13 @@ export default function MessageInput({ chatId }: MessageInputProps) {
         });
     };
 
+    const descriptionClass = `
+        text-sm pt-1 
+        ${currentText.length > 500 ? 'text-red-500 font-bold' : 'text-white/60'}
+        text-right 
+        w-full
+    `;
+
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
@@ -73,11 +80,12 @@ export default function MessageInput({ chatId }: MessageInputProps) {
                 {...register("text")}
                 value={currentText}
                 placeholder="Type a message..."
-                classNames={inputClasses}
+                classNames={{...inputClasses, description: descriptionClass}}
                 className="flex-1"
                 minRows={1}
                 maxRows={6}
                 isDisabled={isPending}
+                description={currentText.length > 450 && currentText.length + "/500"}
                 onKeyDown={handleKeyDown}
                 autoComplete="off"
             />
@@ -98,7 +106,7 @@ export default function MessageInput({ chatId }: MessageInputProps) {
                             className="text-white/60 hover:text-white rounded-full transition-colors"
                             aria-label="Add emoji"
                         >
-                            <Smile size={24} />
+                            <Smile size={24}/>
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent className="p-0 border-none bg-transparent shadow-none">
@@ -109,7 +117,7 @@ export default function MessageInput({ chatId }: MessageInputProps) {
                             searchDisabled={false}
                             width={300}
                             height={400}
-                            previewConfig={{ showPreview: false }}
+                            previewConfig={{showPreview: false}}
                         />
                     </PopoverContent>
                 </Popover>
@@ -123,7 +131,7 @@ export default function MessageInput({ chatId }: MessageInputProps) {
                     isDisabled={!isValid || isPending}
                     className="rounded-full shadow-lg"
                 >
-                    {!isPending && <Send size={20} />}
+                    {!isPending && <Send size={20}/>}
                 </Button>
             </div>
         </form>
