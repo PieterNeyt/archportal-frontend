@@ -1,7 +1,7 @@
 import z from "zod"
 import {GameGenre} from "@/model/GameGenre.ts";
 
-export const createGameSchema = z.object({
+export const gameSchema = z.object({
     title: z.string().max(255),
     description: z.string().max(255),
     price: z.number().positive(),
@@ -11,4 +11,4 @@ export const createGameSchema = z.object({
     maxlobbysize:z.number().positive().min(1),
 })
 
-export type CreateGameValues = z.infer<typeof createGameSchema>;
+export type GameValues = z.infer<typeof gameSchema>;
