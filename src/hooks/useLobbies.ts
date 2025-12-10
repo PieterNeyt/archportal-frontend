@@ -1,5 +1,12 @@
-import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {startSinglePlayer} from "../service/lobbyService";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {
+    getAllLobbies,
+    getLobbyInfo,
+    joinMultiplayerLobby,
+    startMultiplayerLobby,
+    startSinglePlayer
+} from "../service/lobbyService";
+import {LobbiesResponse, MultiplayerLobbyInfo, StartMultiPlayerRequest} from "@/model/lobby.ts";
 
 
 export function useStartSinglePlayerGame() {
@@ -22,4 +29,70 @@ export function useStartSinglePlayerGame() {
         isError,
         startSinglePlayer: mutateAsync
     }
+}
+
+
+export function useStartMultiplayerLobby() {
+    const queryClient = useQueryClient();
+
+    const {
+        mutateAsync,
+        isPending,
+        isError,
+    } = useMutation({
+        mutationFn: (request: StartMultiPlayerRequest) => {
+            return startMultiplayerLobby(request);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['lobbies']});
+            queryClient.invalidateQueries({queryKey: ['session']});
+        },
+    });
+
+    return {
+        isPending,
+        isError,
+        startLobby: mutateAsync
+    };
+}
+
+export function useJoinMultiplayerLobby() {
+    const queryClient = useQueryClient();
+
+    const {
+        mutateAsync,
+        isPending,
+        isError,
+    } = useMutation({
+        mutationFn: (lobbyId: string) => {
+            return joinMultiplayerLobby(lobbyId);
+        },
+        onSuccess: (_data, lobbyId) => {
+            queryClient.invalidateQueries({queryKey: ['lobbyInfo', lobbyId]});
+            queryClient.invalidateQueries({queryKey: ['session']});
+        },
+    });
+
+    return {
+        isPending,
+        isError,
+        joinLobby: mutateAsync
+    };
+}
+
+
+export function useGetAllLobbies(gameId: string) {
+    return useQuery<LobbiesResponse, Error>({
+        queryKey: ['lobbies', gameId],
+        queryFn: () => getAllLobbies(gameId),
+        enabled: !!gameId,
+    });
+}
+
+export function useGetLobbyInfo(lobbyId: string) {
+    return useQuery<MultiplayerLobbyInfo, Error>({
+        queryKey: ['lobbyInfo', lobbyId],
+        queryFn: () => getLobbyInfo(lobbyId),
+        enabled: !!lobbyId,
+    });
 }

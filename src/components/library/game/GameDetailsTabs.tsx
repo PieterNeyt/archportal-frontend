@@ -2,6 +2,12 @@ import { Card, CardBody } from "@heroui/card";
 import { Tabs, Tab } from "@heroui/tabs";
 import { Gamepad2, Trophy, Zap } from "lucide-react";
 import React from "react";
+import {LobbiesTabContent} from "@/components/library/game/LobbiesTabContent.tsx";
+import {EmptyTab} from "@/components/library/game/EmptyTab.tsx";
+
+function Title({ icon, label }: { icon: React.ReactNode; label: string }) {
+    return <div className="flex items-center gap-2">{icon}<span>{label}</span></div>;
+}
 
 export function GameDetailsTabs() {
     return (
@@ -33,11 +39,7 @@ export function GameDetailsTabs() {
                         key="lobbies"
                         title={<Title icon={<Gamepad2 size={18} />} label="Lobbies" />}
                     >
-                        <EmptyTab
-                            icon={<Gamepad2 size={48} className="text-white/40 mx-auto mb-4" />}
-                            title="Lobby comming soon"
-                            subtitle="Play multiplayer games with friends and other players"
-                        />
+                        <LobbiesTabContent />
                     </Tab>
 
                     <Tab
@@ -53,27 +55,5 @@ export function GameDetailsTabs() {
                 </Tabs>
             </CardBody>
         </Card>
-    );
-}
-
-function Title({ icon, label }: { icon: React.ReactNode; label: string }) {
-    return <div className="flex items-center gap-2">{icon}<span>{label}</span></div>;
-}
-
-function EmptyTab({
-                      icon,
-                      title,
-                      subtitle,
-                  }: {
-    icon: React.ReactNode;
-    title: string;
-    subtitle: string;
-}) {
-    return (
-        <div className="text-center py-12">
-            {icon}
-            <p className="text-white/60 text-lg mb-2">{title}</p>
-            <p className="text-white/40 text-sm">{subtitle}</p>
-        </div>
     );
 }
