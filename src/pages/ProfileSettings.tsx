@@ -6,9 +6,12 @@ import {ProfileSettingBody} from "@/components/profile/ProfileSettingBody.tsx";
 import {ProfileLoadError} from "@/components/profile/ProfileLoadError.tsx";
 import {BLURRY_BACKGROUND} from "@/styles/customClasses.ts";
 import {ProfileCardSkeleton} from "@/components/profile/ProfileCardSkeleton.tsx";
+import {useContext} from "react";
+import securityContext from "@/context/SecurityContext.ts";
 
 export function ProfileSettingsPage() {
     const { isError, isLoading, profile } = useProfile();
+    const {updateUser} = useContext(securityContext)
 
     if (isLoading) {
         return <ProfileCardSkeleton/>
@@ -26,8 +29,8 @@ export function ProfileSettingsPage() {
                     <Button
                         className="bg-white text-black font-semibold shadow-none hover:bg-white/90 border-none"
                         radius="full"
-                        onPress={() => window.open("http://localhost:8180/auth/realms/ArchPortal/account", "_blank")
-                    }                    >
+                        onPress={() => updateUser()}
+                    >
                         Edit Profile
                     </Button>
                 </CardHeader>
