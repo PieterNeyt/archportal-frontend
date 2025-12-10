@@ -4,11 +4,18 @@
 };
 
 export const selectClasses = {
-    trigger: "bg-white/5 border border-white/10 rounded-xl backdrop-blur-sm transition-all duration-200 text-white",
+    // Trigger is de 'inputWrapper' van een Select.
+    // Hier voegen we !text-white toe en de hover/focus states van de input.
+    trigger: "bg-white/5 border border-white/10 rounded-xl backdrop-blur-sm transition-all duration-200 data-[hover=true]:bg-white/10 data-[focus=true]:bg-white/10 !text-white",
+
     label: "text-white/90 font-medium text-base",
-    value: "text-white",
-    popoverContent: "bg-black/90 backdrop-blur-md border border-white/10",
-    listbox: "bg-transparent"
+
+    // Dit zorgt ervoor dat de gekozen tekst wit is (!text-white is belangrijk hier)
+    value: "!text-white placeholder:text-white/40",
+
+    // De dropdown menu stijl
+    popoverContent: "bg-[#18181b] backdrop-blur-md border border-white/10 text-white",
+    listbox: "bg-transparent text-white"
 };
 
 export const GLASS_CARD_STYLES = "bg-black/30 backdrop-blur-md border border-white/10 rounded-3xl";

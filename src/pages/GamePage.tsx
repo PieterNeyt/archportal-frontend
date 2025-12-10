@@ -9,7 +9,7 @@ import {GameAchievementsCard} from "@/components/game/GameAchievementsCard.tsx";
 import {GameInfoCard} from "@/components/game/GameInfoCard.tsx";
 import {GameLoadError} from "@/components/game/GameLoadError.tsx";
 import {GamePageLoadSkeleton} from "@/components/game/GamePageLoadSkeleton.tsx";
-import {UpdateGameModal} from "@/components/game/updateGameModal.tsx";
+import {UpdateGameModal} from "@/components/game/UpdateGameModal.tsx";
 
 export function GamePage() {
     const {id} = useParams<{ id: string }>();

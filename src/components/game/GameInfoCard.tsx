@@ -1,7 +1,6 @@
 import {Game} from "@/model/game.ts";
-import {Edit, Image as ImageIcon, Tag} from "lucide-react";
+import {Edit, Image as ImageIcon, Link as LinkIcon, Tag, Users} from "lucide-react";
 import {Button} from "@heroui/button";
-
 
 export interface GameInfoCardProps {
     game: Game;
@@ -10,8 +9,9 @@ export interface GameInfoCardProps {
 
 export function GameInfoCard({game, onEdit}: GameInfoCardProps) {
     const formatPrice = (price: number) => {
-        return new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR' }).format(price);
+        return new Intl.NumberFormat('nl-NL', {style: 'currency', currency: 'EUR'}).format(price);
     };
+
     return (
         <>
             <div className="w-full md:w-1/3 flex-shrink-0">
@@ -33,7 +33,7 @@ export function GameInfoCard({game, onEdit}: GameInfoCardProps) {
                         className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 flex items-center gap-2">
                         <Tag size={12} className="text-primary"/>
                         <span className="text-xs font-semibold text-white uppercase tracking-wider">
-                                    {game.genre}
+                            {game.genre}
                         </span>
                     </div>
                 </div>
@@ -62,13 +62,49 @@ export function GameInfoCard({game, onEdit}: GameInfoCardProps) {
                 <div className="my-6 h-px w-full bg-gradient-to-r from-white/10 to-transparent"/>
 
                 <div className="space-y-6 flex-grow">
+                    {/* Description */}
                     <div className="space-y-2">
                         <h3 className="text-sm font-semibold text-white/40 uppercase tracking-wider">Description</h3>
                         <p className="text-white/80 leading-relaxed whitespace-pre-wrap">
                             {game.description}
                         </p>
                     </div>
+
+                    {/* New Details Grid: Lobby Size & Game URL */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <h3 className="text-sm font-semibold text-white/40 uppercase tracking-wider">Max Lobby Size</h3>
+                            <div className="flex items-center gap-2 text-white/90">
+                                <Users size={18} className="text-primary"/>
+                                <span className="font-medium">
+                                    {game.maxlobbysize ? `${game.maxlobbysize} Players` : "Not specified"}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <h3 className="text-sm font-semibold text-white/40 uppercase tracking-wider">Game URL</h3>
+                            <div className="flex items-center gap-2">
+                                {game.gameUrl ? (
+                                    <a
+                                        href={game.gameUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-2 text-primary hover:text-primary-400 transition-colors group/link truncate"
+                                    >
+                                        <LinkIcon size={18}/>
+                                        <span className="truncate underline decoration-primary/30 group-hover/link:decoration-primary">
+                                            {game.gameUrl}
+                                        </span>
+                                    </a>
+                                ) : (
+                                    <span className="text-white/30 italic text-sm">No URL provided</span>
+                                )}
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
                 <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
                     <div className="space-y-1">
                         <h3 className="text-xs font-semibold text-white/40 uppercase tracking-wider">Price</h3>
@@ -78,5 +114,6 @@ export function GameInfoCard({game, onEdit}: GameInfoCardProps) {
                     </div>
                 </div>
             </div>
-        </>)
+        </>
+    );
 }
