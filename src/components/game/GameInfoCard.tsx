@@ -5,9 +5,10 @@ import {Button} from "@heroui/button";
 
 export interface GameInfoCardProps {
     game: Game;
+    onEdit: () => void;
 }
 
-export function GameInfoCard({game}: GameInfoCardProps) {
+export function GameInfoCard({game, onEdit}: GameInfoCardProps) {
     const formatPrice = (price: number) => {
         return new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR' }).format(price);
     };
@@ -52,7 +53,7 @@ export function GameInfoCard({game}: GameInfoCardProps) {
                         variant="flat"
                         startContent={<Edit size={18}/>}
                         className="font-medium shrink-0"
-                        onPress={() => console.log("Edit game", game.id)}
+                        onPress={() => onEdit()}
                     >
                         Edit Game
                     </Button>

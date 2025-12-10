@@ -1,3 +1,4 @@
+import {useState} from "react";
 import {GLASS_CARD_STYLES} from "@/styles/customClasses.ts";
 import {Button} from "@heroui/button";
 import {ArrowLeft} from "lucide-react";
@@ -8,12 +9,14 @@ import {GameAchievementsCard} from "@/components/game/GameAchievementsCard.tsx";
 import {GameInfoCard} from "@/components/game/GameInfoCard.tsx";
 import {GameLoadError} from "@/components/game/GameLoadError.tsx";
 import {GamePageLoadSkeleton} from "@/components/game/GamePageLoadSkeleton.tsx";
+import {UpdateGameModal} from "@/components/game/updateGameModal.tsx";
 
 export function GamePage() {
     const {id} = useParams<{ id: string }>();
     const {isLoading, isError, game} = useGame(id || "");
-
     const navigate = useNavigate();
+
+    const [isEditOpen, setIsEditOpen] = useState(false);
 
     if (isLoading) {
         return <GamePageLoadSkeleton/>;
@@ -35,12 +38,17 @@ export function GamePage() {
                     Return to Game Studio
                 </Button>
             </div>
+
             <section className={`${GLASS_CARD_STYLES} p-6 sm:p-8 relative overflow-hidden`}>
                 <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-primary/20 blur-3xl rounded-full opacity-50 pointer-events-none"/>
                 <div className="flex flex-col md:flex-row gap-8 relative z-10">
-                    <GameInfoCard game={game}/>
+                    <GameInfoCard
+                        game={game}
+                        onEdit={() => setIsEditOpen(true)}
+                    />
                 </div>
             </section>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <section className={`${GLASS_CARD_STYLES} p-6 relative overflow-hidden flex flex-col h-64`}>
                     <GameDevPostCard/>
@@ -50,6 +58,12 @@ export function GamePage() {
                     <GameAchievementsCard/>
                 </section>
             </div>
+
+            <UpdateGameModal
+                isOpen={isEditOpen}
+                onOpenChange={setIsEditOpen}
+                game={game}
+            />
         </div>
     );
 }

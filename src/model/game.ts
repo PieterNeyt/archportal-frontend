@@ -6,5 +6,7 @@ export interface Game {
     imageUrl: string | null;
     description: string;
     price: number;
+    maxlobbysize: number;
+    gameUrl:string;
     genre: GameGenre;
 }
