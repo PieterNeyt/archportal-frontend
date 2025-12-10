@@ -1,22 +1,24 @@
-import {Skeleton} from "@heroui/skeleton";
+import { Skeleton } from "@heroui/skeleton";
 
 export default function ChatRoomSkeletonCard() {
-    const skeletonClass = "bg-white/10 before:bg-white/5 after:bg-white/20 dark:bg-white/10";
+    // We gebruiken de dark mode classes voor het glass effect
+    const skeletonClass = "bg-white/5 dark:bg-white/10 rounded-lg";
 
     return (
-        <div
-            className={"backdrop-blur-sm flex items-center justify-between p-3 rounded-xl border border-border hover:bg-accent transition-colors cursor-pointer shadow-md"}
-        >
-            <div className="flex items-center space-x-3">
-                <Skeleton
-                    className={`w-10 h-10 rounded-full flex-shrink-0 ${skeletonClass}`}
-                />
+        <div className="flex items-center gap-3 p-3 rounded-xl border border-transparent">
+            {/* Avatar Skeleton */}
+            <Skeleton className={`w-12 h-12 rounded-full flex-shrink-0 ${skeletonClass}`} />
 
-                <div className="flex flex-col space-y-1">
-                    <Skeleton
-                        className={`w-32 h-6 rounded-lg ${skeletonClass}`}
-                    />
+            {/* Content Skeleton */}
+            <div className="flex-1 flex flex-col gap-2 min-w-0">
+                {/* Title + Time bar */}
+                <div className="flex justify-between items-center w-full">
+                    <Skeleton className={`h-4 w-24 ${skeletonClass}`} />
+                    <Skeleton className={`h-3 w-10 ${skeletonClass}`} />
                 </div>
+
+                {/* Message bar */}
+                <Skeleton className={`h-3 w-3/4 ${skeletonClass}`} />
             </div>
         </div>
     );

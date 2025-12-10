@@ -1,7 +1,7 @@
 import {useContext} from "react";
 import SecurityContext from "@/context/SecurityContext.ts";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {getChatRoom, getChatRooms, sendMessage} from "@/service/chatService.ts";
+import {getChatRoom, getChatRoomLastMessage, getChatRooms, sendMessage} from "@/service/chatService.ts";
 import {SendMessage} from "@/model/chatRoom.ts";
 
 const CHATROOMS = "chat rooms";
@@ -16,6 +16,17 @@ export function useGetChatRooms() {
         enabled: isAuthenticated() && isInitialised
     });
     return {isLoading, isError, chatRooms, refetch};
+}
+
+export function useGetChatRoomLastMessage(id:string) {
+    const {isAuthenticated, isInitialised} = useContext(SecurityContext);
+
+    const {isLoading, isError, data: lastMessage, refetch} = useQuery({
+        queryKey: ["lastMessage",id],
+        queryFn: () => getChatRoomLastMessage(id),
+        enabled: isAuthenticated() && isInitialised
+    });
+    return {isLoading, isError, lastMessage, refetch};
 }
 
 export function useGetChatRoom(id: string) {

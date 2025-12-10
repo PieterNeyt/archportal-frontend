@@ -7,35 +7,44 @@ interface ChatRoomListProps {
     chatRooms: ChatRoom[] | undefined;
     setChatRoom: (chatRoom: ChatRoom) => void;
     isLoading: boolean;
+    selectedId?: string;
 }
 
 const SKELETON_COUNT = 5;
 
-export default function ChatRoomList({chatRooms, setChatRoom, isLoading}: ChatRoomListProps) {
+export default function ChatRoomList({chatRooms, setChatRoom, isLoading, selectedId}: ChatRoomListProps) {
 
     return (
-        <div className={"flex flex-col divide-y"}>
+        <div className="flex flex-col gap-1">
 
+            {/* Loading State */}
             {isLoading && (
                 Array(SKELETON_COUNT).fill(0).map((_, i) => (
-                    <div key={i} className={"py-2"}>
-                        <ChatRoomSkeletonCard/>
-                    </div>
+                    <ChatRoomSkeletonCard key={i}/>
                 ))
             )}
 
+            {/* Empty State */}
             {!isLoading && chatRooms && chatRooms.length === 0 && (
-                <div className="text-center py-20">
-                    <Users size={64} className="text-white/40 mx-auto mb-4"/>
-                    <p className="text-white/60 text-xl mb-2">No chats found</p>
+                <div className="flex flex-col items-center justify-center py-20 text-center">
+                    <div className="bg-white/5 p-4 rounded-full mb-4">
+                        <Users size={32} className="text-white/40"/>
+                    </div>
+                    <p className="text-white/60 text-lg font-medium">No chats found</p>
+                    <p className="text-white/30 text-sm">Join a room to start chatting</p>
                 </div>
             )}
 
-            {!isLoading && chatRooms && chatRooms.length > 0 && chatRooms.map((chatRoom: ChatRoom, index: number) => (
-                <div key={index} className={"py-2"}>
-                    <ChatRoomCard title={chatRoom.title} onClick={() => setChatRoom(chatRoom)}/>
-                </div>
-            ))}
+            {/* List */}
+            {!isLoading && chatRooms && chatRooms.length > 0 && chatRooms.map((chatRoom) => {
+                return (<ChatRoomCard
+                    key={chatRoom.id}
+                    title={chatRoom.title}
+                    chatroomId={chatRoom.id}
+                    onClick={() => setChatRoom(chatRoom)}
+                    isActive={selectedId === chatRoom.id}
+                />)
+            })}
         </div>
     );
 }
