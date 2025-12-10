@@ -1,16 +1,15 @@
-import { Users } from "lucide-react";
-import { useGetChatRoomLastMessage } from "@/hooks/useChatRooms.ts";
+import {Users} from "lucide-react";
 import {formatTimeAgo} from "@/lib/dateUtils.ts";
+import {ChatMessage} from "@/model/chatRoom.ts";
 
 interface ChatRoomCardProps {
     title: string;
-    chatroomId: string;
+    lastMessage: ChatMessage;
     onClick: () => void;
     isActive?: boolean;
 }
 
-export default function ChatRoomCard({ title, chatroomId, onClick, isActive }: ChatRoomCardProps) {
-    const { isLoading, isError, lastMessage } = useGetChatRoomLastMessage(chatroomId);
+export default function ChatRoomCard({title, lastMessage, onClick, isActive}: ChatRoomCardProps) {
 
     return (
         <div
@@ -32,7 +31,7 @@ export default function ChatRoomCard({ title, chatroomId, onClick, isActive }: C
                 : "bg-white/10 text-white/60 group-hover:bg-white/20 group-hover:text-white"
             }
             `}>
-                <Users size={20} />
+                <Users size={20}/>
             </div>
 
             {/* Content Area */}
@@ -44,22 +43,20 @@ export default function ChatRoomCard({ title, chatroomId, onClick, isActive }: C
                     </h3>
 
                     {/* Time Ago (Rechtsboven) */}
-                    {!isLoading && lastMessage?.timestamp && (
-                        <span className={`text-[10px] whitespace-nowrap ml-2 font-medium ${isActive ? "text-white/60" : "text-white/30"}`}>
+                    {lastMessage?.timestamp && (
+                        <span
+                            className={`text-[10px] whitespace-nowrap ml-2 font-medium ${isActive ? "text-white/60" : "text-white/30"}`}>
                             {formatTimeAgo(lastMessage.timestamp)}
                         </span>
                     )}
                 </div>
 
                 {/* Last Message */}
-                <div className={`text-xs truncate h-4 flex items-center ${isActive ? "text-white/80" : "text-white/50 group-hover:text-white/70"}`}>
-                    {isLoading ? (
-                        <div className="h-2 w-20 bg-white/10 rounded animate-pulse" />
-                    ) : isError ? (
-                        <span className="text-red-400/60 text-[10px]">Error</span>
-                    ) : (
-                        <span>{lastMessage?.text || <span className="italic opacity-40">No messages</span>}</span>
-                    )}
+                <div
+                    className={`text-xs truncate h-4 flex items-center ${isActive ? "text-white/80" : "text-white/50 group-hover:text-white/70"}`}>
+
+                    <span>{lastMessage?.text || <span className="italic opacity-40">No messages</span>}</span>
+
                 </div>
             </div>
         </div>

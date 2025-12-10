@@ -14,10 +14,3 @@ export interface SendMessage {
     id: string;
     text: string;
 }
-
-
-export interface LastMessage {
-    text: string;
-    timestamp: Date;
-}
-

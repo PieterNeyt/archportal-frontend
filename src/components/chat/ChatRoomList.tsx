@@ -40,7 +40,7 @@ export default function ChatRoomList({chatRooms, setChatRoom, isLoading, selecte
                 return (<ChatRoomCard
                     key={chatRoom.id}
                     title={chatRoom.title}
-                    chatroomId={chatRoom.id}
+                    lastMessage={chatRoom.messages[0]}
                     onClick={() => setChatRoom(chatRoom)}
                     isActive={selectedId === chatRoom.id}
                 />)
