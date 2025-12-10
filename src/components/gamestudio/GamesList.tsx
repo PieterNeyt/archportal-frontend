@@ -28,10 +28,8 @@ export function GamesList({ games }: GamesListProps) {
                         onClick={() => handleCardClick(game.id)}
                         className={`${GLASS_CARD_STYLES} p-3 flex items-center gap-4 hover:bg-white/5 hover:border-white/30 transition-all duration-300 group cursor-pointer active:scale-[0.99]`}
                     >
-                        {/* Game Info (Image + Title + Genre) */}
                         <GameInfoCard game={game} />
 
-                        {/* Price (Right aligned) */}
                         <div className="ml-auto pr-4 text-white font-semibold tracking-wide whitespace-nowrap">
                             {formatPrice(game.price)}
                         </div>

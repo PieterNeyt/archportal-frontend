@@ -3,10 +3,10 @@ import {GameGenre} from "@/model/library.ts";
 export interface Game {
     id: string;
     title: string;
-    imageUrl: string | null;
+    imageUrl: string;
     description: string;
     price: number;
     maxlobbysize: number;
-    gameUrl:string;
+    gameUrl :string;
     genre: GameGenre;
 }

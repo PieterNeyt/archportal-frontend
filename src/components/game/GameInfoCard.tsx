@@ -62,15 +62,12 @@ export function GameInfoCard({game, onEdit}: GameInfoCardProps) {
                 <div className="my-6 h-px w-full bg-gradient-to-r from-white/10 to-transparent"/>
 
                 <div className="space-y-6 flex-grow">
-                    {/* Description */}
                     <div className="space-y-2">
                         <h3 className="text-sm font-semibold text-white/40 uppercase tracking-wider">Description</h3>
                         <p className="text-white/80 leading-relaxed whitespace-pre-wrap">
                             {game.description}
                         </p>
                     </div>
-
-                    {/* New Details Grid: Lobby Size & Game URL */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <h3 className="text-sm font-semibold text-white/40 uppercase tracking-wider">Max Lobby Size</h3>

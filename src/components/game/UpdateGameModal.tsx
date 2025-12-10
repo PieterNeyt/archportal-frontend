@@ -54,7 +54,6 @@ export function UpdateGameModal({isOpen, onOpenChange, game}: UpdateGameModalPro
                 backdrop: "bg-black/50",
             }}
         >
-            {/* Achtergrond aangepast naar bg-black/30 */}
             <ModalContent className="bg-black/30 backdrop-blur-xl border border-white/10 shadow-2xl">
                 {(onClose) => (
                     <>
@@ -79,7 +78,6 @@ export function UpdateGameModal({isOpen, onOpenChange, game}: UpdateGameModalPro
                                     imagePreview={imagePreview}
                                 />
 
-                                {/* Error Melding Sectie */}
                                 {isError && (
                                     <div
                                         className="flex items-center gap-3 p-4 mt-2 rounded-xl bg-danger-500/10 border border-danger-500/50 text-danger animate-appearance-in">
