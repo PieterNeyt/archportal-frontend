@@ -1,12 +1,12 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {
     getAllLobbies,
-    getLobbyInfo,
+    getLobbyInfo, isPlayerInLobby,
     joinMultiplayerLobby,
     startMultiplayerLobby,
     startSinglePlayer
 } from "../service/lobbyService";
-import {LobbiesResponse, MultiplayerLobbyInfo, StartMultiPlayerRequest} from "@/model/lobby.ts";
+import {inLobby, LobbiesResponse, MultiplayerLobbyInfo, StartMultiPlayerRequest} from "@/model/lobby.ts";
 
 
 export function useStartSinglePlayerGame() {
@@ -70,6 +70,7 @@ export function useJoinMultiplayerLobby() {
         onSuccess: (_data, lobbyId) => {
             queryClient.invalidateQueries({queryKey: ['lobbyInfo', lobbyId]});
             queryClient.invalidateQueries({queryKey: ['session']});
+            queryClient.invalidateQueries({queryKey: ['PlayerInLobby']});
         },
     });
 
@@ -80,19 +81,31 @@ export function useJoinMultiplayerLobby() {
     };
 }
 
-
 export function useGetAllLobbies(gameId: string) {
-    return useQuery<LobbiesResponse, Error>({
+    const {data: lobbies, isLoading, isError, refetch} = useQuery<LobbiesResponse, Error>({
         queryKey: ['lobbies', gameId],
         queryFn: () => getAllLobbies(gameId),
         enabled: !!gameId,
     });
+
+    return {lobbies, isLoading, isError, refetch};
 }
 
 export function useGetLobbyInfo(lobbyId: string) {
-    return useQuery<MultiplayerLobbyInfo, Error>({
+    const {data: lobby, isLoading, isError, refetch} = useQuery<MultiplayerLobbyInfo, Error>({
         queryKey: ['lobbyInfo', lobbyId],
         queryFn: () => getLobbyInfo(lobbyId),
         enabled: !!lobbyId,
     });
+
+    return {lobby, isLoading, isError, refetch};
+}
+
+export function useIsPLayerInLobby() {
+    const {data: isInLobby, isLoading, isError, refetch} = useQuery<inLobby>({
+        queryKey: ['PlayerInLobby'],
+        queryFn: () => isPlayerInLobby(),
+    });
+
+    return {isInLobby, isLoading, isError, refetch};
 }

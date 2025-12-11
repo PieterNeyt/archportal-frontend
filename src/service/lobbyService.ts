@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+    inLobby,
     JoinMultiPlayerResponse,
     LobbiesResponse, MultiplayerLobbyInfo,
     StartMultiPlayerRequest,
@@ -31,4 +32,8 @@ export async function getAllLobbies(gameId: string): Promise<LobbiesResponse> {
 export async function getLobbyInfo(lobbyId: string): Promise<MultiplayerLobbyInfo> {
     const { data } = await axios.get(`/api/lobbies/multiplayer/${lobbyId}/info`);
     return data;
+}
+export async function isPlayerInLobby(): Promise<inLobby> {
+    const { data:isInLobby } = await axios.get(`/api/lobbies/player/in-lobby`);
+    return isInLobby;
 }

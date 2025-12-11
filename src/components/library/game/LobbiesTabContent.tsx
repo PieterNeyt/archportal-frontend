@@ -3,11 +3,12 @@ import {useParams} from "react-router-dom";
 import {Button} from "@heroui/button";
 import {Card, CardBody} from "@heroui/card";
 import {Spinner} from "@heroui/spinner";
-import {Gamepad2, Plus, Users} from "lucide-react";
-import {useGetAllLobbies, useJoinMultiplayerLobby} from "@/hooks/useLobbies";
+import {Gamepad2, Plus, Users, AlertCircle} from "lucide-react";
+import {useGetAllLobbies, useIsPLayerInLobby, useJoinMultiplayerLobby} from "@/hooks/useLobbies";
 import {EmptyTab} from "@/components/library/game/EmptyTab.tsx";
 import {CreateLobbyModal} from "@/components/library/game/CreateLobbyModal.tsx";
 import {Game} from "@/model/game.ts";
+import {InLobbyCard} from "@/components/library/game/inLobbyCard.tsx";
 
 interface LobbiesTabProps {
     game: Game;
@@ -17,7 +18,18 @@ export function LobbiesTabContent({game}: LobbiesTabProps) {
     const {gameId} = useParams();
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-    const {data: lobbiesData, isLoading: isLoadingLobbies} = useGetAllLobbies(gameId ?? "");
+    const {
+        lobbies: lobbiesData,
+        isLoading: isLoadingLobbies,
+        isError: isLobbiesError
+    } = useGetAllLobbies(gameId ?? "");
+
+    const {
+        isInLobby,
+        isLoading: isCheckingLobby,
+        isError: isCheckError
+    } = useIsPLayerInLobby();
+
     const {joinLobby, isPending: isJoining} = useJoinMultiplayerLobby();
 
     const lobbies = lobbiesData?.lobbies ?? [];
@@ -26,14 +38,28 @@ export function LobbiesTabContent({game}: LobbiesTabProps) {
         await joinLobby(lobbyId);
     };
 
-    const handleDirectJoin = async (lobbyId: string) => {
-        await handleJoinLobby(lobbyId);
-    };
-
-    if (isLoadingLobbies) {
+    if (isLoadingLobbies || isCheckingLobby) {
         return (
             <div className="flex items-center justify-center py-12">
                 <Spinner size="lg" color="primary"/>
+            </div>
+        );
+    }
+
+    if (isLobbiesError || isCheckError) {
+        return (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+                <AlertCircle size={48} className="text-red-500 mb-4" />
+                <h3 className="text-xl font-bold text-white">Something went wrong</h3>
+                <p className="text-white/50">Could not load lobbies.</p>
+            </div>
+        );
+    }
+
+    if (isInLobby?.isPlayerInLobby) {
+        return (
+            <div className="py-4">
+                <InLobbyCard lobbyId={isInLobby.lobbyId!} />
             </div>
         );
     }
@@ -74,40 +100,30 @@ export function LobbiesTabContent({game}: LobbiesTabProps) {
                             <CardBody className="p-4">
                                 <div className="flex items-center justify-between gap-4">
                                     <div className="flex items-center gap-4 overflow-hidden">
-                                        <div
-                                            className="bg-gradient-to-br from-purple-500/20 to-blue-500/20 p-3 rounded-xl border border-white/5 shrink-0">
+                                        <div className="bg-gradient-to-br from-purple-500/20 to-blue-500/20 p-3 rounded-xl border border-white/5 shrink-0">
                                             <Gamepad2 size={24} className="text-white"/>
                                         </div>
                                         <div className="min-w-0">
                                             <h4 className="text-lg font-bold text-white truncate pr-2">
-                                                COME AND PLAY BTICHES
+                                                Lobby #{lobby.id.substring(0, 4)}
                                             </h4>
-
                                             <div className="flex items-center gap-3 text-xs mt-1">
-                                                <div
-                                                    className="flex items-center gap-1.5 text-white/60 bg-white/5 px-2 py-0.5 rounded-full">
+                                                <div className="flex items-center gap-1.5 text-white/60 bg-white/5 px-2 py-0.5 rounded-full">
                                                     <Users size={12}/>
                                                     <span>{lobby.currentPlayers} / {lobby.maxPlayers}</span>
                                                 </div>
-
-                                                <span
-                                                    className={`px-2 py-0.5 rounded-full font-medium tracking-wide uppercase ${
-                                                        lobby.status === "WAITING"
-                                                            ? "text-green-400"
-                                                            : "text-orange-400"
-                                                    }`}>
+                                                <span className={`px-2 py-0.5 rounded-full font-medium uppercase ${lobby.status === "WAITING" ? "text-green-400" : "text-orange-400"}`}>
                                                     {lobby.status}
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
-
                                     <Button
                                         size="sm"
                                         color="primary"
                                         variant={lobby.status === "WAITING" ? "solid" : "flat"}
                                         className="font-semibold shrink-0"
-                                        onPress={() => handleDirectJoin(lobby.id)}
+                                        onPress={() => handleJoinLobby(lobby.id)}
                                         isDisabled={lobby.status !== "WAITING"}
                                         isLoading={isJoining}
                                     >
@@ -119,7 +135,6 @@ export function LobbiesTabContent({game}: LobbiesTabProps) {
                     ))}
                 </div>
             )}
-
             <CreateLobbyModal
                 isOpen={isCreateModalOpen}
                 onClose={() => setIsCreateModalOpen(false)}
