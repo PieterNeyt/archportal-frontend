@@ -4,10 +4,11 @@ import {Avatar} from "@heroui/avatar";
 import {Spinner} from "@heroui/spinner";
 import {Chip} from "@heroui/chip";
 import {Loader2, LogOut, Play} from "lucide-react";
-import {useGetLobbyInfo, useGetMySession, useStartMultiplayerGame} from "@/hooks/useLobbies.ts";
+import {useGetLobbyInfo, useGetMySession, useLeaveLobby, useStartMultiplayerGame} from "@/hooks/useLobbies.ts";
 import {SinglePlayerLaunchResponse} from "@/model/SinglePlayerLaunchResponse.ts";
 import {useEffect} from "react";
 import {InLobbyError} from "@/components/library/game/lobby/InLobbyError.tsx";
+import useToastEffect from "@/hooks/useToastEffect.ts";
 
 interface InLobbyCardProps {
     lobbyId: string;
@@ -16,7 +17,9 @@ interface InLobbyCardProps {
 export function InLobbyCard({lobbyId}: InLobbyCardProps) {
     const {isError, isLoading, lobby} = useGetLobbyInfo(lobbyId);
     const {isPending, isError: isGameError, startMultiplayer} = useStartMultiplayerGame();
-    const { mySession, refetch: getMySessionData  } = useGetMySession(lobbyId);
+    const {mySession, refetch: getMySessionData} = useGetMySession(lobbyId);
+    const leaveLobby = useLeaveLobby();
+    useToastEffect(leaveLobby, "Left lobby", "Failed to leave lobby", "You successfully left the lobby.")
 
     useEffect(() => {
         if (!lobby) return;
@@ -33,9 +36,8 @@ export function InLobbyCard({lobbyId}: InLobbyCardProps) {
         }
     }, [lobby, mySession]);
 
-    const handleLeaveLobby = () => {
-        console.log("Leaving lobby:", lobbyId);
-        // TODO: Implement leave logic
+    const handleLeaveLobby = async () => {
+        await leaveLobby.leaveLobby()
     };
 
     const handleStartGame = async () => {
