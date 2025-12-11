@@ -1,13 +1,12 @@
-// Hulpcomponent voor de 'lege' tab-inhoud (blijft hier voor de leesbaarheid)
-export function EmptyTab({
-                      icon,
-                      title,
-                      subtitle,
-                  }: {
-    icon: React.ReactNode;
+import {ReactNode} from "react";
+
+interface emptyTabProps {
+    icon: ReactNode;
     title: string;
-    subtitle: string;
-}) {
+    subtitle:string;
+}
+
+export function EmptyTab({icon, title, subtitle}: emptyTabProps) {
     return (
         <div className="text-center py-12">
             {icon}
