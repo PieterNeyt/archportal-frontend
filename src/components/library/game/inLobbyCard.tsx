@@ -4,7 +4,8 @@ import {Avatar} from "@heroui/avatar";
 import {Spinner} from "@heroui/spinner";
 import {Chip} from "@heroui/chip";
 import {AlertCircle, Loader2, LogOut, Play} from "lucide-react";
-import {useGetLobbyInfo} from "@/hooks/useLobbies.ts";
+import {useGetLobbyInfo, useStartMultiplayerGame} from "@/hooks/useLobbies.ts";
+import {SinglePlayerLaunchResponse} from "@/model/SinglePlayerLaunchResponse.ts";
 
 interface InLobbyCardProps {
     lobbyId: string;
@@ -12,15 +13,22 @@ interface InLobbyCardProps {
 
 export function InLobbyCard({lobbyId}: InLobbyCardProps) {
     const {isError, isLoading, lobby} = useGetLobbyInfo(lobbyId);
+    const {isPending, isError: isGameError, startMultiplayer} = useStartMultiplayerGame();
 
     const handleLeaveLobby = () => {
         console.log("Leaving lobby:", lobbyId);
         // TODO: Implement leave logic
     };
 
-    const handleStartGame = () => {
-        console.log("Starting game for lobby:", lobbyId);
-        // TODO: Implement start logic
+    const handleStartGame = async () => {
+        const response: SinglePlayerLaunchResponse = await startMultiplayer(lobbyId);
+
+        if (!isGameError) {
+            window.open(response.launchUrl, "_blank", "noopener,noreferrer");
+            return;
+        }
+        return alert("There was an error launching the game.");
+
     };
 
     if (isLoading) {
@@ -150,6 +158,7 @@ export function InLobbyCard({lobbyId}: InLobbyCardProps) {
                     variant="shadow"
                     className="font-bold text-lg px-12 py-6 shadow-primary/25 w-full max-w-md"
                     startContent={<Play size={24} fill="currentColor"/>}
+                    isLoading={isPending}
                     onPress={handleStartGame}
                 >
                     START GAME

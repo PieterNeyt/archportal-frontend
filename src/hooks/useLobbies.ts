@@ -2,7 +2,7 @@ import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {
     getAllLobbies,
     getLobbyInfo, isPlayerInLobby,
-    joinMultiplayerLobby,
+    joinMultiplayerLobby, startMultiPlayer,
     startMultiplayerLobby,
     startSinglePlayer
 } from "../service/lobbyService";
@@ -28,6 +28,28 @@ export function useStartSinglePlayerGame() {
         isPending,
         isError,
         startSinglePlayer: mutateAsync
+    }
+}
+
+export function useStartMultiplayerGame() {
+    const queryClient = useQueryClient()
+    const {
+        mutateAsync,
+        isPending,
+        isError,
+
+    } = useMutation(
+        {
+            mutationFn: (lobbyId: string) => {
+                return startMultiPlayer(lobbyId)
+            },
+            onSuccess: () => queryClient.invalidateQueries({queryKey: ['session']}),
+        })
+
+    return {
+        isPending,
+        isError,
+        startMultiplayer: mutateAsync
     }
 }
 

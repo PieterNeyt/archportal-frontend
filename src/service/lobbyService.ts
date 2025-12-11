@@ -14,6 +14,15 @@ export async function startSinglePlayer(gameId: string) {
     return launchUrl;
 }
 
+export async function startMultiPlayer(lobbyId: string) {
+    const {data: launchUrl} = await axios.post("/api/lobbies/multiplayer/start", {
+        lobbyId,
+    });
+    return launchUrl;
+}
+
+
+
 export async function startMultiplayerLobby(request: StartMultiPlayerRequest): Promise<StartMultiPlayerResponse> {
     const { data } = await axios.post("/api/lobbies/multiplayer/prepare", request);
     return data;
