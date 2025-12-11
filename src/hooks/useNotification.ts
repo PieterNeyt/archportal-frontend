@@ -9,19 +9,20 @@ import {
 } from "@/service/notificationService.ts";
 
 export function useFirstFiveNotifications() {
-    const {isAuthenticated,isInitialised}= useContext(securityContext)
+    const {isAuthenticated, isInitialised} = useContext(securityContext)
 
     const {isLoading, isError, refetch, data: notifications} = useQuery({
         queryKey: ["firstFiveNotification"],
         queryFn: getFirstFiveNotificaiton,
         enabled: isAuthenticated() && isInitialised,
+        refetchInterval: 1000
     })
 
     return {isLoading, isError, refetch, notifications}
 }
 
 export function useNotifications() {
-    const {isAuthenticated,isInitialised}= useContext(securityContext)
+    const {isAuthenticated, isInitialised} = useContext(securityContext)
 
     const {isLoading, isError, refetch, data: notifications} = useQuery({
         queryKey: ["notifications"],
@@ -33,7 +34,7 @@ export function useNotifications() {
 }
 
 export function useNotificationAmount() {
-    const {isAuthenticated,isInitialised}= useContext(securityContext)
+    const {isAuthenticated, isInitialised} = useContext(securityContext)
 
     const {isLoading, isError, refetch, data: notificationsAmount} = useQuery({
         queryKey: ["amountOfNotifications"],

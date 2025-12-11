@@ -13,7 +13,8 @@ export function useGetChatRooms() {
     const {isLoading, isError, data: chatRooms, refetch} = useQuery({
         queryKey: [CHATROOMS],
         queryFn: () => getChatRooms(),
-        enabled: isAuthenticated() && isInitialised
+        enabled: isAuthenticated() && isInitialised,
+        refetchInterval: 5000
     });
     return {isLoading, isError, chatRooms, refetch};
 }
@@ -24,7 +25,8 @@ export function useGetChatRoom(id: string) {
     const {isLoading, isError, data: chatRoom, refetch} = useQuery({
         queryKey: [MESSAGES, id],
         queryFn: () => getChatRoom(id),
-        enabled: isAuthenticated() && isInitialised
+        enabled: isAuthenticated() && isInitialised,
+        refetchInterval: 1000
     })
     return {isLoading, isError, chatRoom, refetch}
 }
