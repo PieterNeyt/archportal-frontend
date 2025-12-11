@@ -35,7 +35,6 @@ export function LobbiesTabContent({game}: LobbiesTabProps) {
     const lobbies = lobbiesData?.lobbies ?? [];
 
     const handleJoinLobby = async (lobbyId: string) => {
-        console.log(lobbyId+ " JOIJ OJIN JOIJN");
         await joinLobby(lobbyId);
     };
 

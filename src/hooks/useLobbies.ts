@@ -46,6 +46,7 @@ export function useStartMultiplayerLobby() {
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ['lobbies']});
             queryClient.invalidateQueries({queryKey: ['session']});
+            queryClient.invalidateQueries({queryKey: ['PlayerInLobby']});
         },
     });
 
