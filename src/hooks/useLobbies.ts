@@ -1,7 +1,7 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {
     getAllLobbies,
-    getLobbyInfo, isPlayerInLobby,
+    getLobbyInfo, getMySession, isPlayerInLobby,
     joinMultiplayerLobby, startMultiPlayer,
     startMultiplayerLobby,
     startSinglePlayer
@@ -119,6 +119,8 @@ export function useGetLobbyInfo(lobbyId: string) {
         queryKey: ['lobbyInfo', lobbyId],
         queryFn: () => getLobbyInfo(lobbyId),
         enabled: !!lobbyId,
+        refetchInterval: 1500, // every 1.5 sec
+        refetchOnWindowFocus: true,
     });
 
     return {lobby, isLoading, isError, refetch};
@@ -132,3 +134,15 @@ export function useIsPLayerInLobby() {
 
     return {isInLobby, isLoading, isError, refetch};
 }
+
+export function useGetMySession(lobbyId: string) {
+    const { data: mySession, isLoading, isError, refetch } = useQuery({
+        queryKey: ['mySession', lobbyId],
+        queryFn: () => getMySession(lobbyId),
+        enabled: !!lobbyId,
+        refetchOnWindowFocus: true, // Optioneel, afhankelijk van gewenst gedrag
+    });
+
+    return { mySession, isLoading, isError, refetch };
+}
+

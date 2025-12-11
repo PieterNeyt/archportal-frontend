@@ -46,3 +46,8 @@ export async function isPlayerInLobby(): Promise<inLobby> {
     const { data:isInLobby } = await axios.get(`/api/lobbies/player/in-lobby`);
     return isInLobby;
 }
+
+export async function getMySession(lobbyId: string) {
+    const { data } = await axios.get(`/api/lobbies/multiplayer/${lobbyId}/session`);
+    return data;
+}

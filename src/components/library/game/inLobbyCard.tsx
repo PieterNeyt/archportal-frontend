@@ -4,8 +4,9 @@ import {Avatar} from "@heroui/avatar";
 import {Spinner} from "@heroui/spinner";
 import {Chip} from "@heroui/chip";
 import {AlertCircle, Loader2, LogOut, Play} from "lucide-react";
-import {useGetLobbyInfo, useStartMultiplayerGame} from "@/hooks/useLobbies.ts";
+import {useGetLobbyInfo, useGetMySession, useStartMultiplayerGame} from "@/hooks/useLobbies.ts";
 import {SinglePlayerLaunchResponse} from "@/model/SinglePlayerLaunchResponse.ts";
+import {useEffect} from "react";
 
 interface InLobbyCardProps {
     lobbyId: string;
@@ -14,6 +15,26 @@ interface InLobbyCardProps {
 export function InLobbyCard({lobbyId}: InLobbyCardProps) {
     const {isError, isLoading, lobby} = useGetLobbyInfo(lobbyId);
     const {isPending, isError: isGameError, startMultiplayer} = useStartMultiplayerGame();
+    const { mySession, refetch: getMySessionData  } = useGetMySession(lobbyId);
+
+    useEffect(() => {
+        if (!lobby) return;
+
+        // Wanneer host start -> status = CLOSED of STARTED
+        if (lobby.status === "CLOSED" || lobby.status === "STARTED") {
+            // Trigger de sessie fetch van de hook
+            getMySessionData()
+        }
+    }, [lobby, getMySessionData]);
+
+
+    useEffect(() => {
+        if (lobby && (lobby.status === "CLOSED" || lobby.status === "STARTED") && mySession) {
+            // redirect
+            window.open(mySession.launchUrl, "_blank");
+        }
+        // Luister naar zowel lobby status als de mySession data
+    }, [lobby, mySession]);
 
     const handleLeaveLobby = () => {
         console.log("Leaving lobby:", lobbyId);
