@@ -1,4 +1,3 @@
-import {useParams} from "react-router-dom";
 import {Button} from "@heroui/button";
 import {Spinner} from "@heroui/spinner";
 import {AlertCircle, Gamepad2, Plus} from "lucide-react";
@@ -18,7 +17,6 @@ interface LobbiesTabProps {
 }
 
 export function LobbiesTabContent({game}: LobbiesTabProps) {
-    const {gameId} = useParams();
     const { startLobby, isPending } = useStartMultiplayerLobby();
 
     const onSubmit = async () => {
@@ -29,7 +27,7 @@ export function LobbiesTabContent({game}: LobbiesTabProps) {
         lobbies: lobbiesData,
         isLoading: isLoadingLobbies,
         isError: isLobbiesError
-    } = useGetAllLobbies(gameId ?? "");
+    } = useGetAllLobbies(game.id ?? "");
 
     const {
         isInLobby,
