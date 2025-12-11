@@ -1,5 +1,5 @@
 export type GameLobbyFace = {
-    id: string;
+    lobbyId: string;
     maxPlayers: number;
     currentPlayers: number;
     status: string
