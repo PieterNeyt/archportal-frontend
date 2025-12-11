@@ -16,10 +16,11 @@ interface InLobbyCardProps {
 
 export function InLobbyCard({lobbyId}: InLobbyCardProps) {
     const {isError, isLoading, lobby} = useGetLobbyInfo(lobbyId);
-    const {isPending, isError: isGameError, startMultiplayer} = useStartMultiplayerGame();
+    const {isPending, isError: isGameError,error,isSuccess,startMultiplayer} = useStartMultiplayerGame();
     const {mySession, refetch: getMySessionData} = useGetMySession(lobbyId);
     const leaveLobby = useLeaveLobby();
     useToastEffect(leaveLobby, "Left lobby", "Failed to leave lobby", "You successfully left the lobby.")
+    useToastEffect({isError:isGameError,error:error,isSuccess:isSuccess},"The game started successfully.","There was an error launching the game.","Game started successfully.")
 
     useEffect(() => {
         if (!lobby) return;
@@ -45,10 +46,7 @@ export function InLobbyCard({lobbyId}: InLobbyCardProps) {
 
         if (!isGameError) {
             window.open(response.launchUrl, "_blank", "noopener,noreferrer");
-            return;
         }
-        return alert("There was an error launching the game.");
-
     };
 
     if (isLoading) {

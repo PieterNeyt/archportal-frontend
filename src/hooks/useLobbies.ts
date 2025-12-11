@@ -41,6 +41,8 @@ export function useStartMultiplayerGame() {
         mutateAsync,
         isPending,
         isError,
+        error,
+        isSuccess,
 
     } = useMutation(
         {
@@ -53,6 +55,8 @@ export function useStartMultiplayerGame() {
     return {
         isPending,
         isError,
+        error,
+        isSuccess,
         startMultiplayer: mutateAsync
     }
 }

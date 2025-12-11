@@ -9,7 +9,7 @@ import {
 } from "@/hooks/useLobbies.ts";
 import {EmptyTab} from "@/components/library/game/EmptyTab.tsx";
 import {Game} from "@/model/game.ts";
-import {InLobbyCard} from "@/components/library/game/lobby/inLobbyCard.tsx";
+import {InLobbyCard} from "@/components/library/game/lobby/InLobbyCard.tsx";
 import {LobbiesListCard} from "@/components/library/game/lobby/LobbiesTabList.tsx";
 
 interface LobbiesTabProps {
