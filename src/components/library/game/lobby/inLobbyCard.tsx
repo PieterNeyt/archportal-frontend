@@ -3,10 +3,11 @@ import {Button} from "@heroui/button";
 import {Avatar} from "@heroui/avatar";
 import {Spinner} from "@heroui/spinner";
 import {Chip} from "@heroui/chip";
-import {AlertCircle, Loader2, LogOut, Play} from "lucide-react";
+import {Loader2, LogOut, Play} from "lucide-react";
 import {useGetLobbyInfo, useGetMySession, useStartMultiplayerGame} from "@/hooks/useLobbies.ts";
 import {SinglePlayerLaunchResponse} from "@/model/SinglePlayerLaunchResponse.ts";
 import {useEffect} from "react";
+import {InLobbyError} from "@/components/library/game/lobby/InLobbyError.tsx";
 
 interface InLobbyCardProps {
     lobbyId: string;
@@ -20,9 +21,7 @@ export function InLobbyCard({lobbyId}: InLobbyCardProps) {
     useEffect(() => {
         if (!lobby) return;
 
-        // Wanneer host start -> status = CLOSED of STARTED
         if (lobby.status === "CLOSED" || lobby.status === "STARTED") {
-            // Trigger de sessie fetch van de hook
             getMySessionData()
         }
     }, [lobby, getMySessionData]);
@@ -30,10 +29,8 @@ export function InLobbyCard({lobbyId}: InLobbyCardProps) {
 
     useEffect(() => {
         if (lobby && (lobby.status === "CLOSED" || lobby.status === "STARTED") && mySession) {
-            // redirect
             window.open(mySession.launchUrl, "_blank");
         }
-        // Luister naar zowel lobby status als de mySession data
     }, [lobby, mySession]);
 
     const handleLeaveLobby = () => {
@@ -61,24 +58,7 @@ export function InLobbyCard({lobbyId}: InLobbyCardProps) {
     }
 
     if (isError || !lobby) {
-        return (
-            <Card className="w-full bg-danger/10 border border-danger/20">
-                <CardBody className="p-8 flex flex-col items-center text-center gap-4">
-                    <AlertCircle size={48} className="text-danger"/>
-                    <div>
-                        <h3 className="text-xl font-bold text-white">Connection Error</h3>
-                        <p className="text-white/50">Could not retrieve lobby details.</p>
-                    </div>
-                    <Button
-                        color="danger"
-                        variant="flat"
-                        onPress={handleLeaveLobby}
-                    >
-                        Leave Lobby
-                    </Button>
-                </CardBody>
-            </Card>
-        );
+        return <InLobbyError handleLeaveLobby={handleLeaveLobby}/>
     }
 
     const filledSlots = lobby.players.length;
@@ -87,7 +67,6 @@ export function InLobbyCard({lobbyId}: InLobbyCardProps) {
 
     return (
         <Card className="w-full bg-black/20 border border-white/10 overflow-visible">
-            {/* --- HEADER --- */}
             <CardHeader className="flex justify-between items-center p-6 pb-2 border-b border-white/5">
                 <div className="flex items-center gap-4">
                     <Button

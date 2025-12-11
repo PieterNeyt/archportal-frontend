@@ -140,7 +140,7 @@ export function useGetMySession(lobbyId: string) {
         queryKey: ['mySession', lobbyId],
         queryFn: () => getMySession(lobbyId),
         enabled: !!lobbyId,
-        refetchOnWindowFocus: true, // Optioneel, afhankelijk van gewenst gedrag
+        refetchOnWindowFocus: true,
     });
 
     return { mySession, isLoading, isError, refetch };
