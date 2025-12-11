@@ -4,7 +4,7 @@ import {Input, Textarea} from "@heroui/input";
 import {Button} from "@heroui/button";
 import {useNavigate} from "react-router-dom";
 import {CircularProgress} from "@heroui/progress";
-import {createGameSchema, CreateGameValues} from "@/validation/createGameValidation.ts";
+import {gameSchema, GameValues} from "@/validation/createGameValidation.ts";
 import {useState} from "react";
 import {Image, Select, SelectItem} from "@heroui/react";
 import {GameGenre} from "@/model/GameGenre.ts";
@@ -23,12 +23,12 @@ export function CreateGameForm() {
         register,
         handleSubmit,
         formState: {errors},
-    } = useForm<CreateGameValues>({
-        resolver: zodResolver(createGameSchema),
+    } = useForm<GameValues>({
+        resolver: zodResolver(gameSchema),
         mode: "onChange",
     });
 
-    const onSubmit = async (data: CreateGameValues) => {
+    const onSubmit = async (data: GameValues) => {
         await AddGame(data);
         if (!isError) {
             setIsOpen(true);

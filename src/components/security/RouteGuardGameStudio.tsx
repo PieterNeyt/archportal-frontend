@@ -14,8 +14,12 @@ export default function RouteGuardGameStudio({children}: PropsWithChildren) {
 
     useEffect(() => {
         if (loggedInUser?.hasStudio) {
-            if (window.location.pathname !== "/shop" && window.location.hash !== "#studio")
-                navigate("/shop#studio");
+            if (window.location.pathname !== "/gamestudio"){
+                navigate("/gamestudio");
+            }
+        }else {
+            if (window.location.pathname !== "/create/gamestudio")
+                navigate("/create/gamestudio")
         }
     }, [loggedInUser?.hasStudio, navigate]);
 
