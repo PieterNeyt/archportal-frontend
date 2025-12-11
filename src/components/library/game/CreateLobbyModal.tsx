@@ -1,99 +1,124 @@
-import { useState } from "react";
-import {
-    Modal,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-} from "@heroui/modal";
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@heroui/modal";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { useStartMultiplayerLobby } from "@/hooks/useLobbies";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createLobbySchema, CreateLobbyValues } from "@/validation/createLobbyValidation.ts";
+import { inputClasses } from "@/styles/customClasses.ts";
+import { useMemo } from "react";
 
 interface CreateLobbyModalProps {
     isOpen: boolean;
     onClose: () => void;
     gameId: string;
+    maxlobbysize: number;
 }
 
-export function CreateLobbyModal({ isOpen, onClose, gameId }: CreateLobbyModalProps) {
-    const [lobbyName, setLobbyName] = useState("");
-    const [maxPlayers, setMaxPlayers] = useState("4");
+export function CreateLobbyModal({ isOpen, onClose, gameId, maxlobbysize }: CreateLobbyModalProps) {
     const { startLobby, isPending } = useStartMultiplayerLobby();
 
-    const handleCreate = async () => {
-        if (!lobbyName.trim()) return;
+    const schema = useMemo(() => createLobbySchema(maxlobbysize), [maxlobbysize]);
 
-        try {
-            await startLobby({
-                gameId,
-            });
-            setLobbyName("");
-            setMaxPlayers("4");
-            onClose();
-        } catch (error) {
-            console.error("Failed to create lobby:", error);
-        }
-    };
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<CreateLobbyValues>({
+        resolver: zodResolver(schema),
+        values: {
+            lobbysize: maxlobbysize,
+            title: ""
+        },
+        mode: "onChange"
+    });
 
-    const handleClose = () => {
-        setLobbyName("");
-        setMaxPlayers("4");
+    const onSubmit = async (data: CreateLobbyValues) => {
+        await startLobby({
+            gameId,
+            ...data
+        });
         onClose();
     };
 
     return (
         <Modal
             isOpen={isOpen}
-            onClose={handleClose}
+            onClose={onClose}
+            placement="center"
+            backdrop="blur"
             classNames={{
-                base: "bg-black/90 border border-white/10",
-                header: "border-b border-white/10",
-                footer: "border-t border-white/10",
+                base: "bg-transparent",
+                backdrop: "bg-black/50",
             }}
         >
-            <ModalContent>
-                <ModalHeader className="text-white">Create New Lobby</ModalHeader>
-                <ModalBody className="py-6">
-                    <div className="space-y-4">
-                        <Input
-                            label="Lobby Name"
-                            placeholder="Enter lobby name"
-                            value={lobbyName}
-                            onValueChange={setLobbyName}
-                            classNames={{
-                                input: "text-white",
-                                label: "text-white/80",
-                            }}
-                        />
-                        <Input
-                            type="number"
-                            label="Max Players"
-                            placeholder="4"
-                            value={maxPlayers}
-                            onValueChange={setMaxPlayers}
-                            min="2"
-                            max="10"
-                            classNames={{
-                                input: "text-white",
-                                label: "text-white/80",
-                            }}
-                        />
-                    </div>
-                </ModalBody>
-                <ModalFooter>
-                    <Button variant="light" onPress={handleClose}>
-                        Cancel
-                    </Button>
-                    <Button
-                        color="primary"
-                        onPress={handleCreate}
-                        isLoading={isPending}
-                        isDisabled={!lobbyName.trim()}
-                    >
-                        Create Lobby
-                    </Button>
-                </ModalFooter>
+            <ModalContent className="bg-black/30 backdrop-blur-xl border border-white/10 shadow-2xl">
+                {(onClose) => (
+                    <>
+                        {/* Header */}
+                        <ModalHeader className="flex flex-col gap-1 px-6 py-4 text-white">
+                            Create New Lobby
+                        </ModalHeader>
+
+                        <div className="border-t border-white/10"></div>
+
+                        {/* Body */}
+                        <ModalBody className="py-6 px-6">
+                            <form
+                                id="create-lobby-form"
+                                className="flex flex-col gap-4"
+                                onSubmit={handleSubmit(onSubmit)}
+                            >
+                            <div className="space-y-14">
+                                    <Input
+                                        isRequired
+                                        isInvalid={!!errors.title}
+                                        errorMessage={errors.title?.message}
+                                        label="Lobby name"
+                                        labelPlacement="outside"
+                                        placeholder="Enter lobby name"
+                                        type="text"
+                                        classNames={inputClasses}
+                                        {...register("title")}
+                                    />
+                                    <Input
+                                        isRequired
+                                        isInvalid={!!errors.lobbysize}
+                                        errorMessage={errors.lobbysize?.message}
+                                        label="Max Players"
+                                        labelPlacement="outside"
+                                        placeholder="Enter Max Players"
+                                        type="number"
+                                        classNames={inputClasses}
+                                        {...register("lobbysize", { valueAsNumber: true })}
+                                    />
+                                </div>
+                            </form>
+                        </ModalBody>
+
+                        <div className="border-t border-white/10"></div>
+
+                        {/* Footer */}
+                        <ModalFooter className="flex gap-2 justify-end px-6 py-4">
+                            <Button
+                                color="danger"
+                                variant="flat"
+                                onPress={onClose}
+                                isDisabled={isPending}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                color="primary"
+                                type="submit"
+                                form="create-lobby-form" // Linkt de knop aan het formulier hierboven
+                                isLoading={isPending}
+                            >
+                                Create Lobby
+                            </Button>
+                        </ModalFooter>
+                    </>
+                )}
             </ModalContent>
         </Modal>
     );

@@ -4,12 +4,17 @@ import { Gamepad2, Trophy, Zap } from "lucide-react";
 import React from "react";
 import {LobbiesTabContent} from "@/components/library/game/LobbiesTabContent.tsx";
 import {EmptyTab} from "@/components/library/game/EmptyTab.tsx";
+import {Game} from "@/model/game.ts";
 
 function Title({ icon, label }: { icon: React.ReactNode; label: string }) {
     return <div className="flex items-center gap-2">{icon}<span>{label}</span></div>;
 }
 
-export function GameDetailsTabs() {
+interface GameDetailTabsProps{
+    game:Game;
+}
+
+export function GameDetailsTabs({game}:GameDetailTabsProps) {
     return (
         <Card className="bg-black/30 backdrop-blur-xl border border-white/10">
             <CardBody className="p-6">
@@ -39,7 +44,7 @@ export function GameDetailsTabs() {
                         key="lobbies"
                         title={<Title icon={<Gamepad2 size={18} />} label="Lobbies" />}
                     >
-                        <LobbiesTabContent />
+                        <LobbiesTabContent game={game} />
                     </Tab>
 
                     <Tab

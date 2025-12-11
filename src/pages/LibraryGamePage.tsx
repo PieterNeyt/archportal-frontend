@@ -1,28 +1,25 @@
-// src/pages/LibraryGamePage.tsx
-import { useParams, useNavigate } from "react-router-dom";
-import { Button } from "@heroui/button";
-import { ArrowLeft } from "lucide-react";
-import { useLibrary } from "@/hooks/useLibrary";
-import { useStartSinglePlayerGame } from "@/hooks/useLobbies";
-import { useGameStatistics } from "@/hooks/useAnalytics";
-import { GameInfoSection } from "@/components/library/game/GameInfoSection.tsx";
-import { GameStatisticsCard } from "@/components/library/game/GameStatisticsCard.tsx";
-import { GameDetailsTabs } from "@/components/library/game/GameDetailsTabs.tsx";
+import {useNavigate, useParams} from "react-router-dom";
+import {Button} from "@heroui/button";
+import {ArrowLeft} from "lucide-react";
+import {useStartSinglePlayerGame} from "@/hooks/useLobbies";
+import {useGameStatistics} from "@/hooks/useAnalytics";
+import {GameInfoSection} from "@/components/library/game/GameInfoSection.tsx";
+import {GameStatisticsCard} from "@/components/library/game/GameStatisticsCard.tsx";
+import {GameDetailsTabs} from "@/components/library/game/GameDetailsTabs.tsx";
 import {GameImageCard} from "@/components/library/game/GameImageCard.tsx";
+import {useGame} from "@/hooks/useGames.ts";
 
 export default function LibraryGamePage() {
     const { gameId } = useParams();
     const navigate = useNavigate();
 
-    const { games, isLoading, isError } = useLibrary();
+    const { game, isLoading, isError } = useGame(gameId ?? "");
     const { startSinglePlayer, isPending, isError: startError } = useStartSinglePlayerGame();
 
 
     const { gameStatistics, isLoading: isStatsLoading } = useGameStatistics(
         gameId ?? ""
     );
-
-    const game = games?.find((g) => g.id === gameId);
 
     const handleStart = async () => {
         if (!game) return;
@@ -70,7 +67,7 @@ export default function LibraryGamePage() {
                     </div>
                 </div>
 
-                <GameDetailsTabs />
+                <GameDetailsTabs game={game}/>
             </div>
         </div>
     );

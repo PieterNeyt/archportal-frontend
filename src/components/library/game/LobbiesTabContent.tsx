@@ -1,152 +1,55 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { Button } from "@heroui/button";
-import { Card, CardBody } from "@heroui/card";
-import { Spinner } from "@heroui/spinner";
-import { Gamepad2, Users, Plus, ArrowLeft, Crown } from "lucide-react";
-import {
-    useGetAllLobbies,
-    useGetLobbyInfo,
-    useJoinMultiplayerLobby
-} from "@/hooks/useLobbies";
-import { EmptyTab } from "@/components/library/game/EmptyTab.tsx";
-import { CreateLobbyModal } from "@/components/library/game/CreateLobbyModal.tsx";
+import {useState} from "react";
+import {useParams} from "react-router-dom";
+import {Button} from "@heroui/button";
+import {Card, CardBody} from "@heroui/card";
+import {Spinner} from "@heroui/spinner";
+import {Gamepad2, Plus, Users} from "lucide-react";
+import {useGetAllLobbies, useJoinMultiplayerLobby} from "@/hooks/useLobbies";
+import {EmptyTab} from "@/components/library/game/EmptyTab.tsx";
+import {CreateLobbyModal} from "@/components/library/game/CreateLobbyModal.tsx";
+import {Game} from "@/model/game.ts";
 
-export function LobbiesTabContent() {
-    const { gameId } = useParams();
-    const [selectedLobbyId, setSelectedLobbyId] = useState<string | null>(null);
+interface LobbiesTabProps {
+    game: Game;
+}
+
+export function LobbiesTabContent({game}: LobbiesTabProps) {
+    const {gameId} = useParams();
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-    const { data: lobbiesData, isLoading: isLoadingLobbies } = useGetAllLobbies(gameId ?? "");
-    const { data: lobbyInfo, isLoading: isLoadingLobbyInfo } = useGetLobbyInfo(selectedLobbyId ?? "");
-    const { joinLobby, isPending: isJoining } = useJoinMultiplayerLobby();
+    const {data: lobbiesData, isLoading: isLoadingLobbies} = useGetAllLobbies(gameId ?? "");
+    const {joinLobby, isPending: isJoining} = useJoinMultiplayerLobby();
 
     const lobbies = lobbiesData?.lobbies ?? [];
 
-    const handleJoinLobby = async () => {
-        if (!selectedLobbyId) return;
-        try {
-            await joinLobby(selectedLobbyId);
-        } catch (error) {
-            console.error("Failed to join lobby:", error);
-        }
+    const handleJoinLobby = async (lobbyId: string) => {
+        await joinLobby(lobbyId);
     };
 
-    const handleBackToList = () => {
-        setSelectedLobbyId(null);
+    const handleDirectJoin = async (lobbyId: string) => {
+        await handleJoinLobby(lobbyId);
     };
 
-    // Loading state
     if (isLoadingLobbies) {
         return (
             <div className="flex items-center justify-center py-12">
-                <Spinner size="lg" color="primary" />
+                <Spinner size="lg" color="primary"/>
             </div>
         );
     }
 
-    // Show lobby details view
-    if (selectedLobbyId && lobbyInfo) {
-        return (
-            <div className="py-6">
-                <Button
-                    startContent={<ArrowLeft size={18} />}
-                    variant="light"
-                    className="mb-6"
-                    onPress={handleBackToList}
-                >
-                    Back to lobbies
-                </Button>
-
-                <Card className="bg-black/20 border border-white/10">
-                    <CardBody className="p-6">
-                        <div className="flex items-center justify-between mb-6">
-                            <div>
-                                <h3 className="text-2xl font-bold text-white mb-2">
-                                    {lobbyInfo.lobbyId}
-                                </h3>
-                                <p className="text-white/60">
-                                    {lobbyInfo.players.length} / {lobbyInfo.maxPlayers} players
-                                </p>
-                            </div>
-                            <Button
-                                color="primary"
-                                size="lg"
-                                onPress={handleJoinLobby}
-                                isLoading={isJoining}
-                                isDisabled={
-                                    lobbyInfo.players.length >= lobbyInfo.maxPlayers ||
-                                    lobbyInfo.status !== "WAITING"
-                                }
-                            >
-                                {lobbyInfo.status === "WAITING" ? "Join Lobby" : "Game Started"}
-                            </Button>
-                        </div>
-
-                        {isLoadingLobbyInfo ? (
-                            <div className="flex items-center justify-center py-8">
-                                <Spinner color="primary" />
-                            </div>
-                        ) : (
-                            <div className="space-y-3">
-                                <h4 className="text-lg font-semibold text-white mb-4">
-                                    Players in Lobby
-                                </h4>
-                                {lobbyInfo.players.map((player, index) => (
-                                    <Card key={player.playerId} className="bg-white/5 border border-white/10">
-                                        <CardBody className="p-4">
-                                            <div className="flex items-center gap-3">
-                                                {index === 0 && (
-                                                    <Crown size={20} className="text-yellow-500" />
-                                                )}
-                                                <Users size={20} className="text-white/60" />
-                                                <span className="text-white font-medium">
-                                                    {player.username}
-                                                </span>
-                                                {index === 0 && (
-                                                    <span className="text-xs text-yellow-500 ml-auto">
-                                                        Host
-                                                    </span>
-                                                )}
-                                            </div>
-                                        </CardBody>
-                                    </Card>
-                                ))}
-
-                                {/* Empty slots */}
-                                {Array.from({
-                                    length: lobbyInfo.maxPlayers - lobbyInfo.players.length
-                                }).map((_, index) => (
-                                    <Card
-                                        key={`empty-${index}`}
-                                        className="bg-white/5 border border-dashed border-white/20"
-                                    >
-                                        <CardBody className="p-4">
-                                            <div className="flex items-center gap-3">
-                                                <Users size={20} className="text-white/30" />
-                                                <span className="text-white/30 font-medium">
-                                                    Waiting for player...
-                                                </span>
-                                            </div>
-                                        </CardBody>
-                                    </Card>
-                                ))}
-                            </div>
-                        )}
-                    </CardBody>
-                </Card>
-            </div>
-        );
-    }
-
-    // Show lobbies list view
     return (
-        <div className="py-6">
-            <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-white">Available Lobbies</h3>
+        <div className="py-4 space-y-6">
+            <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-4">
+                <div>
+                    <h3 className="text-xl font-bold text-white">Multiplayer Lobbies</h3>
+                    <p className="text-white/50 text-xs mt-0.5">Join a game or start your own</p>
+                </div>
                 <Button
                     color="primary"
-                    startContent={<Plus size={18} />}
+                    size="md"
+                    className="font-semibold shadow-lg shadow-primary/20"
+                    startContent={<Plus size={18}/>}
                     onPress={() => setIsCreateModalOpen(true)}
                 >
                     Create Lobby
@@ -155,50 +58,60 @@ export function LobbiesTabContent() {
 
             {lobbies.length === 0 ? (
                 <EmptyTab
-                    icon={<Gamepad2 size={48} className="text-white/40 mx-auto mb-4" />}
+                    icon={<Gamepad2 size={48} className="text-white/20 mx-auto mb-4"/>}
                     title="No lobbies available"
-                    subtitle="Be the first to create a lobby and invite others to play"
+                    subtitle="Create one to start playing!"
                 />
             ) : (
-                <div className="space-y-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {lobbies.map((lobby) => (
                         <Card
                             key={lobby.id}
                             isPressable
-                            onPress={() => setSelectedLobbyId(lobby.id)}
-                            className="bg-black/20 border border-white/10 hover:border-purple-500/50 transition-all cursor-pointer"
+                            isHoverable
+                            className="bg-black/20 border border-white/10 hover:bg-black/40 transition-all w-full text-left"
                         >
                             <CardBody className="p-4">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-4">
-                                        <div className="bg-purple-500/20 p-3 rounded-lg">
-                                            <Gamepad2 size={24} className="text-purple-400" />
+                                <div className="flex items-center justify-between gap-4">
+                                    <div className="flex items-center gap-4 overflow-hidden">
+                                        <div
+                                            className="bg-gradient-to-br from-purple-500/20 to-blue-500/20 p-3 rounded-xl border border-white/5 shrink-0">
+                                            <Gamepad2 size={24} className="text-white"/>
                                         </div>
-                                        <div>
-                                            <h4 className="text-lg font-semibold text-white mb-1">
-                                                {lobby.id}
+                                        <div className="min-w-0">
+                                            <h4 className="text-lg font-bold text-white truncate pr-2">
+                                                COME AND PLAY BTICHES
                                             </h4>
-                                            <div className="flex items-center gap-4 text-sm text-white/60">
-                                                <span className="flex items-center gap-1">
-                                                    <Users size={14} />
-                                                    {lobby.currentPlayers} / {lobby.maxPlayers}
-                                                </span>
-                                                <span className={`px-2 py-0.5 rounded-full text-xs ${
-                                                    lobby.status === "WAITING"
-                                                        ? "bg-green-500/20 text-green-400"
-                                                        : "bg-orange-500/20 text-orange-400"
-                                                }`}>
+
+                                            <div className="flex items-center gap-3 text-xs mt-1">
+                                                <div
+                                                    className="flex items-center gap-1.5 text-white/60 bg-white/5 px-2 py-0.5 rounded-full">
+                                                    <Users size={12}/>
+                                                    <span>{lobby.currentPlayers} / {lobby.maxPlayers}</span>
+                                                </div>
+
+                                                <span
+                                                    className={`px-2 py-0.5 rounded-full font-medium tracking-wide uppercase ${
+                                                        lobby.status === "WAITING"
+                                                            ? "text-green-400"
+                                                            : "text-orange-400"
+                                                    }`}>
                                                     {lobby.status}
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
+
                                     <Button
                                         size="sm"
-                                        variant="flat"
                                         color="primary"
+                                        variant={lobby.status === "WAITING" ? "solid" : "flat"}
+                                        className="font-semibold shrink-0"
+                                        onPress={() => handleDirectJoin(lobby.id)}
+                                        isDisabled={lobby.status !== "WAITING"}
+                                        isLoading={isJoining}
                                     >
-                                        View Details
+                                        JOIN
                                     </Button>
                                 </div>
                             </CardBody>
@@ -211,6 +124,7 @@ export function LobbiesTabContent() {
                 isOpen={isCreateModalOpen}
                 onClose={() => setIsCreateModalOpen(false)}
                 gameId={gameId ?? ""}
+                maxlobbysize={game.maxlobbysize}
             />
         </div>
     );
