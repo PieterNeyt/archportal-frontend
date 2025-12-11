@@ -94,11 +94,8 @@ export function InLobbyCard({lobbyId}: InLobbyCardProps) {
                 </div>
             </CardHeader>
 
-            {/* --- BODY: Player Grid --- */}
             <CardBody className="p-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-
-                    {/* Huidige Spelers (Horizontaal) */}
                     {lobby.players.map((player) => (
                         <Card
                             key={player.playerId}
@@ -106,8 +103,8 @@ export function InLobbyCard({lobbyId}: InLobbyCardProps) {
                         >
                             <CardBody className="flex flex-row items-center justify-start p-3 gap-4">
                                 <Avatar
-                                    src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${player.username}`}
-                                    name={player.username}
+                                    src={`${player.avatarUrl}`}
+                                    name={player.gamerTag}
                                     className="w-12 h-12 text-large border-2 border-primary/50 shrink-0"
                                     isBordered
                                     color="primary"
@@ -116,14 +113,13 @@ export function InLobbyCard({lobbyId}: InLobbyCardProps) {
                                     <h3 className="font-bold text-white text-md truncate w-full">
                                     </h3>
                                     <span className="text-[10px] text-primary uppercase font-bold tracking-wider">
-                                            {player.username}
+                                            {player.gamerTag}
                                     </span>
                                 </div>
                             </CardBody>
                         </Card>
                     ))}
 
-                    {/* Lege Slots (Horizontaal) */}
                     {[...Array(emptySlots)].map((_, index) => (
                         <Card
                             key={`empty-${index}`}
@@ -148,7 +144,6 @@ export function InLobbyCard({lobbyId}: InLobbyCardProps) {
                 </div>
             </CardBody>
 
-            {/* --- FOOTER: Start Game Button --- */}
             <CardFooter className="flex justify-center pb-8 pt-2">
                 <Button
                     size="lg"

@@ -104,9 +104,6 @@ export function LobbiesTabContent({game}: LobbiesTabProps) {
                                             <Gamepad2 size={24} className="text-white"/>
                                         </div>
                                         <div className="min-w-0">
-                                            <h4 className="text-lg font-bold text-white truncate pr-2">
-                                                Lobby #{lobby.id.substring(0, 4)}
-                                            </h4>
                                             <div className="flex items-center gap-3 text-xs mt-1">
                                                 <div className="flex items-center gap-1.5 text-white/60 bg-white/5 px-2 py-0.5 rounded-full">
                                                     <Users size={12}/>

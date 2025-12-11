@@ -27,8 +27,8 @@ export type JoinMultiPlayerResponse = {
 };
 
 export type PlayerInfo = {
-    playerId: string;
-    username: string;
+    gamerTag: string;
+    avatarUrl: string;
 };
 
 export type MultiplayerLobbyInfo = {
