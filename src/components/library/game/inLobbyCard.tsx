@@ -45,7 +45,7 @@ export function InLobbyCard({lobbyId}: InLobbyCardProps) {
                         variant="flat"
                         onPress={handleLeaveLobby}
                     >
-                        Leave View
+                        Leave Lobby
                     </Button>
                 </CardBody>
             </Card>
@@ -75,7 +75,7 @@ export function InLobbyCard({lobbyId}: InLobbyCardProps) {
 
                     <div className="flex items-center gap-3">
                         <h2 className="text-xl font-bold text-white tracking-wide uppercase">
-                            Lobby Room
+                            Lobby Room <span className="text-white/50 ml-1">#{lobbyId.substring(0, 6)}</span>
                         </h2>
                         <Chip
                             size="sm"
@@ -87,8 +87,6 @@ export function InLobbyCard({lobbyId}: InLobbyCardProps) {
                         </Chip>
                     </div>
                 </div>
-
-                {/* Info over aantal spelers rechtsboven */}
                 <div className="text-white/40 text-sm font-mono">
                     {filledSlots} / {totalSlots} Players
                 </div>
@@ -111,9 +109,10 @@ export function InLobbyCard({lobbyId}: InLobbyCardProps) {
                                 />
                                 <div className="flex flex-col items-start min-w-0">
                                     <h3 className="font-bold text-white text-md truncate w-full">
+                                        {player.gamerTag}
                                     </h3>
                                     <span className="text-[10px] text-primary uppercase font-bold tracking-wider">
-                                            {player.gamerTag}
+                                        READY
                                     </span>
                                 </div>
                             </CardBody>

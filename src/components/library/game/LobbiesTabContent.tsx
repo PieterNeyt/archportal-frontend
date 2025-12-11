@@ -92,7 +92,6 @@ export function LobbiesTabContent({game}: LobbiesTabProps) {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {lobbies.map((lobby) => {
-                        // Check of de lobby vol is
                         const isFull = lobby.currentPlayers >= lobby.maxPlayers;
 
                         return (
@@ -109,9 +108,8 @@ export function LobbiesTabContent({game}: LobbiesTabProps) {
                                                 <Gamepad2 size={24} className="text-white"/>
                                             </div>
                                             <div className="min-w-0">
-                                                {/* HIER IS DE ID SUBSTRING TERUG */}
                                                 <h4 className="text-lg font-bold text-white truncate pr-2">
-                                                    Lobby #{lobby.lobbyId.substring(0, 4)}
+                                                    Lobby #{lobby.lobbyId.substring(0, 6)}
                                                 </h4>
 
                                                 <div className="flex items-center gap-3 text-xs mt-1">
