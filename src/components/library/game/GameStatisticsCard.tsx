@@ -1,6 +1,6 @@
 import { Card, CardBody } from "@heroui/card";
 import { Trophy, Target, Clock } from "lucide-react";
-import {StatCard} from "@/components/library/game/StatCard.tsx";
+import {StatCard} from "@/components/library/game/stats/StatCard.tsx";
 
 export interface GameStatisticsCardProps {
     stats?: {
