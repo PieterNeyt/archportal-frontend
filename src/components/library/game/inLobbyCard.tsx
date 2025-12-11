@@ -96,7 +96,7 @@ export function InLobbyCard({lobbyId}: InLobbyCardProps) {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {lobby.players.map((player) => (
                         <Card
-                            key={player.playerId}
+                            key={player.gamerTag}
                             className="bg-white/5 border border-white/10 hover:border-primary/50 transition-all group"
                         >
                             <CardBody className="flex flex-row items-center justify-start p-3 gap-4">
