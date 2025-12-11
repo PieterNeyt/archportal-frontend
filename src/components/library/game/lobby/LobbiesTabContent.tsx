@@ -17,7 +17,7 @@ interface LobbiesTabProps {
 }
 
 export function LobbiesTabContent({game}: LobbiesTabProps) {
-    const { startLobby, isPending } = useStartMultiplayerLobby();
+    const {startLobby, isPending} = useStartMultiplayerLobby();
 
     const onSubmit = async () => {
         await startLobby({gameId: game.id});
@@ -54,7 +54,7 @@ export function LobbiesTabContent({game}: LobbiesTabProps) {
     if (isLobbiesError || isCheckError) {
         return (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-                <AlertCircle size={48} className="text-red-500 mb-4" />
+                <AlertCircle size={48} className="text-red-500 mb-4"/>
                 <h3 className="text-xl font-bold text-white">Something went wrong</h3>
                 <p className="text-white/50">Could not load lobbies.</p>
             </div>
@@ -64,7 +64,7 @@ export function LobbiesTabContent({game}: LobbiesTabProps) {
     if (isInLobby?.isPlayerInLobby) {
         return (
             <div className="py-4">
-                <InLobbyCard lobbyId={isInLobby.lobbyId!} />
+                <InLobbyCard lobbyId={isInLobby.lobbyId!}/>
             </div>
         );
     }

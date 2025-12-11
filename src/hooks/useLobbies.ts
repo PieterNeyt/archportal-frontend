@@ -1,8 +1,12 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {
     getAllLobbies,
-    getLobbyInfo, getMySession, isPlayerInLobby,
-    joinMultiplayerLobby, startMultiPlayer,
+    getLobbyInfo,
+    getMySession,
+    isPlayerInLobby,
+    joinMultiplayerLobby,
+    leaveLobby,
+    startMultiPlayer,
     startMultiplayerLobby,
     startSinglePlayer
 } from "../service/lobbyService";
@@ -136,13 +140,27 @@ export function useIsPLayerInLobby() {
 }
 
 export function useGetMySession(lobbyId: string) {
-    const { data: mySession, isLoading, isError, refetch } = useQuery({
+    const {data: mySession, isLoading, isError, refetch} = useQuery({
         queryKey: ['mySession', lobbyId],
         queryFn: () => getMySession(lobbyId),
         enabled: !!lobbyId,
         refetchOnWindowFocus: true,
     });
 
-    return { mySession, isLoading, isError, refetch };
+    return {mySession, isLoading, isError, refetch};
 }
 
+export function useLeaveLobby() {
+    const queryClient = useQueryClient();
+    const {mutateAsync, isPending, isSuccess, isError, error} = useMutation({
+        mutationFn: () => {
+            return leaveLobby()
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['lobbies']});
+            queryClient.invalidateQueries({queryKey: ['PlayerInLobby']});
+        }
+    })
+
+    return {isPending, isSuccess, isError, leaveLobby: mutateAsync, error}
+}
