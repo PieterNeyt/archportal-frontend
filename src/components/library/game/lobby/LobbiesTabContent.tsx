@@ -1,28 +1,33 @@
-import {useState} from "react";
-import {useParams} from "react-router-dom";
 import {Button} from "@heroui/button";
 import {Spinner} from "@heroui/spinner";
 import {AlertCircle, Gamepad2, Plus} from "lucide-react";
-import {useGetAllLobbies, useIsPLayerInLobby, useJoinMultiplayerLobby} from "@/hooks/useLobbies";
+import {
+    useGetAllLobbies,
+    useIsPLayerInLobby,
+    useJoinMultiplayerLobby,
+    useStartMultiplayerLobby
+} from "@/hooks/useLobbies.ts";
 import {EmptyTab} from "@/components/library/game/EmptyTab.tsx";
-import {CreateLobbyModal} from "@/components/library/game/CreateLobbyModal.tsx";
 import {Game} from "@/model/game.ts";
-import {InLobbyCard} from "@/components/library/game/inLobbyCard.tsx";
-import {LobbiesListCard} from "@/components/library/game/LobbiesTabList.tsx";
+import {InLobbyCard} from "@/components/library/game/lobby/inLobbyCard.tsx";
+import {LobbiesListCard} from "@/components/library/game/lobby/LobbiesTabList.tsx";
 
 interface LobbiesTabProps {
     game: Game;
 }
 
 export function LobbiesTabContent({game}: LobbiesTabProps) {
-    const {gameId} = useParams();
-    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const { startLobby, isPending } = useStartMultiplayerLobby();
+
+    const onSubmit = async () => {
+        await startLobby({gameId: game.id});
+    };
 
     const {
         lobbies: lobbiesData,
         isLoading: isLoadingLobbies,
         isError: isLobbiesError
-    } = useGetAllLobbies(gameId ?? "");
+    } = useGetAllLobbies(game.id ?? "");
 
     const {
         isInLobby,
@@ -76,7 +81,8 @@ export function LobbiesTabContent({game}: LobbiesTabProps) {
                     size="md"
                     className="font-semibold shadow-lg shadow-primary/20"
                     startContent={<Plus size={18}/>}
-                    onPress={() => setIsCreateModalOpen(true)}
+                    onPress={onSubmit}
+                    disabled={isPending}
                 >
                     Create Lobby
                 </Button>
@@ -100,12 +106,6 @@ export function LobbiesTabContent({game}: LobbiesTabProps) {
                     ))}
                 </div>
             )}
-            <CreateLobbyModal
-                isOpen={isCreateModalOpen}
-                onClose={() => setIsCreateModalOpen(false)}
-                gameId={gameId ?? ""}
-                maxlobbysize={game.maxlobbysize}
-            />
         </div>
     );
 }

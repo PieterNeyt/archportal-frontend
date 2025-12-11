@@ -2,7 +2,7 @@ import { Card, CardBody } from "@heroui/card";
 import { Tabs, Tab } from "@heroui/tabs";
 import { Gamepad2, Trophy, Zap } from "lucide-react";
 import React from "react";
-import {LobbiesTabContent} from "@/components/library/game/LobbiesTabContent.tsx";
+import {LobbiesTabContent} from "@/components/library/game/lobby/LobbiesTabContent.tsx";
 import {EmptyTab} from "@/components/library/game/EmptyTab.tsx";
 import {Game} from "@/model/game.ts";
 
