@@ -42,7 +42,7 @@ export function CreateGameForm() {
                           message={"Youre game has been successfully created. Go to youre gamestudio to see the game and updated if needed!"}
                           action={() => {
                               setIsOpen(false);
-                              navigate(`/gamestudio}`)
+                              navigate(`/gamestudio`)
                           }}
                           open={isOpen}
             />
