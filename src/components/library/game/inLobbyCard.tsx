@@ -3,7 +3,7 @@ import {Button} from "@heroui/button";
 import {Avatar} from "@heroui/avatar";
 import {Spinner} from "@heroui/spinner";
 import {Chip} from "@heroui/chip";
-import {AlertCircle, Loader2, LogOut, Play, User} from "lucide-react";
+import {AlertCircle, Loader2, LogOut, Play} from "lucide-react";
 import {useGetLobbyInfo} from "@/hooks/useLobbies.ts";
 
 interface InLobbyCardProps {
