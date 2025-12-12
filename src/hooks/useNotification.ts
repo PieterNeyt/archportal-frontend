@@ -1,4 +1,4 @@
-import {useContext} from "react";
+import {useContext, useRef} from "react";
 import securityContext from "@/context/SecurityContext.ts";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {
@@ -7,7 +7,6 @@ import {
     getNotificaitons,
     RemoveNotification
 } from "@/service/notificationService.ts";
-import { useRef } from "react";
 import {Notification} from "@/model/notification.ts";
 
 const NOTIFICATIONS_KEY = "notifications";
@@ -17,19 +16,19 @@ const AMOUNT_NOTIFICATIONS_KEY = "amount notifications";
 export function useFirstFiveNotifications() {
     const {isAuthenticated, isInitialised} = useContext(securityContext)
 
-    const {isLoading, isError, refetch, data: notifications,isSuccess} = useQuery({
+    const {isLoading, isError, refetch, data: notifications, isSuccess} = useQuery({
         queryKey: [FIRST_5_NOTIFICATIONS_KEY],
         queryFn: getFirstFiveNotificaiton,
         enabled: isAuthenticated() && isInitialised,
         refetchInterval: 1000
     })
 
-    return {isLoading, isError, refetch, notifications,isSuccess}
+    return {isLoading, isError, refetch, notifications, isSuccess}
 }
 
 
 export function useNewNotifications() {
-    const { notifications, isLoading, isError, isSuccess } = useFirstFiveNotifications();
+    const {notifications, isLoading, isError, isSuccess} = useFirstFiveNotifications();
     const previousRef = useRef<Notification[]>([]);
 
     const newNotifications: Notification[] = [];
@@ -51,7 +50,6 @@ export function useNewNotifications() {
         isSuccess
     };
 }
-
 
 
 export function useNotifications() {
