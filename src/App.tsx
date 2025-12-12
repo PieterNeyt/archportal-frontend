@@ -7,7 +7,7 @@ import SecurityContextProvider from "@/context/SecurityContextProvider.tsx";
 import RouteGuardGameStudio from "@/components/security/RouteGuardGameStudio.tsx";
 import PaymentReturnPage from "@/pages/PaymentReturnPage.tsx";
 import LibraryPage from "./pages/LibraryPage";
-import ShopPage from "@/pages/shop.tsx";
+import ShopPage from "@/pages/ShopPage.tsx";
 import {CreateGamePage} from "@/pages/CreateGamePage.tsx";
 import RouteGuardCreateGame from "@/components/security/RouteGuardCreateGame.tsx";
 import {GameStudioPage} from "@/pages/GameStudioPage.tsx";
@@ -31,11 +31,15 @@ function App() {
                             <Route element={<ShopPage/>} path="/shop"/>
                             <Route element={<PaymentReturnPage/>} path="/payment-return"/>
                             <Route path="/" element={<Navigate to={"/shop"}/>}/>
-                            <Route element={<RouteGuardGameStudio><GameStudioPage/></RouteGuardGameStudio>} path="/gamestudio"/>
-                            <Route element={<RouteGuardLoggedIn><GamePage/></RouteGuardLoggedIn>} path="/gamestudio/game/:id"/>
                             <Route element={<GameShopPage/>} path="/shop/game/:id"/>
+
+                            <Route element={<RouteGuardGameStudio><GameStudioPage/></RouteGuardGameStudio>}
+                                   path="/gamestudio"/>
+                            <Route element={<RouteGuardLoggedIn><GamePage/></RouteGuardLoggedIn>}
+                                   path="/gamestudio/game/:id"/>
                             <Route element={<RouteGuardLoggedIn><LibraryPage/></RouteGuardLoggedIn>} path="/library"/>
-                            <Route element={<RouteGuardLoggedIn><LibraryGamePage/></RouteGuardLoggedIn>} path="/library/:gameId"/>
+                            <Route element={<RouteGuardLoggedIn><LibraryGamePage/></RouteGuardLoggedIn>}
+                                   path="/library/:gameId"/>
                             <Route element={<RouteGuardGameStudio><CreateGameStudioPage/></RouteGuardGameStudio>}
                                    path="/create/gamestudio"/>
                             <Route element={<RouteGuardCreateGame><CreateGamePage/></RouteGuardCreateGame>}
