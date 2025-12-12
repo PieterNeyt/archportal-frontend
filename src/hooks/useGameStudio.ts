@@ -7,6 +7,8 @@ import {useContext} from "react";
 import SecurityContext from "@/context/SecurityContext.ts";
 import securityContext from "@/context/SecurityContext.ts";
 
+export const GAME_STUDIO_KEY = "game studio";
+const GAME_STUDIO_STATUS_KEY = "game studio status";
 
 export function useAddGameStudio() {
     const {updateGameStudioStatus} = useContext(SecurityContext);
@@ -24,7 +26,7 @@ export function useAddGameStudio() {
             },
             onSuccess: (createdGame) => {
                 updateGameStudioStatus(createdGame);
-                queryClient.invalidateQueries({queryKey: ['GameStudio']});
+                queryClient.invalidateQueries({queryKey: [GAME_STUDIO_KEY]});
             },
             onError: (error) => {
                 let errorMessage = "Failed to add to cart";
@@ -51,7 +53,7 @@ export function useAddGameStudio() {
 
 export function useGameStudioStatus() {
     const {isLoading, isError, refetch, data: gameStudioStatus} = useQuery({
-        queryKey: ["gameStudioStatus"],
+        queryKey: [GAME_STUDIO_STATUS_KEY],
         queryFn: () => getMyStudioStatus(),
         enabled: false
     })
@@ -59,10 +61,10 @@ export function useGameStudioStatus() {
 }
 
 export function useGameStudio() {
-    const {isAuthenticated,isInitialised}= useContext(securityContext)
+    const {isAuthenticated, isInitialised} = useContext(securityContext)
 
     const {isLoading, isError, refetch, data: gameStudio} = useQuery({
-        queryKey: ["GameStudio"],
+        queryKey: [GAME_STUDIO_KEY],
         queryFn: () => getGameStudio(),
         enabled: isAuthenticated() && isInitialised
     })
@@ -73,11 +75,11 @@ export function useUpdateGameStudio() {
     const queryClient = useQueryClient()
 
     const {mutateAsync: UpdateGameStudio, isError, isPending} = useMutation({
-        mutationFn: (gameStudio:GameStudio)=>{
+        mutationFn: (gameStudio: GameStudio) => {
             return updateGameStudio(gameStudio)
         },
-        onSuccess: async ()=>{
-            await queryClient.invalidateQueries({queryKey: ['GameStudio']});
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({queryKey: [GAME_STUDIO_KEY]});
         }
     })
 

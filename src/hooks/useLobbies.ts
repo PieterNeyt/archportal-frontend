@@ -12,6 +12,11 @@ import {
 } from "../service/lobbyService";
 import {inLobby, LobbiesResponse, MultiplayerLobbyInfo, StartMultiPlayerRequest} from "@/model/lobby.ts";
 
+const SESSION_KEY = "session";
+const LOBBIES_KEY = "lobbies";
+const PLAYER_IN_LOBBY_KEY = "player in lobby";
+const LOBBY_INFO_KEY = "lobby info";
+const MY_SESSION_KEY = "my session";
 
 export function useStartSinglePlayerGame() {
     const queryClient = useQueryClient()
@@ -25,7 +30,7 @@ export function useStartSinglePlayerGame() {
             mutationFn: (gameId: string) => {
                 return startSinglePlayer(gameId)
             },
-            onSuccess: () => queryClient.invalidateQueries({queryKey: ['session']}),
+            onSuccess: () => queryClient.invalidateQueries({queryKey: [SESSION_KEY]}),
         })
 
     return {
@@ -49,7 +54,7 @@ export function useStartMultiplayerGame() {
             mutationFn: (lobbyId: string) => {
                 return startMultiPlayer(lobbyId)
             },
-            onSuccess: () => queryClient.invalidateQueries({queryKey: ['session']}),
+            onSuccess: () => queryClient.invalidateQueries({queryKey: [SESSION_KEY]}),
         })
 
     return {
@@ -74,9 +79,9 @@ export function useStartMultiplayerLobby() {
             return startMultiplayerLobby(request);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['lobbies']});
-            queryClient.invalidateQueries({queryKey: ['session']});
-            queryClient.invalidateQueries({queryKey: ['PlayerInLobby']});
+            queryClient.invalidateQueries({queryKey: [LOBBIES_KEY]});
+            queryClient.invalidateQueries({queryKey: [SESSION_KEY]});
+            queryClient.invalidateQueries({queryKey: [PLAYER_IN_LOBBY_KEY]});
         },
     });
 
@@ -99,9 +104,9 @@ export function useJoinMultiplayerLobby() {
             return joinMultiplayerLobby(lobbyId);
         },
         onSuccess: (_data, lobbyId) => {
-            queryClient.invalidateQueries({queryKey: ['lobbyInfo', lobbyId]});
-            queryClient.invalidateQueries({queryKey: ['session']});
-            queryClient.invalidateQueries({queryKey: ['PlayerInLobby']});
+            queryClient.invalidateQueries({queryKey: [LOBBY_INFO_KEY, lobbyId]});
+            queryClient.invalidateQueries({queryKey: [SESSION_KEY]});
+            queryClient.invalidateQueries({queryKey: [PLAYER_IN_LOBBY_KEY]});
         },
     });
 
@@ -114,7 +119,7 @@ export function useJoinMultiplayerLobby() {
 
 export function useGetAllLobbies(gameId: string) {
     const {data: lobbies, isLoading, isError, refetch} = useQuery<LobbiesResponse, Error>({
-        queryKey: ['lobbies', gameId],
+        queryKey: [LOBBIES_KEY, gameId],
         queryFn: () => getAllLobbies(gameId),
         enabled: !!gameId,
     });
@@ -124,7 +129,7 @@ export function useGetAllLobbies(gameId: string) {
 
 export function useGetLobbyInfo(lobbyId: string) {
     const {data: lobby, isLoading, isError, refetch} = useQuery<MultiplayerLobbyInfo, Error>({
-        queryKey: ['lobbyInfo', lobbyId],
+        queryKey: [LOBBY_INFO_KEY, lobbyId],
         queryFn: () => getLobbyInfo(lobbyId),
         enabled: !!lobbyId,
         refetchInterval: 1500, // every 1.5 sec
@@ -136,7 +141,7 @@ export function useGetLobbyInfo(lobbyId: string) {
 
 export function useIsPLayerInLobby() {
     const {data: isInLobby, isLoading, isError, refetch} = useQuery<inLobby>({
-        queryKey: ['PlayerInLobby'],
+        queryKey: [PLAYER_IN_LOBBY_KEY],
         queryFn: () => isPlayerInLobby(),
     });
 
@@ -145,7 +150,7 @@ export function useIsPLayerInLobby() {
 
 export function useGetMySession(lobbyId: string) {
     const {data: mySession, isLoading, isError, refetch} = useQuery({
-        queryKey: ['mySession', lobbyId],
+        queryKey: [MY_SESSION_KEY, lobbyId],
         queryFn: () => getMySession(lobbyId),
         enabled: !!lobbyId,
         refetchOnWindowFocus: true,
@@ -161,8 +166,8 @@ export function useLeaveLobby() {
             return leaveLobby()
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['lobbies']});
-            queryClient.invalidateQueries({queryKey: ['PlayerInLobby']});
+            queryClient.invalidateQueries({queryKey: [LOBBIES_KEY]});
+            queryClient.invalidateQueries({queryKey: [PLAYER_IN_LOBBY_KEY]});
         }
     })
 

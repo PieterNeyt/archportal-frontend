@@ -12,11 +12,15 @@ import {
 import {useContext} from "react";
 import SecurityContext from "@/context/SecurityContext.ts";
 
+const FRIENDS_KEY = "friends";
+const OUTGOING_REQUEST_KEY = "outgoing friend requests";
+const INCOMING_REQUEST_KEY = "incoming friend requests";
+
 export function useFriends() {
     const {isAuthenticated, isInitialised} = useContext(SecurityContext);
 
     const {isLoading, isError, data: profiles} = useQuery({
-        queryKey: ["friends"],
+        queryKey: [FRIENDS_KEY],
         queryFn: () => getFriends(),
         enabled: isAuthenticated() && isInitialised,
     });
@@ -30,7 +34,7 @@ export function useSendFriendRequest() {
             return sendFriendRequest(gamertag);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ["outgoing friend requests"]})
+            queryClient.invalidateQueries({queryKey: [OUTGOING_REQUEST_KEY]})
         }
     })
 
@@ -41,7 +45,7 @@ export function useGetIncomingFriendRequests() {
     const {isAuthenticated, isInitialised} = useContext(SecurityContext);
 
     const {isLoading, isError, data: profiles} = useQuery({
-        queryKey: ["incoming friend requests"],
+        queryKey: [INCOMING_REQUEST_KEY],
         queryFn: () => getIncomingFriendRequests(),
         enabled: isAuthenticated() && isInitialised,
     });
@@ -52,7 +56,7 @@ export function useGetOutgoingFriendRequests() {
     const {isAuthenticated, isInitialised} = useContext(SecurityContext);
 
     const {isLoading, isError, data: profiles} = useQuery({
-        queryKey: ["outgoing friend requests"],
+        queryKey: [OUTGOING_REQUEST_KEY],
         queryFn: () => getOutgoingFriendRequests(),
         enabled: isAuthenticated() && isInitialised,
     });
@@ -66,8 +70,8 @@ export function useAcceptFriendRequest() {
             return acceptFriendRequest(gamerTag);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ["friends"]})
-            queryClient.invalidateQueries({queryKey: ["incoming friend requests"]})
+            queryClient.invalidateQueries({queryKey: [FRIENDS_KEY]})
+            queryClient.invalidateQueries({queryKey: [INCOMING_REQUEST_KEY]})
         }
     })
 
@@ -81,7 +85,7 @@ export function useDeclineFriendRequest() {
             return declineFriendRequest(gamerTag);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ["incoming friend requests"]})
+            queryClient.invalidateQueries({queryKey: [INCOMING_REQUEST_KEY]})
         }
     })
 
@@ -95,7 +99,7 @@ export function useCancelFriendRequest() {
             return cancelFriendRequest(gamerTag);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ["outgoing friend requests"]})
+            queryClient.invalidateQueries({queryKey: [OUTGOING_REQUEST_KEY]})
         }
     })
 
@@ -109,7 +113,7 @@ export function useRemoveFriend() {
             return removeFriend(gamerTag);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ["friends"]})
+            queryClient.invalidateQueries({queryKey: [FRIENDS_KEY]})
         }
     })
 
