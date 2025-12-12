@@ -8,11 +8,15 @@ import {
     RemoveNotification
 } from "@/service/notificationService.ts";
 
+const NOTIFICATIONS_KEY = "notifications";
+const FIRST_5_NOTIFICATIONS_KEY = "first 5 notifications";
+const AMOUNT_NOTIFICATIONS_KEY = "amount notifications";
+
 export function useFirstFiveNotifications() {
     const {isAuthenticated, isInitialised} = useContext(securityContext)
 
     const {isLoading, isError, refetch, data: notifications} = useQuery({
-        queryKey: ["firstFiveNotification"],
+        queryKey: [FIRST_5_NOTIFICATIONS_KEY],
         queryFn: getFirstFiveNotificaiton,
         enabled: isAuthenticated() && isInitialised,
         refetchInterval: 1000
@@ -25,7 +29,7 @@ export function useNotifications() {
     const {isAuthenticated, isInitialised} = useContext(securityContext)
 
     const {isLoading, isError, refetch, data: notifications} = useQuery({
-        queryKey: ["notifications"],
+        queryKey: [NOTIFICATIONS_KEY],
         queryFn: getNotificaitons,
         enabled: isAuthenticated() && isInitialised,
     })
@@ -37,7 +41,7 @@ export function useNotificationAmount() {
     const {isAuthenticated, isInitialised} = useContext(securityContext)
 
     const {isLoading, isError, refetch, data: notificationsAmount} = useQuery({
-        queryKey: ["amountOfNotifications"],
+        queryKey: [AMOUNT_NOTIFICATIONS_KEY],
         queryFn: getNotificaitonAmount,
         enabled: isAuthenticated() && isInitialised,
     })
@@ -59,9 +63,9 @@ export function useRemoveNotification() {
                 return RemoveNotification(notifiactionId)
             },
             onSuccess: () => {
-                queryClient.invalidateQueries({queryKey: ['amountOfNotifications']});
-                queryClient.invalidateQueries({queryKey: ['notifications']});
-                queryClient.invalidateQueries({queryKey: ['firstFiveNotification']});
+                queryClient.invalidateQueries({queryKey: [AMOUNT_NOTIFICATIONS_KEY]});
+                queryClient.invalidateQueries({queryKey: [NOTIFICATIONS_KEY]});
+                queryClient.invalidateQueries({queryKey: [FIRST_5_NOTIFICATIONS_KEY]});
             }
         })
 
