@@ -6,7 +6,7 @@ import {Button} from "@heroui/button";
 import {Gamepad2, Play} from "lucide-react";
 import {LibraryGame} from "@/model/library";
 import {useStartSinglePlayerGame} from "@/hooks/useLobbies.ts";
-import {SinglePlayerLaunchResponse} from "@/model/SinglePlayerLaunchResponse.ts";
+import {SinglePlayerLaunchResponse} from "@/model/singlePlayerLaunchResponse.ts";
 
 interface LibraryGameCardProps {
     game: LibraryGame;

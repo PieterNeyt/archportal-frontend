@@ -1,4 +1,4 @@
-import {GameGenre} from "./GameGenre";
+import {GameGenre} from "./gameGenre.ts";
 
 export interface CreateGame {
     title: string;
@@ -7,5 +7,5 @@ export interface CreateGame {
     price: number;
     gameUrl: string;
     genre: GameGenre;
-    maxlobbysize:number;
+    maxlobbysize: number;
 }

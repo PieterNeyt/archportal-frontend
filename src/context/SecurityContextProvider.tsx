@@ -6,7 +6,7 @@ import SecurityContext from "@/context/SecurityContext.ts";
 import {User} from "@/model/user.ts";
 import {useProfile} from "@/hooks/useProfile.ts"
 import {useGameStudioStatus} from "@/hooks/useGameStudio.ts";
-import {GameStudio} from "@/model/GameStudio.ts";
+import {GameStudio} from "@/model/gameStudio.ts";
 
 const keycloakConfig = {
     url: import.meta.env.VITE_KC_URL,
@@ -75,7 +75,7 @@ export default function SecurityContextProvider({children}: PropsWithChildren) {
         else return false;
     }
 
-    function updateUser(){
+    function updateUser() {
         keycloak.accountManagement();
     }
 
@@ -96,7 +96,7 @@ export default function SecurityContextProvider({children}: PropsWithChildren) {
 
     return (
         <SecurityContext.Provider
-            value={{isInitialised, isAuthenticated, loggedInUser, login, logout, updateGameStudioStatus,updateUser}}
+            value={{isInitialised, isAuthenticated, loggedInUser, login, logout, updateGameStudioStatus, updateUser}}
         >
             {children}
         </SecurityContext.Provider>

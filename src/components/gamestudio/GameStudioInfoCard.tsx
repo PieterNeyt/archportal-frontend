@@ -1,5 +1,5 @@
-import { useState } from "react";
-import {GameStudio} from "@/model/GameStudio.ts";
+import {useState} from "react";
+import {GameStudio} from "@/model/gameStudio.ts";
 import {CreditCard, Edit, Hash} from "lucide-react";
 import {Button} from "@heroui/button";
 import {UpdateGameStudioModal} from "@/components/gamestudio/UpdateGameStudioModal.tsx";

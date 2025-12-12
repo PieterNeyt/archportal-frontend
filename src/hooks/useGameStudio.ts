@@ -1,6 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {AddGameStudio, getGameStudio, getMyStudioStatus, updateGameStudio} from "@/service/gameStudioService.ts";
-import {CreateGameStudio, GameStudio} from "@/model/GameStudio.ts";
+import {CreateGameStudio, GameStudio} from "@/model/gameStudio.ts";
 import {useContext} from "react";
 import SecurityContext from "@/context/SecurityContext.ts";
 import securityContext from "@/context/SecurityContext.ts";
