@@ -16,3 +16,7 @@ export const GLASS_CARD_STYLES = "bg-black/30 backdrop-blur-md border border-whi
 
 export const BLURRY_BACKGROUND = "w-full max-w-2xl bg-black/40 backdrop-blur-xl border border-white/10 p-4";
 
+
+export const GROEN_BLURRY_BACKGROUND = "w-full max-w-2xl bg-green-900/40 backdrop-blur-xl border border-green-400/30 p-4";
+
+export const ROOD_BLURRY_BACKGROUND = "w-full max-w-2xl bg-red-900/40 backdrop-blur-xl border border-red-400/30 p-4";

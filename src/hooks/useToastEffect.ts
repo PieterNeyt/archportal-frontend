@@ -1,6 +1,10 @@
 import {useEffect} from "react";
 import {addToast} from "@heroui/toast";
 import {AxiosError} from "axios";
+import {
+    GROEN_BLURRY_BACKGROUND,
+    ROOD_BLURRY_BACKGROUND
+} from "@/styles/customClasses.ts";
 
 export default function useToastEffect(action: {
     isSuccess: boolean;
@@ -8,11 +12,14 @@ export default function useToastEffect(action: {
     error: unknown
 }, successTitle: string, errorTitle: string, successDescription?: string) {
     useEffect(() => {
+
         if (action.isSuccess) {
             addToast({
                 title: successTitle,
-                description: successDescription ?? errorTitle,
-                color: "success"
+                description: successDescription ?? 'Actie is succesvol uitgevoerd.',
+                classNames: {
+                    base: GROEN_BLURRY_BACKGROUND,
+                }
             });
         } else if (action.isError) {
             let errorMessage = "An unexpected error occurred";
@@ -25,7 +32,9 @@ export default function useToastEffect(action: {
             addToast({
                 title: errorTitle,
                 description: errorMessage,
-                color: "danger"
+                classNames: {
+                  base: ROOD_BLURRY_BACKGROUND,
+                }
             });
         }
     }, [action.isSuccess, action.isError, action.error, successTitle, errorTitle, successDescription]);
