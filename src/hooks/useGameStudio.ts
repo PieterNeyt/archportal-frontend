@@ -1,7 +1,5 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {AddGameStudio, getGameStudio, getMyStudioStatus, updateGameStudio} from "@/service/gameStudioService.ts";
-import {addToast} from "@heroui/toast";
-import {AxiosError} from "axios";
 import {CreateGameStudio, GameStudio} from "@/model/GameStudio.ts";
 import {useContext} from "react";
 import SecurityContext from "@/context/SecurityContext.ts";
@@ -18,7 +16,7 @@ export function useAddGameStudio() {
         mutateAsync,
         isPending,
         isError,
-
+        error
     } = useMutation(
         {
             mutationFn: (newGameStudio: CreateGameStudio) => {
@@ -27,27 +25,14 @@ export function useAddGameStudio() {
             onSuccess: (createdGame) => {
                 updateGameStudioStatus(createdGame);
                 queryClient.invalidateQueries({queryKey: [GAME_STUDIO_KEY]});
-            },
-            onError: (error) => {
-                let errorMessage = "Failed to add to cart";
-
-                if (error instanceof AxiosError && error.response?.data?.message) {
-                    errorMessage = error.response.data.message;
-                } else if (error.message) {
-                    errorMessage = error.message;
-                }
-                addToast({
-                    title: "Failed to create Game Studio",
-                    description: errorMessage,
-                    color: "danger",
-                })
             }
         })
 
     return {
         isPending,
         isError,
-        AddGameStudio: mutateAsync
+        AddGameStudio: mutateAsync,
+        error
     }
 }
 

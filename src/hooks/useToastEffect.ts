@@ -1,10 +1,7 @@
 import {useEffect} from "react";
 import {addToast} from "@heroui/toast";
 import {AxiosError} from "axios";
-import {
-    GROEN_BLURRY_BACKGROUND,
-    ROOD_BLURRY_BACKGROUND
-} from "@/styles/customClasses.ts";
+import {GREEN_BLURRY_BACKGROUND, RED_BLURRY_BACKGROUND} from "@/styles/customClasses.ts";
 
 export default function useToastEffect(action: {
     isSuccess: boolean;
@@ -16,26 +13,36 @@ export default function useToastEffect(action: {
         if (action.isSuccess) {
             addToast({
                 title: successTitle,
-                description: successDescription ?? 'Actie is succesvol uitgevoerd.',
+                description: successDescription ?? 'Action succeeded.',
                 classNames: {
-                    base: GROEN_BLURRY_BACKGROUND,
+                    base: GREEN_BLURRY_BACKGROUND,
                 }
             });
-        } else if (action.isError) {
-            let errorMessage = "An unexpected error occurred";
-            const err = action.error;
-            if (err instanceof AxiosError && err.response?.data?.message) {
-                errorMessage = err.response.data.message;
-            } else if (err instanceof Error) {
-                errorMessage = err.message;
+        }
+    }, [action.isSuccess, successDescription, successTitle]);
+
+    useErrorToastEffect(action, errorTitle, "An unexpected error occurred")
+}
+
+export function useErrorToastEffect(action: {
+    isError: boolean;
+    error: unknown
+}, errorTitle: string, errorDescription: string) {
+
+    useEffect(() => {
+        if (action.error && action.isError) {
+            let errorMessage = errorDescription;
+            if (action.error instanceof AxiosError && action.error.response?.data?.message) {
+                errorMessage = action.error.response.data.message;
             }
             addToast({
                 title: errorTitle,
                 description: errorMessage,
+                color: "danger",
                 classNames: {
-                  base: ROOD_BLURRY_BACKGROUND,
+                    base: RED_BLURRY_BACKGROUND,
                 }
-            });
+            })
         }
-    }, [action.isSuccess, action.isError, action.error, successTitle, errorTitle, successDescription]);
+    }, [action.error, action.isError, errorDescription, errorTitle]);
 }

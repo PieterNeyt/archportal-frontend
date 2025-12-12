@@ -2,8 +2,6 @@ import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {AddChannelType, getNotificaitonSettings, RemoveChannelType} from "@/service/notificationService.ts";
 import {useContext} from "react";
 import securityContext from "@/context/SecurityContext.ts";
-import {AxiosError} from "axios";
-import {addToast} from "@heroui/toast";
 import {ChannelType} from "@/model/notificationSettings.ts";
 
 const NOTIFICATIONS_SETTINGS_KEY = "notification settings";
@@ -26,7 +24,7 @@ export function useAddChannelType() {
         mutateAsync,
         isPending,
         isError,
-
+        error
     } = useMutation(
         {
             mutationFn: (channelType: ChannelType) => {
@@ -34,27 +32,14 @@ export function useAddChannelType() {
             },
             onSuccess: () => {
                 queryClient.invalidateQueries({queryKey: [NOTIFICATIONS_SETTINGS_KEY]});
-            },
-            onError: (error) => {
-                let errorMessage = "Failed to add to cart";
-
-                if (error instanceof AxiosError && error.response?.data?.message) {
-                    errorMessage = error.response.data.message;
-                } else if (error.message) {
-                    errorMessage = error.message;
-                }
-                addToast({
-                    title: "Failed to add Channel Type",
-                    description: errorMessage,
-                    color: "danger",
-                })
             }
         })
 
     return {
         isPending,
         isError,
-        AddChannelType: mutateAsync
+        AddChannelType: mutateAsync,
+        error
     }
 }
 
@@ -64,7 +49,7 @@ export function useRemoveChannelType() {
         mutateAsync,
         isPending,
         isError,
-
+        error
     } = useMutation(
         {
             mutationFn: (channelType: ChannelType) => {
@@ -72,26 +57,13 @@ export function useRemoveChannelType() {
             },
             onSuccess: () => {
                 queryClient.invalidateQueries({queryKey: [NOTIFICATIONS_SETTINGS_KEY]});
-            },
-            onError: (error) => {
-                let errorMessage = "Failed to add to cart";
-
-                if (error instanceof AxiosError && error.response?.data?.message) {
-                    errorMessage = error.response.data.message;
-                } else if (error.message) {
-                    errorMessage = error.message;
-                }
-                addToast({
-                    title: "Failed to remove Channel Type",
-                    description: errorMessage,
-                    color: "danger",
-                })
             }
         })
 
     return {
         isPending,
         isError,
-        RemoveChannelType: mutateAsync
+        RemoveChannelType: mutateAsync,
+        error
     }
 }

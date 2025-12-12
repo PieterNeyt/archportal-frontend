@@ -5,38 +5,19 @@ import {Button} from "@heroui/button";
 import {useNavigate} from "react-router-dom";
 import {CircularProgress} from "@heroui/progress";
 import {gameSchema, GameValues} from "@/validation/createGameValidation.ts";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Image, Select, SelectItem} from "@heroui/react";
 import {GameGenre} from "@/model/GameGenre.ts";
 import {inputClasses, selectClasses} from "@/styles/customClasses.ts";
 import {MessageModal} from "@/components/MessageModal.tsx";
 import {useAddGame} from "@/hooks/useGames.ts";
-import {addToast} from "@heroui/toast";
-import axios from "axios";
-
+import {useErrorToastEffect} from "@/hooks/useToastEffect.ts";
 
 export function CreateGameForm() {
     const {isPending, isError, error, AddGame} = useAddGame();
     const navigate = useNavigate();
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [isOpen, setIsOpen] = useState<boolean>(false);
-
-    useEffect(() => {
-        if (error && isError) {
-            let errorMessage = "Failed to add to cart";
-
-            if (axios.isAxiosError(error) && error.response?.data?.message) {
-                errorMessage = error.response.data.message;
-            } else if (error.message) {
-                errorMessage = error.message;
-            }
-            addToast({
-                title: "Failed to create game",
-                description: errorMessage,
-                color: "danger",
-            })
-        }
-    }, [error, isError]);
 
     const {
         register,
@@ -46,6 +27,9 @@ export function CreateGameForm() {
         resolver: zodResolver(gameSchema),
         mode: "onChange",
     });
+
+    useErrorToastEffect({isError, error}, "Failed to create game",
+        "There was an error while creating a game.");
 
     const onSubmit = async (data: GameValues) => {
         await AddGame(data);
