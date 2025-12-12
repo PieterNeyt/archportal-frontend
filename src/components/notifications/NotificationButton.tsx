@@ -8,7 +8,7 @@ import {
     useNotificationAmount,
     useRemoveNotification
 } from "@/hooks/useNotification.ts";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {NotificationModal} from "@/components/notifications/NotificationModal.tsx";
 import {Notification} from "@/model/notification.ts";
 import {AllNotificationsModal} from "@/components/notifications/AllNotificationsModal.tsx";
@@ -19,8 +19,8 @@ export interface NotificationProps {
     open: boolean;
 }
 
-export function NotificationButton({ open }: NotificationProps) {
-    const { isError, isLoading, notificationsAmount } = useNotificationAmount();
+export function NotificationButton({open}: NotificationProps) {
+    const {isError, isLoading, notificationsAmount} = useNotificationAmount();
 
     useFirstFiveNotifications();
 
@@ -28,7 +28,22 @@ export function NotificationButton({ open }: NotificationProps) {
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const [selectedNotification, setSelectedNotification] = useState<Notification | null>(null);
     const [isAllNotificationsOpen, setIsAllNotificationsOpen] = useState(false);
-    const { RemoveNotification } = useRemoveNotification();
+    const {RemoveNotification} = useRemoveNotification();
+    const MAX_2_LINES_CLASS = 'overflow-hidden text-ellipsis line-clamp-2';
+    useEffect(() => {
+        if (newNotifications && newNotifications.length > 0) {
+            newNotifications.map((notification: Notification) => {
+                addToast({
+                    title: notification.title,
+                    description: notification.body,
+                    classNames: {
+                        base: BLURRY_BACKGROUND,
+                        description: MAX_2_LINES_CLASS
+                    }
+                })
+            })
+        }
+    }, [newNotifications]);
 
     const displayAmount = (isLoading || isError) ? 0 : (notificationsAmount ?? 0);
 
@@ -44,22 +59,6 @@ export function NotificationButton({ open }: NotificationProps) {
             setIsPopoverOpen(true);
         }
     };
-
-
-    const MAX_2_LINES_CLASS = 'overflow-hidden text-ellipsis line-clamp-2';
-
-    if(newNotifications && newNotifications.length > 0) {
-     newNotifications.map((notification: Notification) => {
-         addToast({
-             title: notification.title,
-             description: notification.body,
-             classNames: {
-             base: BLURRY_BACKGROUND,
-                 description: MAX_2_LINES_CLASS
-             }
-         })
-     })
-    }
 
     return (
         <>
@@ -77,7 +76,8 @@ export function NotificationButton({ open }: NotificationProps) {
                         onClick={(e) => e.stopPropagation()}
                         className="flex items-center gap-3 p-3 rounded-lg transition-all group relative overflow-hidden hover:scale-105 active:scale-95 cursor-pointer"
                     >
-                        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div
+                            className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
 
                         <div className="relative z-10">
                             {!open && !isError ? (
@@ -87,39 +87,45 @@ export function NotificationButton({ open }: NotificationProps) {
                                     shape="circle"
                                     isInvisible={displayAmount === 0}
                                 >
-                                    <Bell size={20} className="flex-shrink-0 text-muted-foreground group-hover:text-primary transition-colors"/>
+                                    <Bell size={20}
+                                          className="flex-shrink-0 text-muted-foreground group-hover:text-primary transition-colors"/>
                                 </Badge>
                             ) : (
-                                <Bell size={20} className={`flex-shrink-0 transition-colors ${isError ? "text-red-500" : "text-muted-foreground group-hover:text-primary"}`}/>
+                                <Bell size={20}
+                                      className={`flex-shrink-0 transition-colors ${isError ? "text-red-500" : "text-muted-foreground group-hover:text-primary"}`}/>
                             )}
                         </div>
 
                         {open ? (
                             <div className="flex justify-between items-center w-full relative z-10">
-                                <span className="font-medium text-foreground group-hover:text-primary transition-colors">
+                                <span
+                                    className="font-medium text-foreground group-hover:text-primary transition-colors">
                                     Notifications
                                 </span>
                                 {displayAmount > 0 && !isError && (
-                                    <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                                    <span
+                                        className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
                                         {displayAmount}
                                     </span>
                                 )}
                                 {isError && (
-                                    <AlertCircle size={16} className="text-red-500" />
+                                    <AlertCircle size={16} className="text-red-500"/>
                                 )}
                             </div>
                         ) : (
-                            <div className="absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-sm rounded-md opacity-0 pointer-events-none transition-opacity whitespace-nowrap shadow-lg border border-border z-50">
+                            <div
+                                className="absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-sm rounded-md opacity-0 pointer-events-none transition-opacity whitespace-nowrap shadow-lg border border-border z-50">
                                 Notifications
                             </div>
                         )}
                     </div>
                 </PopoverTrigger>
 
-                <PopoverContent className="w-[320px] max-h-[400px] overflow-y-auto border border-white/10 bg-black/40 dark:bg-black/60 backdrop-blur-xl shadow-lg">
+                <PopoverContent
+                    className="w-[320px] max-h-[400px] overflow-y-auto border border-white/10 bg-black/40 dark:bg-black/60 backdrop-blur-xl shadow-lg">
                     {isError ? (
                         <div className="p-4 text-center text-sm text-red-400 flex flex-col items-center gap-2">
-                            <AlertCircle size={24} />
+                            <AlertCircle size={24}/>
                             <span>Failed to load notifications.</span>
                         </div>
                     ) : (

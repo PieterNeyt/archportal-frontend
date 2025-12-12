@@ -29,7 +29,7 @@ export function ChangeChannelType() {
     useErrorToastEffect({isError: isErrorRemove, error: errorRemove}, "Failed to add channel type",
         "There was an error while updating the channel type.");
 
-    const allOptions = Object.values(ChannelType).filter(v => typeof v === 'string') as ChannelType[];
+    const allOptions = Object.values(ChannelType) as ChannelType[];
 
     const handleToggle = async (type: ChannelType, isActive: boolean) => {
         if (addPending || removePending) return;
