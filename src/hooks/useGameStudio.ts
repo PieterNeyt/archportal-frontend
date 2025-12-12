@@ -7,7 +7,7 @@ import {useContext} from "react";
 import SecurityContext from "@/context/SecurityContext.ts";
 import securityContext from "@/context/SecurityContext.ts";
 
-export const GAME_STUDIO_KEY = "game studio";
+const GAME_STUDIO_KEY = "game studio";
 const GAME_STUDIO_STATUS_KEY = "game studio status";
 
 export function useAddGameStudio() {

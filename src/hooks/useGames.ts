@@ -4,10 +4,10 @@ import {CreateGame} from "@/model/createGame.ts";
 import {addToast} from "@heroui/toast";
 import {AxiosError} from "axios";
 import {Game} from "@/model/game.ts";
-import {GAME_STUDIO_KEY} from "@/hooks/useGameStudio.ts";
 
 const GAMES_KEY = "games";
 const GAME_KEY = "game";
+const GAMES_FROM_STUDIO_KEY = "games from studio";
 
 export function useGames() {
     const {isLoading, isError, refetch, data: games} = useQuery({
@@ -20,7 +20,7 @@ export function useGames() {
 
 export function useGameFromStudio() {
     const {isLoading, isError, refetch, data: games} = useQuery({
-        queryKey: [GAME_STUDIO_KEY],
+        queryKey: [GAMES_FROM_STUDIO_KEY],
         queryFn: () => getGamesFromStudio()
     });
 
