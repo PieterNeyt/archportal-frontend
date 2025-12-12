@@ -31,6 +31,8 @@ export function usePaymentVerification(orderId: string | null) {
                 return;
             }
 
+            await new Promise(resolve => setTimeout(resolve, 500));
+
             setState(prev => ({
                 ...prev,
                 progress: `Order ID: ${orderId} - Aan het verifiëren...`
