@@ -1,12 +1,19 @@
-import { Bell, AlertCircle } from "lucide-react";
-import { Badge } from "@heroui/badge";
-import { Popover, PopoverContent, PopoverTrigger } from "@heroui/react";
-import { NotificationList } from "@/components/notifications/NotificationList.tsx";
-import { useNotificationAmount, useRemoveNotification } from "@/hooks/useNotification.ts";
-import { useState } from "react";
-import { NotificationModal } from "@/components/notifications/NotificationModal.tsx";
-import { Notification } from "@/model/notification.ts";
-import { AllNotificationsModal } from "@/components/notifications/AllNotificationsModal.tsx";
+import {AlertCircle, Bell} from "lucide-react";
+import {Badge} from "@heroui/badge";
+import {Popover, PopoverContent, PopoverTrigger} from "@heroui/react";
+import {NotificationList} from "@/components/notifications/NotificationList.tsx";
+import {
+    useFirstFiveNotifications,
+    useNewNotifications,
+    useNotificationAmount,
+    useRemoveNotification
+} from "@/hooks/useNotification.ts";
+import {useState} from "react";
+import {NotificationModal} from "@/components/notifications/NotificationModal.tsx";
+import {Notification} from "@/model/notification.ts";
+import {AllNotificationsModal} from "@/components/notifications/AllNotificationsModal.tsx";
+import {addToast} from "@heroui/toast";
+import {BLURRY_BACKGROUND} from "@/styles/customClasses.ts";
 
 export interface NotificationProps {
     open: boolean;
@@ -15,12 +22,14 @@ export interface NotificationProps {
 export function NotificationButton({ open }: NotificationProps) {
     const { isError, isLoading, notificationsAmount } = useNotificationAmount();
 
+    useFirstFiveNotifications();
+
+    const {newNotifications} = useNewNotifications();
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const [selectedNotification, setSelectedNotification] = useState<Notification | null>(null);
     const [isAllNotificationsOpen, setIsAllNotificationsOpen] = useState(false);
     const { RemoveNotification } = useRemoveNotification();
 
-    // Error handling: UI blijft intact, amount wordt 0
     const displayAmount = (isLoading || isError) ? 0 : (notificationsAmount ?? 0);
 
     const handleOpenAllNotifications = () => {
@@ -35,6 +44,22 @@ export function NotificationButton({ open }: NotificationProps) {
             setIsPopoverOpen(true);
         }
     };
+
+
+    const MAX_2_LINES_CLASS = 'overflow-hidden text-ellipsis line-clamp-2';
+
+    if(newNotifications && newNotifications.length > 0) {
+     newNotifications.map((notification: Notification) => {
+         addToast({
+             title: notification.title,
+             description: notification.body,
+             classNames: {
+             base: BLURRY_BACKGROUND,
+                 description: MAX_2_LINES_CLASS
+             }
+         })
+     })
+    }
 
     return (
         <>

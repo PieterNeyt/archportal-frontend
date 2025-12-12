@@ -7,6 +7,8 @@ import {
     getNotificaitons,
     RemoveNotification
 } from "@/service/notificationService.ts";
+import { useRef } from "react";
+import {Notification} from "@/model/notification.ts";
 
 const NOTIFICATIONS_KEY = "notifications";
 const FIRST_5_NOTIFICATIONS_KEY = "first 5 notifications";
@@ -15,15 +17,42 @@ const AMOUNT_NOTIFICATIONS_KEY = "amount notifications";
 export function useFirstFiveNotifications() {
     const {isAuthenticated, isInitialised} = useContext(securityContext)
 
-    const {isLoading, isError, refetch, data: notifications} = useQuery({
+    const {isLoading, isError, refetch, data: notifications,isSuccess} = useQuery({
         queryKey: [FIRST_5_NOTIFICATIONS_KEY],
         queryFn: getFirstFiveNotificaiton,
         enabled: isAuthenticated() && isInitialised,
         refetchInterval: 1000
     })
 
-    return {isLoading, isError, refetch, notifications}
+    return {isLoading, isError, refetch, notifications,isSuccess}
 }
+
+
+export function useNewNotifications() {
+    const { notifications, isLoading, isError, isSuccess } = useFirstFiveNotifications();
+    const previousRef = useRef<Notification[]>([]);
+
+    const newNotifications: Notification[] = [];
+
+    if (notifications && notifications.length > 0) {
+        const previous = previousRef.current;
+
+        newNotifications.push(
+            ...notifications.filter(n => !previous.some(p => p.id === n.id))
+        );
+
+        previousRef.current = [...notifications];
+    }
+
+    return {
+        newNotifications,
+        isLoading,
+        isError,
+        isSuccess
+    };
+}
+
+
 
 export function useNotifications() {
     const {isAuthenticated, isInitialised} = useContext(securityContext)
@@ -44,6 +73,7 @@ export function useNotificationAmount() {
         queryKey: [AMOUNT_NOTIFICATIONS_KEY],
         queryFn: getNotificaitonAmount,
         enabled: isAuthenticated() && isInitialised,
+        refetchInterval: 1000
     })
 
     return {isLoading, isError, refetch, notificationsAmount}
