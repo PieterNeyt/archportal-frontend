@@ -1,9 +1,9 @@
 import {Card, CardBody, CardFooter, CardHeader} from "@heroui/card";
-import {Image} from "@heroui/image";
-import {useContext, useState} from "react";
-import {Gamepad2, ShoppingCart} from "lucide-react";
+import {useContext, useMemo, useState} from "react";
+import {ShoppingCart} from "lucide-react";
 import {Button} from "@heroui/button";
 import SecurityContext from "@/context/SecurityContext.ts";
+import ImageMemo from "@/components/ImageMemo.tsx";
 
 interface ShopCardProps {
     title: string;
@@ -17,10 +17,12 @@ interface ShopCardProps {
 export function GameCard({title, image, price, gameId, onAddToCart, onPress}: ShopCardProps) {
     const [imageFailed, setImageFailed] = useState(false);
     const {isAuthenticated, login} = useContext(SecurityContext);
-
-    const handleImageError = () => {
+    const onImageError = () => {
         setImageFailed(true);
-    }
+    };
+    const imageElement = useMemo(() => {
+        return ImageMemo({image, title, imageFailed, onImageError});
+    }, [image, imageFailed, title]);
 
     const addToCart = () => {
         if (isAuthenticated())
@@ -35,24 +37,7 @@ export function GameCard({title, image, price, gameId, onAddToCart, onPress}: Sh
                 className={"py-0 w-[250px] h-[380px] sm:w-[300px] bg-black/30 backdrop-blur-xl border border-white/10 hover:border-purple-500/50 hover:bg-black/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/20 overflow-hidden cursor-pointer"}
             >
                 <CardBody className={"p-0 overflow-hidden"}>
-                    {(imageFailed || !image) ? (
-                        <div
-                            className="flex flex-col items-center justify-center h-[300px] bg-white/5 backdrop-blur-sm border-b border-white/10">
-                            <Gamepad2 size={"64"} className={"text-white/40 mb-2"}/>
-                            <p className={"text-sm text-white/40"}>Image missing</p>
-                        </div>
-                    ) : (
-                        <div className="h-[300px] overflow-hidden border-b border-white/10">
-                            <Image
-                                alt={title}
-                                className={"object-cover w-full h-full"}
-                                src={image}
-                                onError={handleImageError}
-                                isBlurred
-                                removeWrapper
-                            />
-                        </div>
-                    )}
+                    {imageElement}
                 </CardBody>
                 <CardHeader className={"pt-2 px-4 flex-col items-start"}>
                     <h4 className={"font-bold text-large truncate w-full"}>{title}</h4>
