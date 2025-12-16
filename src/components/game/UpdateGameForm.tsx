@@ -1,9 +1,9 @@
-import { Input, Textarea } from "@heroui/input";
-import { Image, Select, SelectItem } from "@heroui/react";
-import { UseFormRegister, FieldErrors } from "react-hook-form";
-import { GameValues } from "@/validation/createGameValidation.ts";
-import { GameGenre } from "@/model/GameGenre.ts";
-import { inputClasses, selectClasses } from "@/styles/customClasses.ts";
+import {Input, Textarea} from "@heroui/input";
+import {Image, Select, SelectItem} from "@heroui/react";
+import {FieldErrors, UseFormRegister} from "react-hook-form";
+import {GameValues} from "@/validation/createGameValidation.ts";
+import {GameGenre} from "@/model/gameGenre.ts";
+import {inputClasses, selectClasses} from "@/styles/customClasses.ts";
 
 interface UpdateGameFormProps {
     register: UseFormRegister<GameValues>;
@@ -11,11 +11,12 @@ interface UpdateGameFormProps {
     imagePreview: string | null;
 }
 
-export function UpdateGameForm({ register, errors, imagePreview }: UpdateGameFormProps) {
+export function UpdateGameForm({register, errors, imagePreview}: UpdateGameFormProps) {
     return (
         <div className="flex flex-col gap-6">
             <div className="flex flex-col md:flex-row gap-6">
-                <div className="w-40 h-40 bg-black/40 border border-white/10 rounded-xl flex justify-center items-center overflow-hidden flex-shrink-0 self-start">
+                <div
+                    className="w-40 h-40 bg-black/40 border border-white/10 rounded-xl flex justify-center items-center overflow-hidden flex-shrink-0 self-start">
                     {imagePreview ? (
                         <Image
                             alt="Game Cover Preview"
@@ -74,7 +75,7 @@ export function UpdateGameForm({ register, errors, imagePreview }: UpdateGameFor
                     errorMessage={errors.price?.message}
                     isInvalid={!!errors.price}
                     classNames={inputClasses}
-                    {...register("price", { valueAsNumber: true })}
+                    {...register("price", {valueAsNumber: true})}
                 />
 
                 <Select
@@ -104,7 +105,7 @@ export function UpdateGameForm({ register, errors, imagePreview }: UpdateGameFor
                     errorMessage={errors.maxlobbysize?.message}
                     isInvalid={!!errors.maxlobbysize}
                     classNames={inputClasses}
-                    {...register("maxlobbysize", { valueAsNumber: true })}
+                    {...register("maxlobbysize", {valueAsNumber: true})}
                 />
                 <Input
                     isRequired

@@ -5,7 +5,7 @@ import {Spinner} from "@heroui/spinner";
 import {Chip} from "@heroui/chip";
 import {Loader2, LogOut, Play} from "lucide-react";
 import {useGetLobbyInfo, useGetMySession, useLeaveLobby, useStartMultiplayerGame} from "@/hooks/useLobbies.ts";
-import {SinglePlayerLaunchResponse} from "@/model/SinglePlayerLaunchResponse.ts";
+import {SinglePlayerLaunchResponse} from "@/model/singlePlayerLaunchResponse.ts";
 import {useEffect} from "react";
 import {InLobbyError} from "@/components/library/game/lobby/InLobbyError.tsx";
 import useToastEffect from "@/hooks/useToastEffect.ts";
@@ -16,11 +16,15 @@ interface InLobbyCardProps {
 
 export function InLobbyCard({lobbyId}: InLobbyCardProps) {
     const {isError, isLoading, lobby} = useGetLobbyInfo(lobbyId);
-    const {isPending, isError: isGameError,error,isSuccess,startMultiplayer} = useStartMultiplayerGame();
+    const {isPending, isError: isGameError, error, isSuccess, startMultiplayer} = useStartMultiplayerGame();
     const {mySession, refetch: getMySessionData} = useGetMySession(lobbyId);
     const leaveLobby = useLeaveLobby();
     useToastEffect(leaveLobby, "Left lobby", "Failed to leave lobby", "You successfully left the lobby.")
-    useToastEffect({isError:isGameError,error:error,isSuccess:isSuccess},"The game started successfully.","There was an error launching the game.","Game started successfully.")
+    useToastEffect({
+        isError: isGameError,
+        error: error,
+        isSuccess: isSuccess
+    }, "The game started successfully.", "There was an error launching the game.", "Game started successfully.")
 
     useEffect(() => {
         if (!lobby) return;

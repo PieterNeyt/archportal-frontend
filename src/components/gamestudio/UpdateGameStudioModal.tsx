@@ -1,4 +1,4 @@
-import {GameStudio} from "@/model/GameStudio.ts";
+import {GameStudio} from "@/model/gameStudio.ts";
 import {useUpdateGameStudio} from "@/hooks/useGameStudio.ts";
 import {useForm} from "react-hook-form";
 import {gameStudioSchema, GameStudioValues} from "@/validation/createGameStudioValidation.ts";
@@ -11,7 +11,9 @@ export interface UpdateGameStudioModalProps {
     isOpen: boolean;
     onOpenChange: (isOpen: boolean) => void;
     gameStudio: GameStudio;
-}export function UpdateGameStudioModal({isOpen, onOpenChange, gameStudio}: UpdateGameStudioModalProps) {
+}
+
+export function UpdateGameStudioModal({isOpen, onOpenChange, gameStudio}: UpdateGameStudioModalProps) {
     const {
         isPending,
         isError,

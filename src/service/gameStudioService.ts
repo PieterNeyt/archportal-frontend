@@ -1,5 +1,5 @@
 import axios from "axios";
-import {CreateGameStudio, GameStudio, GameStudioStatus} from "@/model/GameStudio.ts";
+import {CreateGameStudio, GameStudio, GameStudioStatus} from "@/model/gameStudio.ts";
 
 
 export async function AddGameStudio(newGameStudio: CreateGameStudio): Promise<GameStudio> {
@@ -17,7 +17,7 @@ export async function getGameStudio(): Promise<GameStudio> {
     return studio;
 }
 
-export async function updateGameStudio(gameStudio:GameStudio): Promise<GameStudio> {
-    const {data: studio} = await axios.put<GameStudio>(`/api/gamestudio`,gameStudio);
+export async function updateGameStudio(gameStudio: GameStudio): Promise<GameStudio> {
+    const {data: studio} = await axios.put<GameStudio>(`/api/gamestudio`, gameStudio);
     return studio;
 }

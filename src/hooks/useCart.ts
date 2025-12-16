@@ -3,12 +3,14 @@ import {addToCart, getCart, removeFromCart} from "@/service/gameService.ts";
 import {useContext} from "react";
 import SecurityContext from "@/context/SecurityContext.ts";
 
+const CART_KEY = "cart";
+
 export function useCart() {
     const queryClient = useQueryClient();
     const {isAuthenticated} = useContext(SecurityContext)
 
     const {data: cart, isLoading: isCartLoading} = useQuery({
-        queryKey: ["cart"],
+        queryKey: [CART_KEY],
         queryFn: () => getCart(),
         enabled: isAuthenticated()
     });
@@ -16,14 +18,14 @@ export function useCart() {
     const addToCartMutation = useMutation({
         mutationFn: (gameId: string) => addToCart(gameId),
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ["cart"]});
+            queryClient.invalidateQueries({queryKey: [CART_KEY]});
         }
     });
 
     const removeFromCartMutation = useMutation({
         mutationFn: (gameId: string) => removeFromCart(gameId),
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ["cart"]});
+            queryClient.invalidateQueries({queryKey: [CART_KEY]});
         }
     });
     const itemCount = cart?.items?.length ?? 0;

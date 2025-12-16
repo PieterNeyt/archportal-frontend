@@ -9,9 +9,10 @@ import {CircularProgress} from "@heroui/progress";
 import {inputClasses} from "@/styles/customClasses";
 import {useState} from "react";
 import {MessageModal} from "@/components/MessageModal.tsx";
+import {useErrorToastEffect} from "@/hooks/useToastEffect.ts";
 
 export function CreateGameStudioForm() {
-    const {isPending, isError, AddGameStudio} = useAddGameStudio();
+    const {isPending, isError, AddGameStudio, error} = useAddGameStudio();
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -24,13 +25,15 @@ export function CreateGameStudioForm() {
         mode: "onChange",
     });
 
+    useErrorToastEffect({isError, error}, "Failed to create game studio",
+        "There was an error while creating a game studio.");
+
     const onSubmit = async (data: GameStudioValues) => {
         await AddGameStudio(data);
 
         if (isPending) {
             return <CircularProgress aria-label="Loading..."/>;
         }
-
 
         if (!isError) {
             setIsOpen(true);
@@ -44,8 +47,7 @@ export function CreateGameStudioForm() {
                           action={() => {
                               setIsOpen(false);
                               navigate(`/gamestudio`)
-                          }
-                          }
+                          }}
                           open={isOpen}
             />
             <form

@@ -1,4 +1,4 @@
-import {useContext} from "react";
+import {useContext, useRef} from "react";
 import securityContext from "@/context/SecurityContext.ts";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {
@@ -7,25 +7,56 @@ import {
     getNotificaitons,
     RemoveNotification
 } from "@/service/notificationService.ts";
+import {Notification} from "@/model/notification.ts";
+
+const NOTIFICATIONS_KEY = "notifications";
+const FIRST_5_NOTIFICATIONS_KEY = "first 5 notifications";
+const AMOUNT_NOTIFICATIONS_KEY = "amount notifications";
 
 export function useFirstFiveNotifications() {
     const {isAuthenticated, isInitialised} = useContext(securityContext)
 
-    const {isLoading, isError, refetch, data: notifications} = useQuery({
-        queryKey: ["firstFiveNotification"],
+    const {isLoading, isError, refetch, data: notifications, isSuccess} = useQuery({
+        queryKey: [FIRST_5_NOTIFICATIONS_KEY],
         queryFn: getFirstFiveNotificaiton,
         enabled: isAuthenticated() && isInitialised,
         refetchInterval: 1000
     })
 
-    return {isLoading, isError, refetch, notifications}
+    return {isLoading, isError, refetch, notifications, isSuccess}
 }
+
+
+export function useNewNotifications() {
+    const {notifications, isLoading, isError, isSuccess} = useFirstFiveNotifications();
+    const previousRef = useRef<Notification[]>([]);
+
+    const newNotifications: Notification[] = [];
+
+    if (notifications && notifications.length > 0) {
+        const previous = previousRef.current;
+
+        newNotifications.push(
+            ...notifications.filter(n => !previous.some(p => p.id === n.id))
+        );
+
+        previousRef.current = [...notifications];
+    }
+
+    return {
+        newNotifications,
+        isLoading,
+        isError,
+        isSuccess
+    };
+}
+
 
 export function useNotifications() {
     const {isAuthenticated, isInitialised} = useContext(securityContext)
 
     const {isLoading, isError, refetch, data: notifications} = useQuery({
-        queryKey: ["notifications"],
+        queryKey: [NOTIFICATIONS_KEY],
         queryFn: getNotificaitons,
         enabled: isAuthenticated() && isInitialised,
     })
@@ -37,9 +68,10 @@ export function useNotificationAmount() {
     const {isAuthenticated, isInitialised} = useContext(securityContext)
 
     const {isLoading, isError, refetch, data: notificationsAmount} = useQuery({
-        queryKey: ["amountOfNotifications"],
+        queryKey: [AMOUNT_NOTIFICATIONS_KEY],
         queryFn: getNotificaitonAmount,
         enabled: isAuthenticated() && isInitialised,
+        refetchInterval: 1000
     })
 
     return {isLoading, isError, refetch, notificationsAmount}
@@ -59,9 +91,9 @@ export function useRemoveNotification() {
                 return RemoveNotification(notifiactionId)
             },
             onSuccess: () => {
-                queryClient.invalidateQueries({queryKey: ['amountOfNotifications']});
-                queryClient.invalidateQueries({queryKey: ['notifications']});
-                queryClient.invalidateQueries({queryKey: ['firstFiveNotification']});
+                queryClient.invalidateQueries({queryKey: [AMOUNT_NOTIFICATIONS_KEY]});
+                queryClient.invalidateQueries({queryKey: [NOTIFICATIONS_KEY]});
+                queryClient.invalidateQueries({queryKey: [FIRST_5_NOTIFICATIONS_KEY]});
             }
         })
 

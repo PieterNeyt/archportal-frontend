@@ -1,12 +1,12 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {AddGameStudio, getGameStudio, getMyStudioStatus, updateGameStudio} from "@/service/gameStudioService.ts";
-import {addToast} from "@heroui/toast";
-import {AxiosError} from "axios";
-import {CreateGameStudio, GameStudio} from "@/model/GameStudio.ts";
+import {CreateGameStudio, GameStudio} from "@/model/gameStudio.ts";
 import {useContext} from "react";
 import SecurityContext from "@/context/SecurityContext.ts";
 import securityContext from "@/context/SecurityContext.ts";
 
+const GAME_STUDIO_KEY = "game studio";
+const GAME_STUDIO_STATUS_KEY = "game studio status";
 
 export function useAddGameStudio() {
     const {updateGameStudioStatus} = useContext(SecurityContext);
@@ -16,7 +16,7 @@ export function useAddGameStudio() {
         mutateAsync,
         isPending,
         isError,
-
+        error
     } = useMutation(
         {
             mutationFn: (newGameStudio: CreateGameStudio) => {
@@ -24,34 +24,21 @@ export function useAddGameStudio() {
             },
             onSuccess: (createdGame) => {
                 updateGameStudioStatus(createdGame);
-                queryClient.invalidateQueries({queryKey: ['GameStudio']});
-            },
-            onError: (error) => {
-                let errorMessage = "Failed to add to cart";
-
-                if (error instanceof AxiosError && error.response?.data?.message) {
-                    errorMessage = error.response.data.message;
-                } else if (error.message) {
-                    errorMessage = error.message;
-                }
-                addToast({
-                    title: "Failed to create Game Studio",
-                    description: errorMessage,
-                    color: "danger",
-                })
+                queryClient.invalidateQueries({queryKey: [GAME_STUDIO_KEY]});
             }
         })
 
     return {
         isPending,
         isError,
-        AddGameStudio: mutateAsync
+        AddGameStudio: mutateAsync,
+        error
     }
 }
 
 export function useGameStudioStatus() {
     const {isLoading, isError, refetch, data: gameStudioStatus} = useQuery({
-        queryKey: ["gameStudioStatus"],
+        queryKey: [GAME_STUDIO_STATUS_KEY],
         queryFn: () => getMyStudioStatus(),
         enabled: false
     })
@@ -59,10 +46,10 @@ export function useGameStudioStatus() {
 }
 
 export function useGameStudio() {
-    const {isAuthenticated,isInitialised}= useContext(securityContext)
+    const {isAuthenticated, isInitialised} = useContext(securityContext)
 
     const {isLoading, isError, refetch, data: gameStudio} = useQuery({
-        queryKey: ["GameStudio"],
+        queryKey: [GAME_STUDIO_KEY],
         queryFn: () => getGameStudio(),
         enabled: isAuthenticated() && isInitialised
     })
@@ -73,11 +60,11 @@ export function useUpdateGameStudio() {
     const queryClient = useQueryClient()
 
     const {mutateAsync: UpdateGameStudio, isError, isPending} = useMutation({
-        mutationFn: (gameStudio:GameStudio)=>{
+        mutationFn: (gameStudio: GameStudio) => {
             return updateGameStudio(gameStudio)
         },
-        onSuccess: async ()=>{
-            await queryClient.invalidateQueries({queryKey: ['GameStudio']});
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({queryKey: [GAME_STUDIO_KEY]});
         }
     })
 

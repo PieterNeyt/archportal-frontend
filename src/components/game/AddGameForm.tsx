@@ -7,14 +7,14 @@ import {CircularProgress} from "@heroui/progress";
 import {gameSchema, GameValues} from "@/validation/createGameValidation.ts";
 import {useState} from "react";
 import {Image, Select, SelectItem} from "@heroui/react";
-import {GameGenre} from "@/model/GameGenre.ts";
+import {GameGenre} from "@/model/gameGenre.ts";
 import {inputClasses, selectClasses} from "@/styles/customClasses.ts";
 import {MessageModal} from "@/components/MessageModal.tsx";
 import {useAddGame} from "@/hooks/useGames.ts";
-
+import {useErrorToastEffect} from "@/hooks/useToastEffect.ts";
 
 export function CreateGameForm() {
-    const {isPending, isError, AddGame} = useAddGame();
+    const {isPending, isError, error, AddGame} = useAddGame();
     const navigate = useNavigate();
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -27,6 +27,9 @@ export function CreateGameForm() {
         resolver: zodResolver(gameSchema),
         mode: "onChange",
     });
+
+    useErrorToastEffect({isError, error}, "Failed to create game",
+        "There was an error while creating a game.");
 
     const onSubmit = async (data: GameValues) => {
         await AddGame(data);

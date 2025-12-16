@@ -1,13 +1,15 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {AddGame, getGame, getGames, getGamesFromStudio, updateGame} from "@/service/gameService.ts";
 import {CreateGame} from "@/model/createGame.ts";
-import {addToast} from "@heroui/toast";
-import {AxiosError} from "axios";
 import {Game} from "@/model/game.ts";
+
+const GAMES_KEY = "games";
+const GAME_KEY = "game";
+const GAMES_FROM_STUDIO_KEY = "games from studio";
 
 export function useGames() {
     const {isLoading, isError, refetch, data: games} = useQuery({
-        queryKey: ["games"],
+        queryKey: [GAMES_KEY],
         queryFn: () => getGames()
     });
 
@@ -16,7 +18,7 @@ export function useGames() {
 
 export function useGameFromStudio() {
     const {isLoading, isError, refetch, data: games} = useQuery({
-        queryKey: ["gamesStudio"],
+        queryKey: [GAMES_FROM_STUDIO_KEY],
         queryFn: () => getGamesFromStudio()
     });
 
@@ -25,7 +27,7 @@ export function useGameFromStudio() {
 
 export function useGame(id: string) {
     const {isLoading, isError, refetch, data: game} = useQuery({
-        queryKey: ["game"],
+        queryKey: [GAME_KEY],
         queryFn: () => getGame(id)
     });
 
@@ -40,7 +42,7 @@ export function useUpdateGame() {
             return updateGame(game)
         },
         onSuccess: async () => {
-            await queryClient.invalidateQueries({queryKey: ['game']});
+            await queryClient.invalidateQueries({queryKey: [GAME_KEY]});
         }
     })
 
@@ -54,32 +56,19 @@ export function useAddGame() {
         mutateAsync,
         isPending,
         isError,
-
+        error
     } = useMutation(
         {
             mutationFn: (newGame: CreateGame) => {
                 return AddGame(newGame)
             },
-            onSuccess: () => queryClient.invalidateQueries({queryKey: ['games']}),
-            onError: (error) => {
-                let errorMessage = "Failed to add to cart";
-
-                if (error instanceof AxiosError && error.response?.data?.message) {
-                    errorMessage = error.response.data.message;
-                } else if (error.message) {
-                    errorMessage = error.message;
-                }
-                addToast({
-                    title: "Failed to create game",
-                    description: errorMessage,
-                    color: "danger",
-                })
-            }
+            onSuccess: () => queryClient.invalidateQueries({queryKey: [GAMES_KEY]})
         })
 
     return {
         isPending,
         isError,
+        error,
         AddGame: mutateAsync
     }
 }

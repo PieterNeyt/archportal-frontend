@@ -1,6 +1,7 @@
 import {Game} from "@/model/game.ts";
-import {Edit, Image as ImageIcon, Link as LinkIcon, Tag, Users} from "lucide-react";
+import {Edit, Gamepad2, Link as LinkIcon, Tag, Users} from "lucide-react";
 import {Button} from "@heroui/button";
+import {useState} from "react";
 
 export interface GameInfoCardProps {
     game: Game;
@@ -8,6 +9,7 @@ export interface GameInfoCardProps {
 }
 
 export function GameInfoCard({game, onEdit}: GameInfoCardProps) {
+    const [imageFailed, setImageFailed] = useState(false);
     const formatPrice = (price: number) => {
         return new Intl.NumberFormat('nl-NL', {style: 'currency', currency: 'EUR'}).format(price);
     };
@@ -17,17 +19,17 @@ export function GameInfoCard({game, onEdit}: GameInfoCardProps) {
             <div className="w-full md:w-1/3 flex-shrink-0">
                 <div
                     className="aspect-[3/4] rounded-xl overflow-hidden bg-white/5 border border-white/10 shadow-lg relative flex items-center justify-center group">
-                    {game.imageUrl ? (
+                    {!game.imageUrl || imageFailed ? (
+                        <div className="h-full w-full flex items-center justify-center text-white/20">
+                            <Gamepad2 size={24}/>
+                        </div>
+                    ) : (
                         <img
                             src={game.imageUrl}
                             alt={game.title}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            onError={() => setImageFailed(true)}
                         />
-                    ) : (
-                        <div className="text-white/20 flex flex-col items-center gap-2">
-                            <ImageIcon size={48}/>
-                            <span className="text-sm">No Image Found</span>
-                        </div>
                     )}
                     <div
                         className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 flex items-center gap-2">
@@ -70,7 +72,8 @@ export function GameInfoCard({game, onEdit}: GameInfoCardProps) {
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                            <h3 className="text-sm font-semibold text-white/40 uppercase tracking-wider">Max Lobby Size</h3>
+                            <h3 className="text-sm font-semibold text-white/40 uppercase tracking-wider">Max Lobby
+                                Size</h3>
                             <div className="flex items-center gap-2 text-white/90">
                                 <Users size={18} className="text-primary"/>
                                 <span className="font-medium">
@@ -90,7 +93,8 @@ export function GameInfoCard({game, onEdit}: GameInfoCardProps) {
                                         className="flex items-center gap-2 text-primary hover:text-primary-400 transition-colors group/link truncate"
                                     >
                                         <LinkIcon size={18}/>
-                                        <span className="truncate underline decoration-primary/30 group-hover/link:decoration-primary">
+                                        <span
+                                            className="truncate underline decoration-primary/30 group-hover/link:decoration-primary">
                                             {game.gameUrl}
                                         </span>
                                     </a>

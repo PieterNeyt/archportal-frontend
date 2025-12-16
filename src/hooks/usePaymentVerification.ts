@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef } from 'react';
-import { verifyPayment } from '@/service/paymentService';
+import {useEffect, useRef, useState} from 'react';
+import {verifyPayment} from '@/service/paymentService';
 
 type VerificationStatus = 'verifying' | 'success' | 'failed' | 'error';
 
@@ -12,8 +12,8 @@ interface PaymentVerificationState {
 export function usePaymentVerification(orderId: string | null) {
     const [state, setState] = useState<PaymentVerificationState>({
         status: 'verifying',
-        message: 'Betaling verwerken...',
-        progress: 'Bezig met controleren...'
+        message: 'Processing payment...',
+        progress: 'Checking...'
     });
 
     const hasVerified = useRef(false);
@@ -25,15 +25,17 @@ export function usePaymentVerification(orderId: string | null) {
             if (!orderId) {
                 setState({
                     status: 'error',
-                    message: 'Geen order ID gevonden',
-                    progress: 'Controleer de URL en probeer opnieuw'
+                    message: 'No order ID found',
+                    progress: 'Check the URL and try again'
                 });
                 return;
             }
 
+            await new Promise(resolve => setTimeout(resolve, 500));
+
             setState(prev => ({
                 ...prev,
-                progress: `Order ID: ${orderId} - Aan het verifiëren...`
+                progress: `Order ID: ${orderId} - Verifying...`
             }));
 
             try {
@@ -43,8 +45,8 @@ export function usePaymentVerification(orderId: string | null) {
                 if (isVerified) {
                     setState({
                         status: 'success',
-                        message: 'Betaling succesvol!',
-                        progress: 'Je bestelling wordt verwerkt'
+                        message: 'Payment successful',
+                        progress: 'Your order is being processed'
                     });
 
                     setTimeout(() => {
@@ -53,16 +55,16 @@ export function usePaymentVerification(orderId: string | null) {
                 } else {
                     setState({
                         status: 'failed',
-                        message: 'Betaling mislukt',
-                        progress: 'De betaling kon niet worden bevestigd'
+                        message: 'Payment failed',
+                        progress: 'The payment could not be confirmed'
                     });
                 }
             } catch {
                 hasVerified.current = true;
                 setState({
                     status: 'error',
-                    message: 'Er ging iets mis',
-                    progress: 'Probeer het later opnieuw of neem contact op met support'
+                    message: 'Something went wrong',
+                    progress: 'Please try again later or contact support'
                 });
             }
         };

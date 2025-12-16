@@ -18,7 +18,7 @@ function DefaultLayout({children}: { children: ReactNode }) {
                 <GameLauncherSidebar/>
                 <main className="dark text-foreground flex-1 overflow-auto relative z-10">
                     <HeroUIProvider>
-                        <ToastProvider/>
+                        <ToastProvider placement={"bottom-right"} maxVisibleToasts={3}/>
                         {children}
                     </HeroUIProvider>
                 </main>

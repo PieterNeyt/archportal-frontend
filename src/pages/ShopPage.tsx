@@ -7,7 +7,7 @@ import {GameLoadError} from "@/components/shop/GameLoadError.tsx";
 import {ShoppingCartComponent} from "@/components/shop/ShoppingCartComponent.tsx";
 import {useMemo, useState} from "react";
 import {Button} from "@heroui/button";
-import {Search, ShoppingCart, Filter, ArrowUpDown} from "lucide-react";
+import {ArrowUpDown, Filter, Search, ShoppingCart} from "lucide-react";
 import {Badge} from "@heroui/badge";
 import {Input} from "@heroui/input";
 import {Select, SelectItem} from "@heroui/select";
@@ -51,11 +51,10 @@ export default function ShopPage() {
         setSortOption(new Set([SortOption.ALPHABETICAL]));
     };
 
-
     useToastEffect(addToCartMutation,
         "Added to cart",
         "Failed to add",
-        `Succesfully added Game to cart`
+        `Successfully added Game to cart`
     );
 
     const filteredAndSortedGames = useMemo(() => {
@@ -108,6 +107,7 @@ export default function ShopPage() {
                             }}
                             isClearable
                             onClear={() => setSearchQuery("")}
+                            aria-label={"Search for a game"}
                         />
 
                         <Select
@@ -118,6 +118,7 @@ export default function ShopPage() {
                             className="w-full sm:w-[200px]"
                             startContent={<Filter size={18} className="text-white/40"/>}
                             classNames={selectClasses}
+                            aria-label="Select your genres"
                         >
                             {(Object.values(GameGenre) as string[]).map((genre) => (
                                 <SelectItem key={genre} textValue={formatLabel(genre)}>
@@ -127,7 +128,7 @@ export default function ShopPage() {
                         </Select>
 
                         <Select
-                            placeholder="Sorteer op"
+                            placeholder="Sort on"
                             selectionMode="single"
                             disallowEmptySelection
                             selectedKeys={sortOption}
@@ -135,6 +136,7 @@ export default function ShopPage() {
                             className="w-full sm:w-[180px]"
                             startContent={<ArrowUpDown size={18} className="text-white/40"/>}
                             classNames={selectClasses}
+                            aria-label={"Sort on"}
                         >
                             <SelectItem key={SortOption.ALPHABETICAL}>Title (A-Z)</SelectItem>
                             <SelectItem key={SortOption.PRICE_LOW_HIGH}>Price (Low - High)</SelectItem>

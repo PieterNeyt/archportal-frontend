@@ -4,14 +4,14 @@ import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {getChatRoom, getChatRooms, sendMessage} from "@/service/chatService.ts";
 import {SendMessage} from "@/model/chatRoom.ts";
 
-const CHATROOMS = "chat rooms";
-const MESSAGES = "messages";
+const CHATROOMS_KEY = "chat rooms";
+const MESSAGES_KEY = "messages";
 
 export function useGetChatRooms() {
     const {isAuthenticated, isInitialised} = useContext(SecurityContext);
 
     const {isLoading, isError, data: chatRooms, refetch} = useQuery({
-        queryKey: [CHATROOMS],
+        queryKey: [CHATROOMS_KEY],
         queryFn: () => getChatRooms(),
         enabled: isAuthenticated() && isInitialised,
         refetchInterval: 5000
@@ -23,7 +23,7 @@ export function useGetChatRoom(id: string) {
     const {isAuthenticated, isInitialised} = useContext(SecurityContext);
 
     const {isLoading, isError, data: chatRoom, refetch} = useQuery({
-        queryKey: [MESSAGES, id],
+        queryKey: [MESSAGES_KEY, id],
         queryFn: () => getChatRoom(id),
         enabled: isAuthenticated() && isInitialised,
         refetchInterval: 1000
@@ -39,9 +39,9 @@ export function useSendMessage() {
         },
         onSuccess: (_data, variables) => {
             if (variables?.id) {
-                queryClient.invalidateQueries({queryKey: [MESSAGES, variables.id]});
+                queryClient.invalidateQueries({queryKey: [MESSAGES_KEY, variables.id]});
             } else {
-                queryClient.invalidateQueries({queryKey: [MESSAGES]});
+                queryClient.invalidateQueries({queryKey: [MESSAGES_KEY]});
             }
         }
     })

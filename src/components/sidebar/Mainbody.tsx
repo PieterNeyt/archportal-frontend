@@ -1,14 +1,16 @@
 import { menuSections } from "@/config/menuItemsList.ts";
-import React, {useContext} from "react";
+import { useContext } from "react";
 import { NotificationButton } from "@/components/notifications/NotificationButton.tsx";
 import securityContext from "@/context/SecurityContext.ts";
+import { useNavigate } from "react-router-dom";
 
 interface MainBodyProps {
     isOpen: boolean;
 }
 
 export function SidebarMainBody({ isOpen }: MainBodyProps) {
-    const {isAuthenticated,isInitialised,loggedInUser}= useContext(securityContext)
+    const { isAuthenticated, isInitialised, loggedInUser } = useContext(securityContext);
+    const navigate = useNavigate();
 
     const visibleSections = isAuthenticated() && isInitialised
         ? menuSections.filter(section => {
@@ -37,25 +39,27 @@ export function SidebarMainBody({ isOpen }: MainBodyProps) {
                                 const Icon = item.icon;
                                 return (
                                     <li key={itemIndex}>
-                                        <a
-                                            href={item.href}
-                                            onClick={(e: React.MouseEvent<HTMLAnchorElement>) => e.stopPropagation()}
-                                            className="flex items-center gap-2 p-1.5 rounded-lg transition-all group relative overflow-hidden hover:scale-105 active:scale-95"
-                                        >
-                                            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                            <Icon size={20} className="flex-shrink-0 text-muted-foreground group-hover:text-primary transition-colors relative z-10" />
-                                            {isOpen ? (
-                                                <span className="font-medium text-foreground group-hover:text-primary transition-colors relative z-10">
+                                        <div
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                navigate(item.href)
+                                            }}
+                                                className="flex items-center gap-2 p-1.5 rounded-lg transition-all group relative overflow-hidden hover:scale-105 active:scale-95 cursor-pointer" // <-- Voeg cursor-pointer toe
+                                                >
+                                                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                                <Icon size={20} className="flex-shrink-0 text-muted-foreground group-hover:text-primary transition-colors relative z-10" />
+                                        {isOpen ? (
+                                        <span className="font-medium text-foreground group-hover:text-primary transition-colors relative z-10">
                                                     {item.label}
                                                 </span>
-                                            ) : (
-                                                <div className="absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-sm rounded-md opacity-0 pointer-events-none transition-opacity whitespace-nowrap shadow-lg border border-border z-50">
-                                                    {item.label}
-                                                </div>
-                                            )}
-                                        </a>
-                                    </li>
-                                );
+                                        ) : (
+                                        <div className="absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-sm rounded-md opacity-0 pointer-events-none transition-opacity whitespace-nowrap shadow-lg border border-border z-50">
+                                            {item.label}
+                                        </div>
+                                        )}
+                                    </div>
+                            </li>
+                            );
                             })}
                         </ul>
                     </div>

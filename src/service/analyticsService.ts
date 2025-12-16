@@ -1,5 +1,5 @@
 import axios from "axios";
-import {GameStatistics} from "@/model/GameStatistics.ts";
+import {GameStatistics} from "@/model/gameStatistics.ts";
 
 
 export async function getGameStatistics(gameId: string): Promise<GameStatistics> {
