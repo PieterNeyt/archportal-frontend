@@ -4,11 +4,12 @@ import {LogOut, Play, Settings, UserPlus, Users} from "lucide-react";
 import {Divider} from "@heroui/react";
 
 interface PartyCardProps {
+    title: string;
     max: number;
     count: number;
 }
 
-export default function PartyCard({max, count}: PartyCardProps) {
+export default function PartyCard({title, max, count}: PartyCardProps) {
     return (
         <Card className={"w-full bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl"}>
             <CardHeader className={"flex justify-between items-center px-6 pt-6 pb-2"}>
@@ -17,7 +18,7 @@ export default function PartyCard({max, count}: PartyCardProps) {
                         <Users size={20} className="text-primary"/>
                     </div>
                     <h2>
-                        Pro squad
+                        {title}
                     </h2>
                     <div className="px-2 py-0.5 rounded-md bg-white/10 border border-white/10">
                         <span className="text-xs font-bold text-primary"> {count} / {max} </span>

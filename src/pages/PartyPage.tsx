@@ -1,6 +1,8 @@
 import PartyCard from "@/components/party/PartyCard.tsx";
 import PartyMember from "@/components/party/PartyMember.tsx";
 import {GLASS_CARD_STYLES} from "@/styles/customClasses.ts";
+import {useParty} from "@/hooks/useParties.ts";
+import CreatePartyCard from "@/components/party/CreatePartyCard.tsx";
 
 const DUMMY_MEMBERS = [
     {
@@ -30,15 +32,25 @@ const DUMMY_MEMBERS = [
 ];
 
 export default function PartyPage() {
+    const {party, isError} = useParty();
+
+    if (!party || isError) {
+        return (
+            <div
+                className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-6 flex flex-col items-center justify-center min-h-screen  p-4">
+                <CreatePartyCard/>
+                <div>
+                    joinable party list
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div
             className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-6 flex flex-col items-center justify-center min-h-screen  p-4"
         >
-            {/*<CreatePartyCard/>*/}
-            {/*<div>*/}
-            {/*    joinable party list*/}
-            {/*</div>*/}
-            <PartyCard max={8} count={DUMMY_MEMBERS.length}/>
+            <PartyCard title={party.title} max={party.maxMembers} count={DUMMY_MEMBERS.length}/>
             <div className={`flex flex-col gap-2 w-full ${GLASS_CARD_STYLES} p-4`}>
                 {DUMMY_MEMBERS.map((member, index) => (
                     <PartyMember key={index} icon={member.icon} gamerTag={member.gamerTag} isLeader={member.isLeader}
