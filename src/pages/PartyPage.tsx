@@ -3,6 +3,7 @@ import PartyMember from "@/components/party/PartyMember.tsx";
 import {GLASS_CARD_STYLES} from "@/styles/customClasses.ts";
 import {useGetPartyMembers, useParty} from "@/hooks/useParties.ts";
 import CreatePartyCard from "@/components/party/CreatePartyCard.tsx";
+import {Divider} from "@heroui/react";
 
 const DUMMY_MEMBERS = [
     {
@@ -52,27 +53,45 @@ export default function PartyPage() {
     }
 
     return (
-        <div
-            className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-6 flex flex-col items-center justify-center min-h-screen  p-4"
-        >
+        <div className="h-screen max-w-7xl mx-auto flex flex-col p-4 sm:p-6 lg:p-8 gap-6">
+
             <PartyCard title={party.title} max={party.maxMembers} count={members.length}/>
-            <div className={`flex flex-col gap-2 w-full ${GLASS_CARD_STYLES} p-4`}>
-                {members.map((member, index) => (
-                    <PartyMember key={index} icon={member.icon} gamerTag={member.gamerTag} isLeader={member.isLeader}
-                                 isReady={member.isReady}/>
-                ))}
-            </div>
-            <div className={`w-full flex-1 flex-col p-4 relative ${GLASS_CARD_STYLES}`}>
-                <h2 className="text-lg font-semibold mb-4 text-white px-2 border-b border-white/10 pb-2">
-                    Party chat
-                </h2>
-                <div className="flex-1 overflow-hidden flex flex-col mb-4">
-                    {/*<MessageList id={selectedChatRoom.id} />*/}
+
+            <div className={`flex-1 flex flex-col lg:flex-row gap-6 min-h-0 ${GLASS_CARD_STYLES}`}>
+                <div className={`flex-1 flex flex-col p-4 relative`}>
+                    <h2 className="text-lg font-semibold p-4 text-white border-b border-white/10">
+                        Party chat
+                    </h2>
+
+                    <div className="flex-1 overflow-y-auto p-4">
+                        {/*<MessageList id={selectedChatRoom.id} />*/}
+                    </div>
+
+                    <div className="p-4 border-t border-white/10">
+                        {/*<MessageInput chatId={selectedChatRoom.id} />*/}
+                    </div>
                 </div>
 
-                <div className="mt-auto">
-                    {/*<MessageInput chatId={selectedChatRoom.id} />*/}
+                <Divider orientation={"vertical"} className={"bg-white/10 w-1"}/>
+
+                <div className={`flex-1 flex flex-col p-4 relative lg:max-w-xs`}>
+                    <h2 className="text-lg font-semibold uppercase tracking-wider text-gray-400 p-4 border-b border-white/10">
+                        Members - {members.length}
+                    </h2>
+
+                    <div className="flex-1 overflow-y-auto p-4 space-y-2">
+                        {members.map((member, index) => (
+                            <PartyMember
+                                key={index}
+                                icon={member.icon}
+                                gamerTag={member.gamerTag}
+                                isLeader={member.isLeader}
+                                isReady={member.isReady}
+                            />
+                        ))}
+                    </div>
                 </div>
+
             </div>
         </div>
     );
