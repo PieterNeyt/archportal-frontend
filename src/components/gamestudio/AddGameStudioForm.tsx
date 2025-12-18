@@ -1,4 +1,4 @@
-import {gameStudioSchema, GameStudioValues} from "@/validation/createGameStudioValidation.ts";
+import {gameStudioSchema, GameStudioValues} from "@/validation/GameStudioValidation.ts";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Input} from "@heroui/input";

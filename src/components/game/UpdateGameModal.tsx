@@ -4,7 +4,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader} from "@heroui/modal";
 import {Button} from "@heroui/button";
 import {Game} from "@/model/game.ts";
-import {gameSchema, GameValues} from "@/validation/createGameValidation.ts";
+import {gameSchema, GameValues} from "@/validation/GameValidation.ts";
 import {UpdateGameForm} from "@/components/game/UpdateGameForm.tsx";
 import {useUpdateGame} from "@/hooks/useGames.ts";
 import {AlertCircle} from "lucide-react";

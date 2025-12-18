@@ -4,7 +4,6 @@ import {Button} from "@heroui/button";
 import {ArrowLeft} from "lucide-react";
 import {useNavigate, useParams} from "react-router-dom";
 import {useGame} from "@/hooks/useGames.ts";
-import {GameDevPostCard} from "@/components/game/GameDevPostCard.tsx";
 import {GameAchievementsCard} from "@/components/game/GameAchievementsCard.tsx";
 import {GameInfoCard} from "@/components/game/GameInfoCard.tsx";
 import {GameLoadError} from "@/components/game/GameLoadError.tsx";
@@ -40,7 +39,8 @@ export function GamePage() {
             </div>
 
             <section className={`${GLASS_CARD_STYLES} p-6 sm:p-8 relative overflow-hidden`}>
-                <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-primary/20 blur-3xl rounded-full opacity-50 pointer-events-none"/>
+                <div
+                    className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-primary/20 blur-3xl rounded-full opacity-50 pointer-events-none"/>
                 <div className="flex flex-col md:flex-row gap-8 relative z-10">
                     <GameInfoCard
                         game={game}
@@ -49,15 +49,12 @@ export function GamePage() {
                 </div>
             </section>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <section className={`${GLASS_CARD_STYLES} p-6 relative overflow-hidden flex flex-col h-64`}>
-                    <GameDevPostCard/>
-                </section>
-
-                <section className={`${GLASS_CARD_STYLES} p-6 relative overflow-hidden flex flex-col h-64`}>
-                    <GameAchievementsCard/>
+            <div className="grid grid-cols-1 gap-6">
+                <section className={`${GLASS_CARD_STYLES} p-6 relative overflow-hidden flex flex-col min-h-[256px]`}>
+                    <GameAchievementsCard achievements={game.achievements}/>
                 </section>
             </div>
+
 
             <UpdateGameModal
                 isOpen={isEditOpen}
