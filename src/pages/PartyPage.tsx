@@ -4,33 +4,8 @@ import {GLASS_CARD_STYLES} from "@/styles/customClasses.ts";
 import {useGetPartyMembers, useParty} from "@/hooks/useParties.ts";
 import CreatePartyCard from "@/components/party/CreatePartyCard.tsx";
 import {Divider} from "@heroui/react";
-
-const DUMMY_MEMBERS = [
-    {
-        id: "1",
-        gamerTag: "ShadowViper",
-        icon: "https://i.pravatar.cc/150?u=1",
-        isLeader: true,
-        isReady: true,
-        level: 42
-    },
-    {
-        id: "2",
-        gamerTag: "NeonGhost",
-        icon: "https://i.pravatar.cc/150?u=2",
-        isLeader: false,
-        isReady: true,
-        level: 15
-    },
-    {
-        id: "3",
-        gamerTag: "PixelWarrior",
-        icon: "https://i.pravatar.cc/150?u=3",
-        isLeader: false,
-        isReady: false,
-        level: 8
-    }
-];
+import MessageList from "@/components/chat/MessageList.tsx";
+import MessageInput from "@/components/chat/MessageInput.tsx";
 
 export default function PartyPage() {
     const {party, isError} = useParty();
@@ -64,11 +39,11 @@ export default function PartyPage() {
                     </h2>
 
                     <div className="flex-1 overflow-y-auto p-4">
-                        {/*<MessageList id={selectedChatRoom.id} />*/}
+                        <MessageList id={party.chatRoomId}/>
                     </div>
 
                     <div className="p-4 border-t border-white/10">
-                        {/*<MessageInput chatId={selectedChatRoom.id} />*/}
+                        <MessageInput chatId={party.chatRoomId}/>
                     </div>
                 </div>
 

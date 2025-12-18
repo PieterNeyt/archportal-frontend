@@ -2,6 +2,7 @@ export interface Party {
     title: string;
     maxMembers: number;
     hostIsYou: boolean;
+    chatRoomId: string;
 }
 
 export interface Member {
