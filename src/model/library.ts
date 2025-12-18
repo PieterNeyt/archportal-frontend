@@ -17,8 +17,12 @@ export enum GameGenre {
     ENGINE_BUILDING = "ENGINE_BUILDING"
 }
 
-
 export interface LibraryGame {
+    game:GlobalGameDto;
+    favorite:boolean;
+}
+
+export interface GlobalGameDto {
     id: string;
     studioId: string;
     title: string;
