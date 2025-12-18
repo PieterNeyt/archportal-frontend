@@ -21,7 +21,6 @@ export const LibrarySection = ({
                                }: LibrarySectionProps) => {
     return (
         <div className="mb-10">
-            {/* De Divider Header */}
             <div
                 className="flex items-center gap-4 mb-6 cursor-pointer group"
                 onClick={toggle}
@@ -35,7 +34,6 @@ export const LibrarySection = ({
                 </div>
             </div>
 
-            {/* Inhoud die inklapt */}
             {isOpen && (
                 <div className={viewMode === 'grid'
                     ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6"

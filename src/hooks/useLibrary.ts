@@ -20,7 +20,7 @@ export function useLibrary() {
 export function useAddToFavorites() {
     const queryClient = useQueryClient();
 
-    const {mutateAsync: addToFavorites, isError, isPending} = useMutation({
+    const {mutateAsync: addToFavorites, isError, isPending,error,isSuccess} = useMutation({
         mutationFn: (gameId: string) => {
             return addGameToFavorite(gameId);
         },
@@ -29,13 +29,13 @@ export function useAddToFavorites() {
         }
     });
 
-    return {isPending, isError, addToFavorites};
+    return {isPending, isError,error,isSuccess, addToFavorites};
 }
 
 export function useRemoveFromFavorites() {
     const queryClient = useQueryClient();
 
-    const {mutateAsync: removeFromFavorites, isError, isPending} = useMutation({
+    const {mutateAsync: removeFromFavorites, isError, isPending,error,isSuccess} = useMutation({
         mutationFn: (gameId: string) => {
             return removeGameFromFavorite(gameId);
         },
@@ -44,5 +44,5 @@ export function useRemoveFromFavorites() {
         }
     });
 
-    return {isPending, isError, removeFromFavorites};
+    return {isPending, isError,error,isSuccess, removeFromFavorites};
 }
