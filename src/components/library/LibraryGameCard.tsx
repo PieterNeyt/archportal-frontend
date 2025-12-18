@@ -6,6 +6,7 @@ import { Button } from "@heroui/button";
 import { Gamepad2, Play, Heart } from "lucide-react";
 import { LibraryGame } from "@/model/library";
 import { useStartSinglePlayerGame } from "@/hooks/useLobbies.ts";
+import { useAddToFavorites, useRemoveFromFavorites } from "@/hooks/useLibrary.ts";
 import { SinglePlayerLaunchResponse } from "@/model/singlePlayerLaunchResponse.ts";
 
 interface LibraryGameCardProps {
@@ -19,15 +20,26 @@ export function LibraryGameCard({ libraryItem, viewMode }: LibraryGameCardProps)
     const [imageFailed, setImageFailed] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const { isPending, isError, startSinglePlayer } = useStartSinglePlayerGame();
+    const { addToFavorites, isPending: isAddingToFavorites } = useAddToFavorites();
+    const { removeFromFavorites, isPending: isRemovingFromFavorites } = useRemoveFromFavorites();
 
     const handleCardClick = () => {
         navigate(`/library/${game.id}`);
     };
 
-    const handleFavoriteClick = (e: React.MouseEvent) => {
+    const handleFavoriteClick = async (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log("I love this game");
+
+        try {
+            if (favorite) {
+                await removeFromFavorites(game.id);
+            } else {
+                await addToFavorites(game.id);
+            }
+        } catch (error) {
+            console.error("Error updating favorite status:", error);
+        }
     };
 
     const handlePlayClick = async () => {
@@ -39,19 +51,22 @@ export function LibraryGameCard({ libraryItem, viewMode }: LibraryGameCardProps)
         return alert("There was an error launching the game.");
     };
 
-    const FavoriteHeart = () => {
+    const isFavoriteLoading = isAddingToFavorites || isRemovingFromFavorites;
 
+    const FavoriteHeart = () => {
         return (
             <div
                 onClick={handleFavoriteClick}
-                className="p-2 cursor-pointer transition-transform duration-200 hover:scale-125 active:scale-95 z-50"
+                className={`p-2 cursor-pointer transition-transform duration-200 hover:scale-125 active:scale-95 z-50 ${
+                    isFavoriteLoading ? 'opacity-50 pointer-events-none' : ''
+                }`}
             >
                 <Heart
                     size={34}
                     className={`transition-all duration-300 stroke-[2.5px] ${
                         favorite
                             ? "text-red-500 fill-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]"
-                            : "text-gray-400 fill-gray-400" 
+                            : "text-gray-400 fill-gray-400"
                     }`}
                 />
             </div>

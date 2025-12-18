@@ -7,3 +7,11 @@ export async function getLibrary(): Promise<LibraryGame[]> {
     );
     return data;
 }
+
+export async function addGameToFavorite(gameId: string): Promise<void> {
+    await axios.put(`/api/profile/library/${gameId}/add-favorite`);
+}
+
+export async function removeGameFromFavorite(gameId: string): Promise<void> {
+    await axios.put(`/api/profile/library/${gameId}/remove-favorite`);
+}
