@@ -12,7 +12,7 @@ export function useAddAchievement(gameId: string) {
             return addAchievement(gameId, achievement);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [GAME_KEY, gameId] });
+            queryClient.invalidateQueries({ queryKey: [GAME_KEY] });
         }
     });
 

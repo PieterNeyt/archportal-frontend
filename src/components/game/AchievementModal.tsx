@@ -40,6 +40,14 @@ export function AchievementModal({ isOpen, onOpenChange, onSubmit }: Props) {
                                 errorMessage={errors.title?.message}
                                 variant="bordered"
                             />
+                            <Input
+                                {...register("externalAchId")}
+                                label="External achievement id"
+                                placeholder="Put here you're external achievementId"
+                                isInvalid={!!errors.externalAchId}
+                                errorMessage={errors.externalAchId?.message}
+                                variant="bordered"
+                            />
                             <Textarea
                                 {...register("description")}
                                 label="Description"

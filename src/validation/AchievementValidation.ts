@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const achievementSchema = z.object({
+    externalAchId:z.string().min(1,"Achievement ID is required"),
     title: z.string()
         .min(1, "Title is required")
         .max(100, "Title cannot exceed 100 characters"),
