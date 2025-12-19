@@ -14,3 +14,9 @@ export async function getMembersOfParty(): Promise<Member[]> {
 export async function createParty(): Promise<void> {
     await axios.post("/api/party");
 }
+
+export async function sendPartyInvite(gamerTag: string): Promise<void> {
+    await axios.post("/api/party/invite", {
+        gamerTag,
+    })
+}

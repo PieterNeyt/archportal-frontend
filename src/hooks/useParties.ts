@@ -1,5 +1,5 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {createParty, getMembersOfParty, getParty} from "@/service/partyService.ts";
+import {createParty, getMembersOfParty, getParty, sendPartyInvite} from "@/service/partyService.ts";
 
 const PARTY_KEY = "party"
 const PARTY_MEMBERS_KEY = "party members"
@@ -34,4 +34,17 @@ export function useGetPartyMembers() {
     })
 
     return {isLoading, isError, members}
+}
+
+export function useSendPartyInvite() {
+    const queryClient = useQueryClient();
+    const {mutateAsync, isPending, error, isSuccess, isError} = useMutation({
+        mutationFn: (gamerTag: string) => {
+            return sendPartyInvite(gamerTag);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: [PARTY_MEMBERS_KEY]})
+        }
+    });
+    return {isPending, isError, error, isSuccess, sendPartyInvite: mutateAsync};
 }

@@ -1,7 +1,8 @@
 import {Card, CardBody, CardHeader} from "@heroui/card";
 import {Button} from "@heroui/button";
-import {LogOut, Play, Settings, UserPlus, Users} from "lucide-react";
+import {LogOut, Play, Settings, Users} from "lucide-react";
 import {Divider} from "@heroui/react";
+import InviteFriendModal from "@/components/party/InviteFriendModal.tsx";
 
 interface PartyCardProps {
     title: string;
@@ -48,13 +49,7 @@ export default function PartyCard({title, max, count}: PartyCardProps) {
             </CardHeader>
             <Divider className={"mx-6 bg-white/5"}/>
             <CardBody className={"flex flex-row items-center gap-3"}>
-                <Button
-                    variant={"bordered"}
-                    className={"w-full border-white/10 text-white hover:bg-white/5 font-medium h-12"}
-                    startContent={<UserPlus size={20}/>}
-                >
-                    Invite friends
-                </Button>
+                <InviteFriendModal/>
                 <Button
                     color={"success"}
                     variant={"shadow"}
