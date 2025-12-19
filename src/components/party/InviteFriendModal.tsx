@@ -1,15 +1,15 @@
 import {Modal, ModalBody, ModalContent, ModalHeader, useDisclosure} from "@heroui/react";
 import {Button} from "@heroui/button";
 import {AlertTriangle, UserPlus} from "lucide-react";
-import {useFriends} from "@/hooks/useFriends.ts";
 import FriendSkeletonCard from "@/components/friend/FriendSkeletonCard.tsx";
 import InviteFriendCard from "@/components/party/InviteFriendCard.tsx";
+import {useGetFriendsToInvite} from "@/hooks/useParties.ts";
 
 const SKELETON_COUNT = 3
 
 export default function InviteFriendModal() {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
-    const {isLoading, isError, profiles, refetch} = useFriends();
+    const {isLoading, isError, friends, refetch} = useGetFriendsToInvite();
 
 
     return (
@@ -58,14 +58,15 @@ export default function InviteFriendModal() {
                                     <FriendSkeletonCard key={index}/>
                                 ))}
 
-                                {!isLoading && !isError && profiles?.length === 0 && (
+                                {!isLoading && !isError && friends?.length === 0 && (
                                     <div className="py-10 text-center text-white/40 text-sm">
                                         No friends online to invite.
                                     </div>
                                 )}
 
-                                {!isLoading && !isError && profiles && profiles?.length > 0 && profiles?.map((profile, index) => (
-                                    <InviteFriendCard key={index} gamerTag={profile.gamerTag} icon={profile.icon}/>
+                                {!isLoading && !isError && friends && friends?.length > 0 && friends?.map((friend, index) => (
+                                    <InviteFriendCard key={index} gamerTag={friend.gamerTag} icon={friend.icon}
+                                                      hasInvite={friend.hasInvite}/>
                                 ))}
                             </ModalBody>
                         </>

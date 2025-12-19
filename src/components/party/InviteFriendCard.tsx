@@ -8,19 +8,27 @@ import {AlertTriangle} from "lucide-react";
 
 interface AddFriendCardProps {
     gamerTag: string;
-    icon: string
+    icon: string;
+    hasInvite: boolean;
 }
 
-export default function InviteFriendCard({gamerTag, icon}: AddFriendCardProps) {
+export default function InviteFriendCard({gamerTag, icon, hasInvite}: AddFriendCardProps) {
     const send = useSendPartyInvite();
 
-    useToastEffect(send, "", "", "");
+    useToastEffect(send, "Send friend request", "Failed to send friend request", "Successfully send a friend request to " + gamerTag + ".");
 
     const getButtonContent = () => {
         if (send.isPending) return <CircularProgress size="sm" color="default"/>;
         if (send.isError) return <AlertTriangle size={18}/>;
+        if (hasInvite) return "Pending"
         return "Invite";
     };
+
+    const getButtonColour = () => {
+        if (send.isError) return "danger";
+        if (hasInvite) return "default";
+        return "success";
+    }
 
     return (
         <div
@@ -50,9 +58,9 @@ export default function InviteFriendCard({gamerTag, icon}: AddFriendCardProps) {
             <Button
                 isIconOnly={send.isPending || send.isError}
                 isLoading={send.isPending}
-                disabled={send.isPending}
+                disabled={send.isPending || hasInvite}
                 size="sm"
-                color={send.isError ? "danger" : "success"}
+                color={getButtonColour()}
                 variant="shadow"
                 onPress={() => send.sendPartyInvite(gamerTag)}
                 className="font-bold px-4"

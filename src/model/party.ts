@@ -11,3 +11,9 @@ export interface Member {
     isLeader: boolean;
     isReady: boolean;
 }
+
+export interface FriendToInvite {
+    gamerTag: string;
+    icon: string;
+    hasInvite: boolean;
+}

@@ -1,5 +1,5 @@
 import axios from "axios";
-import {Member, Party} from "@/model/party.ts";
+import {FriendToInvite, Member, Party} from "@/model/party.ts";
 
 export async function getParty(): Promise<Party> {
     const {data: party} = await axios.get<Party>("/api/party");
@@ -19,4 +19,9 @@ export async function sendPartyInvite(gamerTag: string): Promise<void> {
     await axios.post("/api/party/invite", {
         gamerTag,
     })
+}
+
+export async function getFriendsForInvite(): Promise<FriendToInvite[]> {
+    const {data: friends} = await axios.get("/api/party/friends");
+    return friends;
 }

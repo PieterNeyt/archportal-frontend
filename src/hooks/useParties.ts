@@ -1,8 +1,15 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {createParty, getMembersOfParty, getParty, sendPartyInvite} from "@/service/partyService.ts";
+import {
+    createParty,
+    getFriendsForInvite,
+    getMembersOfParty,
+    getParty,
+    sendPartyInvite
+} from "@/service/partyService.ts";
 
 const PARTY_KEY = "party"
 const PARTY_MEMBERS_KEY = "party members"
+const PARTY_INVITES_KEY = "party invites"
 
 export function useParty() {
     const {isLoading, isError, data: party} = useQuery({
@@ -44,7 +51,17 @@ export function useSendPartyInvite() {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: [PARTY_MEMBERS_KEY]})
+            queryClient.invalidateQueries({queryKey: [PARTY_INVITES_KEY]})
         }
     });
     return {isPending, isError, error, isSuccess, sendPartyInvite: mutateAsync};
+}
+
+export function useGetFriendsToInvite() {
+    const {isLoading, isError, data: friends, refetch} = useQuery({
+        queryKey: [PARTY_INVITES_KEY],
+        queryFn: () => getFriendsForInvite()
+    })
+
+    return {isLoading, isError, friends, refetch}
 }
