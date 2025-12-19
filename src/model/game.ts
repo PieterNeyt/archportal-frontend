@@ -8,7 +8,7 @@ export interface Game {
     price: number;
     maxlobbysize: number;
     gameUrl :string;
-    achievements:Achievement[];
+    achievements?:Achievement[];
     genre: GameGenre;
 }
 
