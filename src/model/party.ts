@@ -17,3 +17,10 @@ export interface FriendToInvite {
     icon: string;
     hasInvite: boolean;
 }
+
+export interface PartyInvite {
+    gamerTag: string;
+    title: string;
+    maxMembers: number;
+    memberCount: number;
+}
