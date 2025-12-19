@@ -19,6 +19,7 @@ export interface FriendToInvite {
 }
 
 export interface PartyInvite {
+    partyId: string;
     gamerTag: string;
     title: string;
     maxMembers: number;

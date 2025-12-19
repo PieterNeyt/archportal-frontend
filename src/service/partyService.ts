@@ -42,3 +42,11 @@ export async function getInvitedParties(): Promise<PartyInvite[]> {
     const {data: parties} = await axios.get<PartyInvite[]>("/api/party/invite");
     return parties;
 }
+
+export async function acceptPartyInvite(partyId: string): Promise<void> {
+    await axios.delete(`/api/party/${partyId}/accept`)
+}
+
+export async function declinePartyInvite(partyId: string): Promise<void> {
+    await axios.delete(`/api/party/${partyId}/decline`)
+}

@@ -1,15 +1,20 @@
 import {User} from "@heroui/user";
 import {Check, Users, X} from "lucide-react";
 import {Button} from "@heroui/button";
+import {useAcceptPartyInvite, useDeclinePartyInvite} from "@/hooks/useParties.ts";
 
 interface PartyInviteCardProps {
+    partyId: string;
     gamerTag: string;
     title: string;
     maxMembers: number;
     memberCount: number;
 }
 
-export default function PartyInviteCard({gamerTag, title, maxMembers, memberCount}: PartyInviteCardProps) {
+export default function PartyInviteCard({partyId, gamerTag, title, maxMembers, memberCount}: PartyInviteCardProps) {
+    const accept = useAcceptPartyInvite();
+    const decline = useDeclinePartyInvite();
+
     return (
         <div
             className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-md transition-all duration-300 hover:bg-white/10 hover:shadow-2xl hover:shadow-purple-500/10">
@@ -58,7 +63,7 @@ export default function PartyInviteCard({gamerTag, title, maxMembers, memberCoun
                         color="danger"
                         radius="lg"
                         className="bg-red-500/10 text-red-400 hover:bg-red-500/20"
-                        onPress={() => console.log("declined")}
+                        onPress={() => decline.declineInvite(partyId)}
                         aria-label="Decline Invite"
                     >
                         <X size={20} strokeWidth={2.5}/>
@@ -70,7 +75,7 @@ export default function PartyInviteCard({gamerTag, title, maxMembers, memberCoun
                         radius="lg"
                         className="flex-1 font-bold text-white shadow-success/20 sm:flex-none sm:px-6"
                         startContent={<Check size={18} strokeWidth={3}/>}
-                        onPress={() => console.log("accepted")}
+                        onPress={() => accept.acceptInvite(partyId)}
                     >
                         Accept
                     </Button>

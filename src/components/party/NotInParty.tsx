@@ -21,9 +21,9 @@ export default function NotInParty() {
             );
         }
 
-        return parties.map((party, index) => (
+        return parties.map((party) => (
             <PartyInviteCard
-                key={index} gamerTag={party.gamerTag} title={party.title}
+                key={party.partyId} partyId={party.partyId} gamerTag={party.gamerTag} title={party.title}
                 maxMembers={party.maxMembers} memberCount={party.memberCount}
             />
         ));

@@ -1,6 +1,8 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {
+    acceptPartyInvite,
     createParty,
+    declinePartyInvite,
     getFriendsForInvite,
     getInvitedParties,
     getMembersOfParty,
@@ -39,7 +41,8 @@ export function useCreateParty() {
 export function useGetPartyMembers() {
     const {isLoading, isError, data: members, refetch} = useQuery({
         queryKey: [PARTY_MEMBERS_KEY],
-        queryFn: () => getMembersOfParty()
+        queryFn: () => getMembersOfParty(),
+        refetchInterval: 1000
     })
 
     return {isLoading, isError, members, refetch}
@@ -62,7 +65,8 @@ export function useSendPartyInvite() {
 export function useGetFriendsToInvite() {
     const {isLoading, isError, data: friends, refetch} = useQuery({
         queryKey: [FRIENDS_TO_INVITE],
-        queryFn: () => getFriendsForInvite()
+        queryFn: () => getFriendsForInvite(),
+        refetchInterval: 1000
     })
 
     return {isLoading, isError, friends, refetch}
@@ -72,7 +76,38 @@ export function useGetInvitedParties() {
     const {isLoading, isError, data: parties, refetch} = useQuery({
         queryKey: [PARTY_INVITES_KEY],
         queryFn: () => getInvitedParties(),
+        refetchInterval: 1000
     })
 
     return {isLoading, isError, parties, refetch}
+}
+
+export function useAcceptPartyInvite() {
+    const queryClient = useQueryClient();
+    const {mutateAsync, isPending, error, isSuccess, isError} = useMutation({
+        mutationFn: (partyId: string) => {
+            return acceptPartyInvite(partyId);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: [PARTY_INVITES_KEY]})
+            queryClient.invalidateQueries({queryKey: [PARTY_KEY]})
+            queryClient.invalidateQueries({queryKey: [PARTY_MEMBERS_KEY]})
+        }
+    });
+
+    return {isPending, isError, error, isSuccess, acceptInvite: mutateAsync};
+}
+
+export function useDeclinePartyInvite() {
+    const queryClient = useQueryClient();
+    const {mutateAsync, isPending, error, isSuccess, isError} = useMutation({
+        mutationFn: (partyId: string) => {
+            return declinePartyInvite(partyId);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: [PARTY_INVITES_KEY]})
+        }
+    });
+
+    return {isPending, isError, error, isSuccess, declineInvite: mutateAsync};
 }
