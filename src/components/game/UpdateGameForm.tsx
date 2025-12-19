@@ -1,7 +1,7 @@
 import {Input, Textarea} from "@heroui/input";
 import {Image, Select, SelectItem} from "@heroui/react";
 import {FieldErrors, UseFormRegister} from "react-hook-form";
-import {GameValues} from "@/validation/createGameValidation.ts";
+import {GameValues} from "@/validation/GameValidation.ts";
 import {GameGenre} from "@/model/gameGenre.ts";
 import {inputClasses, selectClasses} from "@/styles/customClasses.ts";
 

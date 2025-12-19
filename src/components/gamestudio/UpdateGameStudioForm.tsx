@@ -1,7 +1,7 @@
 import { Input, Textarea } from "@heroui/input";
 import { inputClasses } from "@/styles/customClasses";
 import { UseFormRegister, FieldErrors } from "react-hook-form";
-import { GameStudioValues } from "@/validation/createGameStudioValidation";
+import { GameStudioValues } from "@/validation/GameStudioValidation.ts";
 
 interface UpdateGameStudioFormProps {
     register: UseFormRegister<GameStudioValues>;

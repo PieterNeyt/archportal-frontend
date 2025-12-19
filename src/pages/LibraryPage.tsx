@@ -5,7 +5,7 @@ import { Grid3x3, List, Search, AlertCircle, RefreshCw } from "lucide-react";
 import { useLibrary } from "@/hooks/useLibrary";
 import { LibrarySkeletonCard } from "@/components/library/LibrarySkeletonCard";
 import { inputClasses } from "@/styles/customClasses.ts";
-import { LibrarySection } from "@/components/library/LibrarySection"; // Importeer je nieuwe component
+import { LibrarySection } from "@/components/library/LibrarySection";
 
 export default function LibraryPage() {
     const { isLoading, isError, games } = useLibrary();
@@ -15,9 +15,12 @@ export default function LibraryPage() {
     const [favsOpen, setFavsOpen] = useState(true);
     const [othersOpen, setOthersOpen] = useState(true);
 
-    const filteredItems = games?.filter(item =>
-        item.game.title.toLowerCase().includes(searchQuery.toLowerCase())
-    ) || [];
+    const filteredItems = games?.filter(item => {
+        if (!item || !item.game) return false;
+        const title = item.game.title || "";
+
+        return title.toLowerCase().includes(searchQuery.toLowerCase());
+    }) || [];
 
     const favoriteGames = filteredItems.filter(item => item.favorite);
     const otherGames = filteredItems.filter(item => !item.favorite);
