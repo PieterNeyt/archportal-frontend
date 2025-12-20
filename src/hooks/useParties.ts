@@ -9,6 +9,7 @@ import {
     getParty,
     sendPartyInvite
 } from "@/service/partyService.ts";
+import {CreateParty} from "@/model/party.ts";
 
 const PARTY_KEY = "party"
 const PARTY_MEMBERS_KEY = "party members"
@@ -27,8 +28,8 @@ export function useParty() {
 export function useCreateParty() {
     const queryClient = useQueryClient();
     const {mutateAsync, isPending, isError} = useMutation({
-        mutationFn: () => {
-            return createParty()
+        mutationFn: (party: CreateParty) => {
+            return createParty(party)
         },
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: [PARTY_KEY]})

@@ -1,5 +1,5 @@
 import axios from "axios";
-import {FriendToInvite, Member, Party, PartyInvite} from "@/model/party.ts";
+import {CreateParty, FriendToInvite, Member, Party, PartyInvite} from "@/model/party.ts";
 
 export async function getParty(): Promise<Party | null> {
     try {
@@ -23,8 +23,8 @@ export async function getMembersOfParty(): Promise<Member[]> {
     }
 }
 
-export async function createParty(): Promise<void> {
-    await axios.post("/api/party");
+export async function createParty(party: CreateParty): Promise<void> {
+    await axios.post("/api/party", party);
 }
 
 export async function sendPartyInvite(gamerTag: string): Promise<void> {

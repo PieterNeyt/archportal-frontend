@@ -11,7 +11,6 @@ export default function InviteFriendModal() {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const {isLoading, isError, friends, refetch} = useGetFriendsToInvite();
 
-
     return (
         <>
             <Button
@@ -22,7 +21,6 @@ export default function InviteFriendModal() {
             >
                 Invite friends
             </Button>
-
             <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement={"center"} scrollBehavior={"inside"}
                    className={"bg-black/30 backdrop-blur-xl border border-white/10 pb-2"}>
                 <ModalContent>

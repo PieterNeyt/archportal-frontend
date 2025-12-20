@@ -25,3 +25,8 @@ export interface PartyInvite {
     maxMembers: number;
     memberCount: number;
 }
+
+export interface CreateParty {
+    title: string;
+    maxMembers: number;
+}

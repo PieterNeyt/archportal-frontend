@@ -1,10 +1,7 @@
-import {Gamepad2, Users} from "lucide-react";
-import {Button} from "@heroui/button";
-import {useCreateParty} from "@/hooks/useParties.ts";
+import {Gamepad2} from "lucide-react";
+import CreatePartyModal from "@/components/party/CreatePartyModal.tsx";
 
 export default function CreatePartyCard() {
-    const {isPending, createParty} = useCreateParty();
-
     return (
         <div
             className="flex flex-col items-center justify-center space-y-6 w-full p-8 rounded-2xl
@@ -17,17 +14,7 @@ export default function CreatePartyCard() {
             <p className={"text-medium text-muted-foreground text-center mb-6"}>
                 Create a party to play with your friends
             </p>
-            <Button
-                color={"primary"}
-                type={"button"}
-                size={"lg"}
-                className={"w-full"}
-                startContent={<Users className={"size-5"}/>}
-                onPress={() => createParty()}
-                disabled={isPending}
-            >
-                Create a party
-            </Button>
+            <CreatePartyModal/>
         </div>
     );
 }
