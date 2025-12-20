@@ -1,5 +1,5 @@
-import {useQuery} from "@tanstack/react-query";
-import {getLibrary} from "@/service/libraryService";
+import {useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
+import {getLibrary, addGameToFavorite, removeGameFromFavorite} from "@/service/libraryService";
 import {useContext} from "react";
 import SecurityContext from "@/context/SecurityContext.ts";
 
@@ -15,4 +15,34 @@ export function useLibrary() {
     });
 
     return {isLoading, isError, refetch, games};
+}
+
+export function useAddToFavorites() {
+    const queryClient = useQueryClient();
+
+    const {mutateAsync: addToFavorites, isError, isPending,error,isSuccess} = useMutation({
+        mutationFn: (gameId: string) => {
+            return addGameToFavorite(gameId);
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({queryKey: [LIBRARY_KEY]});
+        }
+    });
+
+    return {isPending, isError,error,isSuccess, addToFavorites};
+}
+
+export function useRemoveFromFavorites() {
+    const queryClient = useQueryClient();
+
+    const {mutateAsync: removeFromFavorites, isError, isPending,error,isSuccess} = useMutation({
+        mutationFn: (gameId: string) => {
+            return removeGameFromFavorite(gameId);
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({queryKey: [LIBRARY_KEY]});
+        }
+    });
+
+    return {isPending, isError,error,isSuccess, removeFromFavorites};
 }

@@ -1,3 +1,5 @@
+import {Achievement} from "@/model/game.ts";
+
 export enum GameGenre {
     STRATEGY = "STRATEGY",
     FAMILY = "FAMILY",
@@ -17,8 +19,12 @@ export enum GameGenre {
     ENGINE_BUILDING = "ENGINE_BUILDING"
 }
 
-
 export interface LibraryGame {
+    game:GlobalGameDto;
+    favorite:boolean;
+}
+
+export interface GlobalGameDto {
     id: string;
     studioId: string;
     title: string;
@@ -27,4 +33,5 @@ export interface LibraryGame {
     gameUrl: string;
     price: number;
     genre: GameGenre;
+    achievements: Achievement[];
 }

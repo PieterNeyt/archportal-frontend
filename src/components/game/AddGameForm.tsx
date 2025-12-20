@@ -4,7 +4,7 @@ import {Input, Textarea} from "@heroui/input";
 import {Button} from "@heroui/button";
 import {useNavigate} from "react-router-dom";
 import {CircularProgress} from "@heroui/progress";
-import {gameSchema, GameValues} from "@/validation/createGameValidation.ts";
+import {gameSchema, GameValues} from "@/validation/GameValidation.ts";
 import {useState} from "react";
 import {Image, Select, SelectItem} from "@heroui/react";
 import {GameGenre} from "@/model/gameGenre.ts";

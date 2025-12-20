@@ -1,5 +1,5 @@
 import {CreateGame} from "@/model/createGame";
-import {Game} from "@/model/game.ts";
+import {Achievement, Game} from "@/model/game.ts";
 import {Cart, PaymentCreation} from "@/model/shop";
 import axios from "axios";
 
@@ -55,4 +55,12 @@ export async function checkout(): Promise<PaymentCreation> {
 export async function AddGame(newGame: CreateGame) {
     const {data: game} = await axios.post<CreateGame>(`/api/games`, newGame)
     return game
+}
+
+export async function addAchievement(gameId: string, achievement: Achievement): Promise<Achievement> {
+    const { data: newAchievement } = await axios.post<Achievement>(
+        `/api/games/${gameId}/achievement`,
+        achievement
+    );
+    return newAchievement;
 }
