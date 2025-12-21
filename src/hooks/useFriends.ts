@@ -19,12 +19,12 @@ const INCOMING_REQUEST_KEY = "incoming friend requests";
 export function useFriends() {
     const {isAuthenticated, isInitialised} = useContext(SecurityContext);
 
-    const {isLoading, isError, data: profiles} = useQuery({
+    const {isLoading, isError, data: profiles, refetch} = useQuery({
         queryKey: [FRIENDS_KEY],
         queryFn: () => getFriends(),
         enabled: isAuthenticated() && isInitialised,
     });
-    return {isLoading, isError, profiles};
+    return {isLoading, isError, profiles, refetch};
 }
 
 export function useSendFriendRequest() {
