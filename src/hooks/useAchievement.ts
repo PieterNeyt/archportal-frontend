@@ -1,6 +1,9 @@
-import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {Achievement} from "@/model/game.ts";
 import {addAchievement} from "@/service/gameService.ts";
+import {useContext} from "react";
+import SecurityContext from "@/context/SecurityContext.ts";
+import {getAchievemnts} from "@/service/analyticsService.ts";
 
 const GAME_KEY = "game";
 
@@ -23,4 +26,16 @@ export function useAddAchievement(gameId: string) {
         error,
         isSuccess
     };
+}
+
+
+export function useAchievemnts(gameId: string) {
+    const {isAuthenticated, isInitialised} = useContext(SecurityContext);
+
+    const {isLoading, isError, data: achievements} = useQuery({
+        queryKey: ["achievemnts", gameId],
+        queryFn: () => getAchievemnts(gameId),
+        enabled: isAuthenticated() && isInitialised
+    });
+    return {isLoading, isError, achievements};
 }
