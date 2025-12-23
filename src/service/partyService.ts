@@ -54,3 +54,7 @@ export async function declinePartyInvite(partyId: string): Promise<void> {
 export async function leaveParty(): Promise<void> {
     await axios.patch("/api/party/leave")
 }
+
+export async function kickFromParty(gamertag: string): Promise<void> {
+    await axios.patch(`/api/party/kick/${gamertag}`);
+}

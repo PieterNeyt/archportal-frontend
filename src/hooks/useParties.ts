@@ -7,6 +7,7 @@ import {
     getInvitedParties,
     getMembersOfParty,
     getParty,
+    kickFromParty,
     leaveParty,
     sendPartyInvite
 } from "@/service/partyService.ts";
@@ -127,4 +128,18 @@ export function useLeaveParty() {
     })
 
     return {isPending, isError, error, isSuccess, leaveParty: mutateAsync};
+}
+
+export function useKickFromParty() {
+    const queryClient = useQueryClient();
+    const {mutateAsync, isPending, error, isSuccess, isError} = useMutation({
+        mutationFn: (gamertag: string) => {
+            return kickFromParty(gamertag);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: [PARTY_MEMBERS_KEY]})
+        }
+    })
+
+    return {isPending, isError, error, isSuccess, kickFromParty: mutateAsync};
 }
