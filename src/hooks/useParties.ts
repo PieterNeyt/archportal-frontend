@@ -7,6 +7,7 @@ import {
     getInvitedParties,
     getMembersOfParty,
     getParty,
+    leaveParty,
     sendPartyInvite
 } from "@/service/partyService.ts";
 import {CreateParty} from "@/model/party.ts";
@@ -111,4 +112,19 @@ export function useDeclinePartyInvite() {
     });
 
     return {isPending, isError, error, isSuccess, declineInvite: mutateAsync};
+}
+
+export function useLeaveParty() {
+    const queryClient = useQueryClient();
+    const {mutateAsync, isPending, error, isSuccess, isError} = useMutation({
+        mutationFn: () => {
+            return leaveParty();
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: [PARTY_KEY]})
+            queryClient.invalidateQueries({queryKey: [PARTY_INVITES_KEY]})
+        }
+    })
+
+    return {isPending, isError, error, isSuccess, leaveParty: mutateAsync};
 }

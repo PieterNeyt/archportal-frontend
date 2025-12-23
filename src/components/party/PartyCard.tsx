@@ -3,6 +3,8 @@ import {Button} from "@heroui/button";
 import {LogOut, Play, Settings, Users} from "lucide-react";
 import {Divider} from "@heroui/react";
 import InviteFriendModal from "@/components/party/InviteFriendModal.tsx";
+import {useLeaveParty} from "@/hooks/useParties.ts";
+import useToastEffect from "@/hooks/useToastEffect.ts";
 
 interface PartyCardProps {
     title: string;
@@ -11,6 +13,10 @@ interface PartyCardProps {
 }
 
 export default function PartyCard({title, max, count}: PartyCardProps) {
+    const leave = useLeaveParty();
+
+    useToastEffect(leave, "You left the party", "Failed to leave the party", "")
+
     return (
         <Card className={"w-full bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl"}>
             <CardHeader className={"flex justify-between items-center px-6 pt-6 pb-2"}>
@@ -42,6 +48,7 @@ export default function PartyCard({title, max, count}: PartyCardProps) {
                         size="sm"
                         color="danger"
                         className="hover:bg-danger/20"
+                        onPress={() => leave.leaveParty()}
                     >
                         <LogOut size={18}/>
                     </Button>
