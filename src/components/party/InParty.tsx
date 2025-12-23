@@ -8,6 +8,8 @@ import {useGetPartyMembers} from "@/hooks/useParties.ts";
 import {AlertCircle, RefreshCcw} from "lucide-react";
 import {Button} from "@heroui/button";
 import FriendSkeletonCard from "@/components/friend/FriendSkeletonCard.tsx";
+import {useContext} from "react";
+import securityContext from "@/context/SecurityContext.ts";
 
 const SKELETON_COUNT = 3;
 
@@ -24,6 +26,9 @@ export default function InParty({title, maxMembers, chatRoomId}: InPartyProps) {
         isLoading,
         refetch
     } = useGetPartyMembers();
+
+    const {loggedInUser} = useContext(securityContext);
+    const leader = (members?.filter(m => m.isLeader) || [])[0]
 
     return (
         <div className="h-screen max-w-7xl mx-auto flex flex-col p-4 sm:p-6 lg:p-8 gap-6">
@@ -81,6 +86,7 @@ export default function InParty({title, maxMembers, chatRoomId}: InPartyProps) {
                                 gamerTag={member.gamerTag}
                                 isLeader={member.isLeader}
                                 isReady={member.isReady}
+                                canKick={loggedInUser?.gamerTag == leader.gamerTag}
                             />
                         ))}
                     </div>
