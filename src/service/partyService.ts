@@ -50,3 +50,7 @@ export async function acceptPartyInvite(partyId: string): Promise<void> {
 export async function declinePartyInvite(partyId: string): Promise<void> {
     await axios.delete(`/api/party/${partyId}/decline`)
 }
+
+export async function leaveParty(): Promise<void> {
+    await axios.patch("/api/party/leave")
+}
