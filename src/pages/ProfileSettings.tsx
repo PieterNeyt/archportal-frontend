@@ -1,11 +1,11 @@
-import {ChangeChannelType} from "@/components/profile/ChangeChannelType.tsx";
+import {ChangeChannelType} from "@/components/profile/settings/ChangeChannelType.tsx";
 import {useProfile} from "@/hooks/useProfile.ts";
 import {Button, Card, CardBody, CardHeader, Divider} from "@heroui/react";
-import {ProfileSettingHeader} from "@/components/profile/ProfileSettingHeader.tsx";
-import {ProfileSettingBody} from "@/components/profile/ProfileSettingBody.tsx";
-import {ProfileLoadError} from "@/components/profile/ProfileLoadError.tsx";
+import {ProfileSettingHeader} from "@/components/profile/settings/ProfileSettingHeader.tsx";
+import {ProfileSettingBody} from "@/components/profile/settings/ProfileSettingBody.tsx";
+import {ProfileLoadError} from "@/components/profile/settings/ProfileLoadError.tsx";
 import {BLURRY_BACKGROUND} from "@/styles/customClasses.ts";
-import {ProfileCardSkeleton} from "@/components/profile/ProfileCardSkeleton.tsx";
+import {ProfileCardSkeleton} from "@/components/profile/settings/ProfileCardSkeleton.tsx";
 import {useContext} from "react";
 import securityContext from "@/context/SecurityContext.ts";
 

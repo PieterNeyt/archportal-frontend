@@ -1,7 +1,7 @@
-import {Profile} from "@/model/profile.ts";
+import {ProfileSyncDto} from "@/model/profileSyncDto.ts";
 
 interface ProfileSettingHeaderProps {
-    profile: Profile;
+    profile: ProfileSyncDto;
 }
 
 export function ProfileSettingBody({profile}: ProfileSettingHeaderProps) {

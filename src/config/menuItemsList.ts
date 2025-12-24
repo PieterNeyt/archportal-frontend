@@ -22,7 +22,7 @@ export const menuSections: MenuSection[] = [
     {
         title: 'My Profile',
         items: [
-            {icon: User, label: 'Profile', href: '#profile'},
+            {icon: User, label: 'Profile', href: '/profile'},
             {icon: Library, label: 'Library', href: '/library'},
         ]
     },

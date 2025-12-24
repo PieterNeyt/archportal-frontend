@@ -1,8 +1,8 @@
-import {Profile} from "@/model/profile.ts";
+import {ProfileSyncDto} from "@/model/profileSyncDto.ts";
 import {Avatar, Chip} from "@heroui/react";
 
 interface ProfileSettingHeaderProps {
-    profile: Profile;
+    profile: ProfileSyncDto;
 }
 
 export function ProfileSettingHeader({profile}: ProfileSettingHeaderProps) {

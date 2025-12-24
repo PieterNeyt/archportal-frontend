@@ -1,8 +1,8 @@
 import axios from "axios";
-import {Profile} from "@/model/profile.ts";
+import {ProfileSyncDto} from "@/model/profileSyncDto.ts";
 
-export async function getFriends(): Promise<Profile[]> {
-    const {data: friends} = await axios.get<Profile[]>("/api/profile/friends");
+export async function getFriends(): Promise<ProfileSyncDto[]> {
+    const {data: friends} = await axios.get<ProfileSyncDto[]>("/api/profile/friends");
     return friends;
 }
 
@@ -13,13 +13,13 @@ export async function sendFriendRequest(gamertag: string): Promise<void> {
     return profile;
 }
 
-export async function getIncomingFriendRequests(): Promise<Profile[]> {
-    const {data: profiles} = await axios.get<Profile[]>("/api/profile/friend-requests/incoming");
+export async function getIncomingFriendRequests(): Promise<ProfileSyncDto[]> {
+    const {data: profiles} = await axios.get<ProfileSyncDto[]>("/api/profile/friend-requests/incoming");
     return profiles;
 }
 
-export async function getOutgoingFriendRequests(): Promise<Profile[]> {
-    const {data: profiles} = await axios.get<Profile[]>("/api/profile/friend-requests/outgoing");
+export async function getOutgoingFriendRequests(): Promise<ProfileSyncDto[]> {
+    const {data: profiles} = await axios.get<ProfileSyncDto[]>("/api/profile/friend-requests/outgoing");
     return profiles;
 }
 

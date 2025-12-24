@@ -1,6 +1,6 @@
 import FriendSkeletonCard from "@/components/friend/FriendSkeletonCard.tsx";
 import RequestCard from "@/components/friend/RequestCard.tsx";
-import {Profile} from "@/model/profile.ts";
+import {ProfileSyncDto} from "@/model/profileSyncDto.ts";
 
 interface RequestSectionProps {
     title: string;
@@ -8,7 +8,7 @@ interface RequestSectionProps {
     emptyIcon: React.ReactNode;
     isLoading: boolean;
     isError: boolean;
-    profiles: Profile[];
+    profiles: ProfileSyncDto[];
     type: "incoming" | "outgoing";
 }
 
