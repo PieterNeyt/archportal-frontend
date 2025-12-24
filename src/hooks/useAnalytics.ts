@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {getGameStatistics} from "@/service/analyticsService.ts"; // Pas het pad aan indien nodig
+import {getGameStatistics} from "@/service/analyticsService.ts";
 import {GameStatistics} from "@/model/gameStatistics.ts";
 
 const GAME_STATISTICS_KEY = "game statistics";
