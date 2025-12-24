@@ -12,7 +12,6 @@ export interface GameStatisticsCardProps {
 export function GameStatisticsCard({ gameId }: GameStatisticsCardProps) {
     const { gameStatistics, isLoading, isError, isSuccess, error } = useGameStatistics(gameId ?? "");
 
-    // Fixed the typo "youre" to "your"
     useToastEffect({ isSuccess, isError, error }, "", "Failed to load your game statistics");
 
     const stats = useMemo(() => {
@@ -25,7 +24,7 @@ export function GameStatisticsCard({ gameId }: GameStatisticsCardProps) {
             .sort((a, b) => new Date(b.PlayedAt).getTime() - new Date(a.PlayedAt).getTime())[0]?.Winner || "N/A";
 
         return {
-            playtime: `${hours}h ${minutes}m`, // Changed 'u' to 'h'
+            playtime: `${hours}h ${minutes}m`,
             totalGames: gameStatistics.winnerRecords?.length || 0,
             latestWinner: latestWinner,
             achievementCount: gameStatistics.achievements?.length || 0
