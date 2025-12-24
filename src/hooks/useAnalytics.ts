@@ -12,10 +12,9 @@ export function useGameStatistics(gameId: string) {
         isError,
         refetch,
         data: gameStatistics,
-        isFetching,
+        isSuccess,
         error
     } = useQuery<GameStatistics, Error>({
-        // De query is alleen actief als beide ID's aanwezig zijn (niet null of undefined)
         enabled: !!gameId,
 
         queryKey: queryKey,
@@ -28,7 +27,7 @@ export function useGameStatistics(gameId: string) {
         isError,
         refetch,
         gameStatistics,
-        isFetching,
+        isSuccess,
         error
     };
 }

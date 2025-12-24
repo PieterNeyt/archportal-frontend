@@ -14,7 +14,7 @@ export interface GameStatistics {
     gameId: string;
     profileId: string;
     totalPlayTimeMinutes: number;
-    lastPlayedAt: string;
+    lastPlayedAt: Date;
     achievements: Achievement[];
     winnerRecords: WinnerRecord[];
 }
