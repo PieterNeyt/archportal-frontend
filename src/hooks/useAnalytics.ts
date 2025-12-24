@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {getGameStatistics} from "@/service/analyticsService.ts"; // Pas het pad aan indien nodig
+import {getGameStatistics} from "@/service/analyticsService.ts";
 import {GameStatistics} from "@/model/gameStatistics.ts";
 
 const GAME_STATISTICS_KEY = "game statistics";
@@ -12,10 +12,9 @@ export function useGameStatistics(gameId: string) {
         isError,
         refetch,
         data: gameStatistics,
-        isFetching,
+        isSuccess,
         error
     } = useQuery<GameStatistics, Error>({
-        // De query is alleen actief als beide ID's aanwezig zijn (niet null of undefined)
         enabled: !!gameId,
 
         queryKey: queryKey,
@@ -28,7 +27,7 @@ export function useGameStatistics(gameId: string) {
         isError,
         refetch,
         gameStatistics,
-        isFetching,
+        isSuccess,
         error
     };
 }

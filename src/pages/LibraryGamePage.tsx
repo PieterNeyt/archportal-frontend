@@ -2,7 +2,6 @@ import {useNavigate, useParams} from "react-router-dom";
 import {Button} from "@heroui/button";
 import {ArrowLeft} from "lucide-react";
 import {useStartSinglePlayerGame} from "@/hooks/useLobbies";
-import {useGameStatistics} from "@/hooks/useAnalytics";
 import {GameInfoSection} from "@/components/library/game/GameInfoSection.tsx";
 import {GameStatisticsCard} from "@/components/library/game/GameStatisticsCard.tsx";
 import {GameDetailsTabs} from "@/components/library/game/GameDetailsTabs.tsx";
@@ -15,11 +14,6 @@ export default function LibraryGamePage() {
 
     const { game, isLoading, isError } = useGame(gameId ?? "");
     const { startSinglePlayer, isPending, isError: startError } = useStartSinglePlayerGame();
-
-
-    const { gameStatistics, isLoading: isStatsLoading } = useGameStatistics(
-        gameId ?? ""
-    );
 
     const handleStart = async () => {
         if (!game) return;
@@ -54,15 +48,7 @@ export default function LibraryGamePage() {
                         />
 
                         <div className="mt-6">
-                            <GameStatisticsCard
-                                stats={
-                                    gameStatistics || {
-                                        totalPlayTimeMinutes: 0,
-                                        winnerRecords: [],
-                                    }
-                                }
-                                isLoading={isStatsLoading}
-                            />
+                            <GameStatisticsCard gameId={game.id} />
                         </div>
                     </div>
                 </div>
