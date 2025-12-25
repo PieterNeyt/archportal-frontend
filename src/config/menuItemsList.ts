@@ -16,7 +16,7 @@ export const menuSections: MenuSection[] = [
         title: 'Store',
         items: [
             {icon: ShoppingCart, label: 'Shop', href: '/shop'},
-            {icon: Coins, label: 'Points', href: '#points'},
+            {icon: Coins, label: 'Points', href: '/points'},
         ]
     },
     {

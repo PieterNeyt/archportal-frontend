@@ -19,6 +19,8 @@ import LibraryGamePage from "@/pages/LibraryGamePage.tsx";
 import ChatPage from "@/pages/ChatPage.tsx";
 import {GamePage} from "@/pages/GamePage.tsx";
 import PartyPage from "@/pages/PartyPage.tsx";
+import PointsPage from "@/pages/PointsPage.tsx";
+
 
 const queryClient = new QueryClient();
 
@@ -30,6 +32,7 @@ function App() {
                     <DefaultLayout>
                         <Routes>
                             <Route element={<ShopPage/>} path="/shop"/>
+                            <Route element={<RouteGuardLoggedIn><PointsPage/></RouteGuardLoggedIn>} path="/points"/>
                             <Route element={<PaymentReturnPage/>} path="/payment-return"/>
                             <Route path="/" element={<Navigate to={"/shop"}/>}/>
                             <Route element={<GameShopPage/>} path="/shop/game/:id"/>
