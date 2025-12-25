@@ -32,7 +32,7 @@ function App() {
                     <DefaultLayout>
                         <Routes>
                             <Route element={<ShopPage/>} path="/shop"/>
-                            <Route element={<PointsPage/>} path="/points"/>
+                            <Route element={<RouteGuardLoggedIn><PointsPage/></RouteGuardLoggedIn>} path="/points"/>
                             <Route element={<PaymentReturnPage/>} path="/payment-return"/>
                             <Route path="/" element={<Navigate to={"/shop"}/>}/>
                             <Route element={<GameShopPage/>} path="/shop/game/:id"/>
