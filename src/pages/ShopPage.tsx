@@ -4,7 +4,7 @@ import {useCheckout} from "@/hooks/useCheckout.ts";
 import {GameCard} from "@/components/shop/GameCard.tsx";
 import {SkeletonCard} from "@/components/shop/SkeletonCard.tsx";
 import {GameLoadError} from "@/components/shop/GameLoadError.tsx";
-import {ShoppingCartComponent} from "@/components/shop/ShoppingCartComponent.tsx";
+import {ShoppingCartComponent} from "@/components/shop/shoppingcart/ShoppingCartComponent.tsx";
 import {useMemo, useState} from "react";
 import {Button} from "@heroui/button";
 import {ArrowUpDown, Filter, Search, ShoppingCart} from "lucide-react";

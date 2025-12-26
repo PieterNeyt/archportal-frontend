@@ -20,7 +20,6 @@ export default function FriendCard({gamerTag, icon, activeUsernameColorId}: User
 
     useToastEffect(remove, "Friend removed", "Failed to remove friend", "The friend has been removed from your list.");
 
-
     const activeColor = useMemo(() => {
         if (!activeUsernameColorId || !benefits) return undefined;
         return benefits.find(b => b.id === activeUsernameColorId)?.configuration;
@@ -37,7 +36,7 @@ export default function FriendCard({gamerTag, icon, activeUsernameColorId}: User
 
     return (
         <div
-            className={"backdrop-blur-sm flex items-center justify-between p-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all cursor-pointer shadow-md"}
+            className={"backdrop-blur-sm flex items-center justify-between p-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all cursor-pointer shadow-md group"}
             onClick={() => console.log("navigate to profile")}
         >
             <User
@@ -49,8 +48,8 @@ export default function FriendCard({gamerTag, icon, activeUsernameColorId}: User
                 }}
                 name={
                     <span
-                        className="text-base font-bold truncate"
-                        style={activeColor ? { color: activeColor } : {}}
+                        className="text-base font-bold truncate transition-colors"
+                        style={activeColor ? { color: activeColor } : { color: 'white' }}
                     >
                         {gamerTag}
                     </span>
@@ -62,9 +61,11 @@ export default function FriendCard({gamerTag, icon, activeUsernameColorId}: User
 
             <Button
                 isIconOnly
+                size="sm"
                 disabled={remove.isPending}
-                color={"danger"}
-                variant={"shadow"}
+                variant="flat"
+                radius="md"
+                className="ml-4 text-danger bg-danger/15 hover:bg-danger/30 hover:text-danger-500 transition-all duration-250 active:scale-95 shadow-sm"
                 aria-label={"Remove friend"}
                 onPress={() => remove.removeFriend(gamerTag)}
             >

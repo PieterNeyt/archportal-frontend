@@ -40,7 +40,7 @@ export default function RequestCard({icon, gamerTag, type, activeUsernameColorId
 
     return (
         <div
-            className={"backdrop-blur-sm flex items-center justify-between p-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all shadow-md"}
+            className={"backdrop-blur-sm flex items-center justify-between p-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all shadow-md group"}
         >
             <User
                 avatarProps={{
@@ -51,8 +51,8 @@ export default function RequestCard({icon, gamerTag, type, activeUsernameColorId
                 }}
                 name={
                     <span
-                        className="text-base font-bold truncate"
-                        style={activeColor ? { color: activeColor } : {}}
+                        className="text-base font-bold truncate transition-colors"
+                        style={activeColor ? { color: activeColor } : { color: 'white' }}
                     >
                         {gamerTag}
                     </span>
@@ -64,13 +64,14 @@ export default function RequestCard({icon, gamerTag, type, activeUsernameColorId
 
             <div className="flex items-center gap-2">
                 {type === "incoming" && (
-                    <ButtonGroup size={"sm"} className={"ml-4 flex-shrink-0"}>
+                    <ButtonGroup size={"sm"} className={"ml-4 flex-shrink-0 shadow-sm"}>
                         <Button
                             isIconOnly
                             disabled={accept.isPending || decline.isPending}
-                            color={"success"}
-                            variant={"flat"}
-                            className="hover:bg-success/20"
+                            color="success"
+                            variant="flat"
+                            // Smooth hover: verhoogt de opacity van de achtergrond subtiel
+                            className="bg-success/10 hover:bg-success/25 transition-colors duration-250 active:opacity-70"
                             aria-label={"Accept friend request"}
                             onPress={() => accept.acceptFriendRequest(gamerTag)}
                         >
@@ -79,9 +80,10 @@ export default function RequestCard({icon, gamerTag, type, activeUsernameColorId
                         <Button
                             isIconOnly
                             disabled={decline.isPending || accept.isPending}
-                            color={"danger"}
-                            variant={"flat"}
-                            className="hover:bg-danger/20"
+                            color="danger"
+                            variant="flat"
+                            // De border-l-1 zorgt voor een heel dun lijntje tussen de twee knoppen voor definitie
+                            className="bg-danger/10 hover:bg-danger/25 border-l border-white/5 transition-colors duration-250 active:opacity-70"
                             aria-label={"Decline friend request"}
                             onPress={() => decline.declineFriendRequest(gamerTag)}
                         >
@@ -94,9 +96,10 @@ export default function RequestCard({icon, gamerTag, type, activeUsernameColorId
                     <Button
                         isIconOnly
                         disabled={cancel.isPending}
-                        color={"danger"}
-                        variant={"flat"}
-                        className="hover:bg-danger/20"
+                        size="sm"
+                        color="danger"
+                        variant="flat"
+                        className="ml-4 bg-danger/10 hover:bg-danger/25 transition-colors duration-250 active:opacity-70 rounded-xl"
                         aria-label={"Cancel friend request"}
                         onPress={() => cancel.cancelFriendRequest(gamerTag)}
                     >

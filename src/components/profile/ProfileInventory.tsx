@@ -13,7 +13,6 @@ export function ProfileInventory() {
         profile?.platformBenefits.includes(b.id)
     ) || [];
 
-    // Groepeer per type
     const avatars = myBenefits.filter(b => b.type === BenefitType.UNIQUE_PROFILE_PICTURE);
     const colors = myBenefits.filter(b => b.type === BenefitType.USERNAME_COLOR);
     const discounts = myBenefits.filter(b => b.type === BenefitType.GAME_DISCOUNT);
@@ -29,11 +28,7 @@ export function ProfileInventory() {
         );
     };
 
-    const renderItem = (
-        benefit: Benefit,
-        preview: React.ReactNode,
-        selectable: boolean = true
-    ) => {
+    const renderItem = (benefit: Benefit, preview: React.ReactNode, isToggleable = true) => {
         const isActive =
             profile?.activeProfilePictureId === benefit.id ||
             profile?.activeUsernameColorId === benefit.id;
@@ -42,10 +37,19 @@ export function ProfileInventory() {
             <div
                 key={benefit.id}
                 className={`p-3 rounded-xl border transition-all flex items-center justify-between ${
-                    isActive
-                        ? "bg-primary/20 border-primary"
-                        : "bg-white/5 border-white/10"
+                    isToggleable
+                        ? `cursor-pointer ${isActive ? "bg-primary/20 border-primary" : "bg-white/5 border-white/10"}`
+                        : "bg-white/5 border-white/10 cursor-default"
                 }`}
+
+                onClick={() =>
+                    isToggleable && handleToggle(
+                        benefit.id,
+                        benefit.type,
+                        benefit.configuration,
+                        isActive
+                    )
+                }
             >
                 <div className="flex items-center gap-3">
                     {preview}
@@ -57,28 +61,18 @@ export function ProfileInventory() {
                     </div>
                 </div>
 
-                {selectable && (
+                {isToggleable && (
                     <Button
                         size="sm"
                         isIconOnly
                         radius="full"
                         variant={isActive ? "solid" : "flat"}
                         color={isActive ? "primary" : "default"}
-                        onPress={() =>
-                            handleToggle(
-                                benefit.id,
-                                benefit.type,
-                                benefit.configuration,
-                                isActive
-                            )
-                        }
+                        onPress={() => handleToggle(benefit.id, benefit.type, benefit.configuration, isActive)}
                     >
-                        {isActive ? (
-                            <Check size={16} />
-                        ) : (
-                            <Check size={16} className="opacity-20" />
-                        )}
+                        {isActive ? <Check size={16} /> : <Check size={16} className="opacity-20" />}
                     </Button>
+
                 )}
             </div>
         );
