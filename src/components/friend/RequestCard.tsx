@@ -26,7 +26,6 @@ export default function RequestCard({icon, gamerTag, type, activeUsernameColorId
     useToastEffect(decline, "Friend request declined", "Failed to accept friend request", "You declined the friend request.");
     useToastEffect(cancel, "Friend request cancelled", "Failed to accept friend request", "You canceled the friend request.");
 
-    // Zoek de hex-kleurcode
     const activeColor = useMemo(() => {
         if (!activeUsernameColorId || !benefits) return undefined;
         return benefits.find(b => b.id === activeUsernameColorId)?.configuration;
@@ -70,7 +69,6 @@ export default function RequestCard({icon, gamerTag, type, activeUsernameColorId
                             disabled={accept.isPending || decline.isPending}
                             color="success"
                             variant="flat"
-                            // Smooth hover: verhoogt de opacity van de achtergrond subtiel
                             className="bg-success/10 hover:bg-success/25 transition-colors duration-250 active:opacity-70"
                             aria-label={"Accept friend request"}
                             onPress={() => accept.acceptFriendRequest(gamerTag)}
@@ -82,7 +80,6 @@ export default function RequestCard({icon, gamerTag, type, activeUsernameColorId
                             disabled={decline.isPending || accept.isPending}
                             color="danger"
                             variant="flat"
-                            // De border-l-1 zorgt voor een heel dun lijntje tussen de twee knoppen voor definitie
                             className="bg-danger/10 hover:bg-danger/25 border-l border-white/5 transition-colors duration-250 active:opacity-70"
                             aria-label={"Decline friend request"}
                             onPress={() => decline.declineFriendRequest(gamerTag)}

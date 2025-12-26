@@ -29,7 +29,7 @@ export default function InParty({title, maxMembers, chatRoomId}: InPartyProps) {
 
     const {loggedInUser} = useContext(securityContext);
 
-    // Zoek de leider op een veilige manier
+
     const leader = members?.find(m => m.isLeader);
 
     return (

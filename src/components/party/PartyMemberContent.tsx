@@ -55,9 +55,8 @@ export default function PartyMemberContent({
                                     content="Squad Leader"
                                     showArrow
                                     placement="top"
-                                    // Styling voor de tooltip zodat deze leesbaar en in thema is
                                     classNames={{
-                                        base: "before:bg-white/10", // De pijl styling
+                                        base: "before:bg-white/10",
                                         content: "bg-black/80 backdrop-blur-md border border-white/10 text-white px-3 py-1 text-xs font-bold rounded-lg shadow-xl"
                                     }}
                                     delay={0}

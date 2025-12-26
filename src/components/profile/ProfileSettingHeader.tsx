@@ -35,7 +35,7 @@ export function ProfileSettingHeader({profile}: ProfileSettingHeaderProps) {
                     style={activeColor ? {
                         color: activeColor,
                         borderColor: activeColor,
-                        backgroundColor: `${activeColor}15` // 15 voegt een beetje transparantie toe voor de achtergrond
+                        backgroundColor: `${activeColor}15`
                     } : {}}
                 >
                     @{profile?.gamerTag}
