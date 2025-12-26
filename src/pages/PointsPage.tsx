@@ -11,7 +11,7 @@ import { PurchaseConfirmationModal } from "@/components/benefit/PurchaseConfirma
 export default function PointsPage() {
     const { profile, refetch: fetchProfile, isLoading: profileLoading } = useProfile();
     const { data: benefits, isLoading: benefitsLoading } = useBenefits();
-    const { data: points, isLoading: pointsLoading } = usePoints();
+    const { data: points, isLoading: pointsLoading} = usePoints();
     const { mutate: buyBenefit, isPending: isBuying, ...buyMutation } = useBuyBenefit();
 
     const [searchQuery, setSearchQuery] = useState("");
@@ -36,8 +36,12 @@ export default function PointsPage() {
 
     const confirmPurchase = () => {
         if (selectedBenefit) {
-            buyBenefit(selectedBenefit.id);
-            onClose();
+            buyBenefit(selectedBenefit.id, {
+                onSuccess: () => {
+                    fetchProfile();
+                    onClose();
+                }
+            });
         }
     };
 
@@ -78,3 +82,4 @@ export default function PointsPage() {
         </div>
     );
 }
+

@@ -4,6 +4,7 @@ import {buyBenefit, getBenefits, getPoints } from "@/service/benefitService";
 
 const BENEFITS_KEY = "benefits";
 const POINTS_KEY = "profile-points";
+const PROFILE_KEY = "profile"
 
 export function useBenefits() {
     return useQuery({
@@ -14,10 +15,15 @@ export function useBenefits() {
 
 export function useBuyBenefit() {
     const queryClient = useQueryClient();
+
     return useMutation({
         mutationFn: (id: string) => buyBenefit(id),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [POINTS_KEY] });
+        onSuccess: (newPoints) => {
+
+            queryClient.setQueryData([POINTS_KEY], newPoints);
+
+            queryClient.invalidateQueries({ queryKey: [PROFILE_KEY] });
+            queryClient.invalidateQueries({ queryKey: [POINTS_KEY], refetchType: 'none' });
         }
     });
 }

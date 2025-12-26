@@ -1,9 +1,10 @@
 import {Card, CardBody, CardFooter, CardHeader} from "@heroui/card";
 import {Button} from "@heroui/button";
 import {Avatar} from "@heroui/avatar";
+import {Chip} from "@heroui/chip";
 import {Benefit, BenefitType} from "@/model/benefit";
 import {Profile} from "@/model/profile";
-import {ShoppingCart} from "lucide-react";
+import {ShoppingCart, CheckCircle2} from "lucide-react";
 
 interface Props {
     benefit: Benefit;
@@ -14,6 +15,8 @@ interface Props {
 }
 
 export function BenefitCard({ benefit, profile, userPoints, onBuy, isBuying }: Props) {
+    // Check of de gebruiker dit voordeel al bezit
+    const isOwned = profile?.platformBenefits?.includes(benefit.id);
     const canAfford = userPoints >= benefit.pointCost;
 
     const renderPreview = () => {
@@ -51,25 +54,47 @@ export function BenefitCard({ benefit, profile, userPoints, onBuy, isBuying }: P
     };
 
     return (
-        <Card className="py-0 w-[250px] h-[380px] sm:w-[300px] bg-black/30 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-300">
-            <CardBody className="p-0 overflow-hidden bg-white/5 flex items-center justify-center">
+        <Card className={`py-0 w-[250px] h-[380px] sm:w-[300px] bg-black/30 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-300 ${isOwned ? 'opacity-90' : ''}`}>
+            <CardBody className="p-0 overflow-hidden bg-white/5 flex items-center justify-center relative">
                 {renderPreview()}
+
+                {/* 'Owned' badge */}
+                {isOwned && (
+                    <div className="absolute top-3 right-3">
+                        <Chip
+                            color="success"
+                            variant="flat"
+                            startContent={<CheckCircle2 size={14} />}
+                            className="backdrop-blur-md border border-success/20"
+                        >
+                            Owned
+                        </Chip>
+                    </div>
+                )}
             </CardBody>
+
             <CardHeader className="pt-2 px-4 flex-col items-start">
                 <h4 className="font-bold text-large truncate w-full">{benefit.name}</h4>
-                <p className="text-xl font-bold text-primary">{benefit.pointCost} Points</p>
+
+
+                <p className={`text-xl font-bold ${isOwned ? 'text-success' : 'text-primary'}`}>
+                    {isOwned ? "Unlocked" : `${benefit.pointCost} Points`}
+                </p>
+
                 <p className="text-tiny text-white/50 line-clamp-1">{benefit.description}</p>
             </CardHeader>
+
             <CardFooter className="pt-0 px-4 pb-4 mt-auto">
                 <Button
-                    color={canAfford ? "primary" : "default"}
+                    color={isOwned ? "success" : (canAfford ? "primary" : "default")}
+                    variant={isOwned ? "flat" : "solid"}
                     className="w-full font-bold"
-                    isDisabled={!canAfford || isBuying}
+                    isDisabled={isOwned || !canAfford || isBuying}
                     isLoading={isBuying}
-                    startContent={!isBuying && <ShoppingCart size={18}/>}
+                    startContent={!isBuying && !isOwned && <ShoppingCart size={18}/>}
                     onPress={() => onBuy(benefit)}
                 >
-                    {canAfford ? "Buy Benefit" : "Insufficient Points"}
+                    {isOwned ? "Already Owned" : (canAfford ? "Buy Benefit" : "Insufficient Points")}
                 </Button>
             </CardFooter>
         </Card>

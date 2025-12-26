@@ -4,4 +4,5 @@ export interface Profile {
     gamerTag: string;
     icon: string;
     email: string;
+    platformBenefits: string[];
 }

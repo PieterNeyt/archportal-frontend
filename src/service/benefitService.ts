@@ -6,8 +6,9 @@ export async function getBenefits(): Promise<Benefit[]> {
     return data;
 }
 
-export async function buyBenefit(benefitId: string): Promise<void> {
-    await axios.post(`/api/shop/benefits/${benefitId}/buy`);
+export async function buyBenefit(benefitId: string): Promise<number> {
+    const { data } = await axios.post<number>(`/api/shop/benefits/${benefitId}/buy`);
+    return data;
 }
 
 export async function getPoints(): Promise<number> {
