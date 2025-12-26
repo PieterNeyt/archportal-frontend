@@ -28,7 +28,9 @@ export default function InParty({title, maxMembers, chatRoomId}: InPartyProps) {
     } = useGetPartyMembers();
 
     const {loggedInUser} = useContext(securityContext);
-    const leader = (members?.filter(m => m.isLeader) || [])[0]
+
+    // Zoek de leider op een veilige manier
+    const leader = members?.find(m => m.isLeader);
 
     return (
         <div className="h-screen max-w-7xl mx-auto flex flex-col p-4 sm:p-6 lg:p-8 gap-6">
@@ -37,7 +39,7 @@ export default function InParty({title, maxMembers, chatRoomId}: InPartyProps) {
 
             <div className={`flex-1 flex flex-col lg:flex-row gap-6 min-h-0 ${GLASS_CARD_STYLES}`}>
                 <div className={`flex-1 flex flex-col p-4 relative`}>
-                    <h2 className="text-lg font-semibold p-4 text-white border-b border-white/10">
+                    <h2 className="text-lg font-semibold p-4 text-white border-b border-white/10 uppercase tracking-widest">
                         Party chat
                     </h2>
 
@@ -50,11 +52,11 @@ export default function InParty({title, maxMembers, chatRoomId}: InPartyProps) {
                     </div>
                 </div>
 
-                <Divider orientation={"vertical"} className={"bg-white/10 w-1"}/>
+                <Divider orientation={"vertical"} className={"bg-white/10 w-1 hidden lg:block"}/>
 
                 <div className={`flex-1 flex flex-col p-4 relative lg:max-w-xs`}>
-                    <h2 className="text-lg font-semibold uppercase tracking-wider text-gray-400 p-4 border-b border-white/10">
-                        Members - {members?.length ?? 0}
+                    <h2 className="text-lg font-semibold uppercase tracking-wider text-white/40 p-4 border-b border-white/10">
+                        Members — {members?.length ?? 0}
                     </h2>
 
                     <div className="flex-1 overflow-y-auto p-4 space-y-2">
@@ -64,7 +66,7 @@ export default function InParty({title, maxMembers, chatRoomId}: InPartyProps) {
                             ))
                         )}
 
-                        {(isError || !members || members?.length === 0) && (
+                        {(isError || !members || members?.length === 0) && !isLoading && (
                             <div className="flex flex-col items-center justify-center h-64 p-4 text-center gap-3">
                                 <AlertCircle className="text-danger" size={32}/>
                                 <p className="text-sm text-white/50">Failed to sync members</p>
@@ -79,14 +81,15 @@ export default function InParty({title, maxMembers, chatRoomId}: InPartyProps) {
                             </div>
                         )}
 
-                        {!isLoading && !isError && members && members.map((member, index) => (
+                        {!isLoading && !isError && members && members.map((member) => (
                             <PartyMember
-                                key={index}
+                                key={member.gamerTag}
                                 icon={member.icon}
                                 gamerTag={member.gamerTag}
                                 isLeader={member.isLeader}
                                 isReady={member.isReady}
-                                canKick={loggedInUser?.gamerTag == leader.gamerTag}
+                                activeUsernameColorId={member.activeUsernameColorId}
+                                canKick={loggedInUser?.gamerTag === leader?.gamerTag}
                             />
                         ))}
                     </div>

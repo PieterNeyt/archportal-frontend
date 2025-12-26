@@ -2,6 +2,8 @@ import {User} from "@heroui/user";
 import {Tooltip} from "@heroui/tooltip";
 import {CheckCircle2, CircleDashed, Crown} from "lucide-react";
 import {Chip} from "@heroui/chip";
+import {useBenefits} from "@/hooks/useBenefits.ts";
+import {useMemo} from "react";
 
 interface PartyMemberContentProps {
     canTriggerKick: boolean;
@@ -10,6 +12,7 @@ interface PartyMemberContentProps {
     icon: string;
     isReady: boolean;
     isSelf: boolean;
+    activeUsernameColorId?: string;
 }
 
 export default function PartyMemberContent({
@@ -18,8 +21,16 @@ export default function PartyMemberContent({
                                                isLeader,
                                                isReady,
                                                icon,
-                                               isSelf
+                                               isSelf,
+                                               activeUsernameColorId
                                            }: PartyMemberContentProps) {
+    const { data: benefits } = useBenefits();
+
+    const activeColor = useMemo(() => {
+        if (!activeUsernameColorId || !benefits) return null;
+        return benefits.find(b => b.id === activeUsernameColorId)?.configuration;
+    }, [activeUsernameColorId, benefits]);
+
     return (
         <div
             role={canTriggerKick ? "button" : "gridcell"}
@@ -34,12 +45,25 @@ export default function PartyMemberContent({
                     name={
                         <div className="flex items-center gap-1.5 min-w-0">
                             <span
-                                className={`font-bold truncate ${!isSelf ? "text-primary" : "text-white"}`}>
+                                className={`font-bold truncate ${!activeColor && (!isSelf ? "text-primary" : "text-white")}`}
+                                style={activeColor ? { color: activeColor } : {}}
+                            >
                                 {gamerTag}
                             </span>
                             {isLeader && (
-                                <Tooltip content="Squad Leader">
-                                    <Crown size={14} className="text-warning fill-warning/20 shrink-0"/>
+                                <Tooltip
+                                    content="Squad Leader"
+                                    showArrow
+                                    placement="top"
+                                    // Styling voor de tooltip zodat deze leesbaar en in thema is
+                                    classNames={{
+                                        base: "before:bg-white/10", // De pijl styling
+                                        content: "bg-black/80 backdrop-blur-md border border-white/10 text-white px-3 py-1 text-xs font-bold rounded-lg shadow-xl"
+                                    }}
+                                    delay={0}
+                                    closeDelay={0}
+                                >
+                                    <Crown size={14} className="text-warning fill-warning/20 shrink-0 cursor-help"/>
                                 </Tooltip>
                             )}
                         </div>

@@ -1,11 +1,20 @@
 import {Profile} from "@/model/profile.ts";
 import {Avatar, Chip} from "@heroui/react";
+import {useBenefits} from "@/hooks/useBenefits.ts";
+import {useMemo} from "react";
 
 interface ProfileSettingHeaderProps {
     profile: Profile;
 }
 
 export function ProfileSettingHeader({profile}: ProfileSettingHeaderProps) {
+    const { data: benefits } = useBenefits();
+
+    const activeColor = useMemo(() => {
+        if (!profile?.activeUsernameColorId || !benefits) return null;
+        return benefits.find(b => b.id === profile.activeUsernameColorId)?.configuration;
+    }, [profile?.activeUsernameColorId, benefits]);
+
     return (
         <div className="flex gap-5 items-center">
             <Avatar
@@ -20,10 +29,14 @@ export function ProfileSettingHeader({profile}: ProfileSettingHeaderProps) {
                     {profile?.firstName} {profile?.lastName}
                 </h1>
                 <Chip
-                    color="secondary"
-                    variant="shadow"
+                    variant={activeColor ? "bordered" : "shadow"}
                     size="sm"
-                    className="bg-purple-500/20 border border-purple-500/30"
+                    className={!activeColor ? "bg-purple-500/20 border border-purple-500/30" : ""}
+                    style={activeColor ? {
+                        color: activeColor,
+                        borderColor: activeColor,
+                        backgroundColor: `${activeColor}15` // 15 voegt een beetje transparantie toe voor de achtergrond
+                    } : {}}
                 >
                     @{profile?.gamerTag}
                 </Chip>

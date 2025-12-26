@@ -5,4 +5,6 @@ export interface Profile {
     icon: string;
     email: string;
     platformBenefits: string[];
+    activeProfilePictureId?: string;
+    activeUsernameColorId?: string;
 }

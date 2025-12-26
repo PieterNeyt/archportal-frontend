@@ -8,6 +8,7 @@ import {BLURRY_BACKGROUND} from "@/styles/customClasses.ts";
 import {ProfileCardSkeleton} from "@/components/profile/ProfileCardSkeleton.tsx";
 import {useContext} from "react";
 import securityContext from "@/context/SecurityContext.ts";
+import {ProfileInventory} from "@/components/profile/ProfileInventory.tsx";
 
 export function ProfileSettingsPage() {
     const { isError, isLoading, profile } = useProfile();
@@ -38,16 +39,16 @@ export function ProfileSettingsPage() {
                 <Divider className="my-2 bg-white/10" />
 
                 <CardBody className="gap-8">
-                    {/* User Details Section */}
                     <ProfileSettingBody profile={profile}/>
+
+                    <Divider className="bg-white/10" />
+
+                    <ProfileInventory />
 
                     <Divider className="bg-white/10" />
 
                     <div>
                         <h3 className="text-xl font-semibold text-white mb-2">Notification Channels</h3>
-                        <p className="text-sm text-white/50 mb-4">
-                            Toggle the chips to manage your active channels.
-                        </p>
                         <ChangeChannelType />
                     </div>
                 </CardBody>
