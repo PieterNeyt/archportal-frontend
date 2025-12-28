@@ -5,9 +5,10 @@ export type GameLobbyFace = {
     status: string
 };
 
-export interface inLobby {
+export interface InLobby {
     lobbyId: string | null;
-    isPlayerInLobby: number;
+    gameId: string;
+    isPlayerInLobby: boolean;
 }
 
 export type LobbiesResponse = {

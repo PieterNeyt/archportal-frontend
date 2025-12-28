@@ -62,11 +62,18 @@ export function LobbiesTabContent({game}: LobbiesTabProps) {
     }
 
     if (isInLobby?.isPlayerInLobby) {
+        if (isInLobby.gameId === game.id)
+            return (
+                <div className="py-4">
+                    <InLobbyCard lobbyId={isInLobby.lobbyId!}/>
+                </div>
+            );
+
         return (
-            <div className="py-4">
-                <InLobbyCard lobbyId={isInLobby.lobbyId!}/>
+            <div>
+                Already in lobby from another game
             </div>
-        );
+        )
     }
 
     return (
