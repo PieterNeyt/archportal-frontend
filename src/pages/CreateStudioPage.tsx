@@ -27,7 +27,7 @@ export function CreateGameStudioPage() {
             {/* VERTICAL DIVIDER */}
             <div className="hidden md:block w-px bg-gradient-to-b from-transparent via-white/20 to-transparent"/>
 
-            {/* RIGHT SIDE (FORM) */}
+            {/* RIGHT SIDE  */}
             <div className="md:w-1/2 flex flex-col justify-center items-center p-8 lg:p-16 bg-black/5">
                 <CreateGameStudioForm/>
             </div>
