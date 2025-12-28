@@ -33,7 +33,7 @@ export default function PartyMember({icon, gamerTag, isLeader, isReady, canKick,
             icon={icon}
             isReady={isReady}
             isSelf={isSelf}
-            activeUsernameColorId={activeUsernameColorId} // DOORGEVEN
+            activeUsernameColorId={activeUsernameColorId}
         />
     );
 

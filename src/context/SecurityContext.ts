@@ -10,6 +10,7 @@ export type SecurityContext = {
     logout: () => void;
     updateGameStudioStatus: (gameStudio: GameStudio) => void;
     updateUser: () => void;
+    refetchProfile: () => Promise<void>;
 }
 
 export default createContext<SecurityContext>({
@@ -24,4 +25,5 @@ export default createContext<SecurityContext>({
     },
     updateUser: () => {
     },
+    refetchProfile: async () => {},
 })

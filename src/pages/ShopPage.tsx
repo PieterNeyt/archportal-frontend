@@ -32,7 +32,7 @@ const formatLabel = (label: string) => {
 export default function ShopPage() {
     const {isError, isLoading, refetch, games} = useGames();
     const {cart, addToCartMutation, addToCart, removeFromCart, itemCount} = useCart();
-    const {checkout, isCheckingOut} = useCheckout();
+    const { isCheckingOut} = useCheckout();
 
     const navigate = useNavigate();
 
@@ -209,7 +209,6 @@ export default function ShopPage() {
                 isOpen={isCartOpen}
                 onClose={() => setIsCartOpen(false)}
                 onRemoveItem={removeFromCart}
-                onCheckout={checkout}
                 isCheckingOut={isCheckingOut}
             />
         </>

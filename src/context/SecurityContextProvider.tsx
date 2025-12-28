@@ -79,6 +79,14 @@ export default function SecurityContextProvider({children}: PropsWithChildren) {
         keycloak.accountManagement();
     }
 
+    async function refetchProfile() {
+        try {
+            await refetch();
+            await refetchStudio();
+        } catch (e) {
+            console.error("Failed to refetch profile", e);
+        }
+    }
     async function updateGameStudioStatus(gameStudio: GameStudio) {
         try {
             if (!loggedInUser) return;
@@ -94,10 +102,9 @@ export default function SecurityContextProvider({children}: PropsWithChildren) {
         }
     }
 
+
     return (
-        <SecurityContext.Provider
-            value={{isInitialised, isAuthenticated, loggedInUser, login, logout, updateGameStudioStatus, updateUser}}
-        >
+        <SecurityContext.Provider value={{isInitialised, isAuthenticated, loggedInUser, login, logout, updateGameStudioStatus, updateUser, refetchProfile}}>
             {children}
         </SecurityContext.Provider>
     )

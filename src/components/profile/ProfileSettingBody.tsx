@@ -1,5 +1,5 @@
 import {Profile} from "@/model/profile.ts";
-import {useBenefits} from "@/hooks/useBenefits.ts";
+import {useInventory} from "@/hooks/useBenefits.ts";
 import {useMemo} from "react";
 
 interface ProfileSettingBodyProps {
@@ -7,12 +7,13 @@ interface ProfileSettingBodyProps {
 }
 
 export function ProfileSettingBody({profile}: ProfileSettingBodyProps) {
-    const { data: benefits } = useBenefits();
+
+    const { data: myBenefits = []} = useInventory(profile?.platformBenefits);
 
     const activeColor = useMemo(() => {
-        if (!profile?.activeUsernameColorId || !benefits) return null;
-        return benefits.find(b => b.id === profile.activeUsernameColorId)?.configuration;
-    }, [profile?.activeUsernameColorId, benefits]);
+        if (!profile?.activeUsernameColorId || !myBenefits) return null;
+        return myBenefits.find(b => b.id === profile.activeUsernameColorId)?.configuration;
+    }, [profile?.activeUsernameColorId, myBenefits]);
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-white/90">

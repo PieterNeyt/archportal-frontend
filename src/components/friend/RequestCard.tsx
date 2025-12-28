@@ -20,7 +20,7 @@ export default function RequestCard({icon, gamerTag, type, activeUsernameColorId
     const decline = useDeclineFriendRequest();
     const cancel = useCancelFriendRequest();
 
-    const { data: benefits } = useBenefits();
+    const {data: benefits} = useBenefits();
 
     useToastEffect(accept, "Friend request accepted", "Failed to accept friend request", "You accepted the friend request.");
     useToastEffect(decline, "Friend request declined", "Failed to accept friend request", "You declined the friend request.");
@@ -44,14 +44,14 @@ export default function RequestCard({icon, gamerTag, type, activeUsernameColorId
             <User
                 avatarProps={{
                     src: icon,
-                    fallback: <Avatar showFallback />,
+                    fallback: <Avatar showFallback/>,
                     name: gamerTag,
                     className: "w-10 h-10 flex-shrink-0"
                 }}
                 name={
                     <span
                         className="text-base font-bold truncate transition-colors"
-                        style={activeColor ? { color: activeColor } : { color: 'white' }}
+                        style={activeColor ? {color: activeColor} : {color: 'white'}}
                     >
                         {gamerTag}
                     </span>
@@ -61,49 +61,49 @@ export default function RequestCard({icon, gamerTag, type, activeUsernameColorId
                 }}
             />
 
-            <div className="flex items-center gap-2">
-                {type === "incoming" && (
-                    <ButtonGroup size={"sm"} className={"ml-4 flex-shrink-0 shadow-sm"}>
-                        <Button
-                            isIconOnly
-                            disabled={accept.isPending || decline.isPending}
-                            color="success"
-                            variant="flat"
-                            className="bg-success/10 hover:bg-success/25 transition-colors duration-250 active:opacity-70"
-                            aria-label={"Accept friend request"}
-                            onPress={() => accept.acceptFriendRequest(gamerTag)}
-                        >
-                            {getButtonContent(accept, <Check size={20}/>, <AlertTriangle size={20}/>)}
-                        </Button>
-                        <Button
-                            isIconOnly
-                            disabled={decline.isPending || accept.isPending}
-                            color="danger"
-                            variant="flat"
-                            className="bg-danger/10 hover:bg-danger/25 border-l border-white/5 transition-colors duration-250 active:opacity-70"
-                            aria-label={"Decline friend request"}
-                            onPress={() => decline.declineFriendRequest(gamerTag)}
-                        >
-                            {getButtonContent(decline, <X size={20}/>, <AlertTriangle size={20}/>)}
-                        </Button>
-                    </ButtonGroup>
-                )}
 
-                {type === "outgoing" && (
+            {type === "incoming" && (
+                <ButtonGroup size={"sm"} className={"ml-4 flex-shrink-0 shadow-sm"}>
                     <Button
                         isIconOnly
-                        disabled={cancel.isPending}
-                        size="sm"
+                        disabled={accept.isPending || decline.isPending}
+                        color="success"
+                        variant="flat"
+                        className="bg-success/10 hover:bg-success/25 transition-colors duration-250 active:opacity-70"
+                        aria-label={"Accept friend request"}
+                        onPress={() => accept.acceptFriendRequest(gamerTag)}
+                    >
+                        {getButtonContent(accept, <Check size={20}/>, <AlertTriangle size={20}/>)}
+                    </Button>
+                    <Button
+                        isIconOnly
+                        disabled={decline.isPending || accept.isPending}
                         color="danger"
                         variant="flat"
-                        className="ml-4 bg-danger/10 hover:bg-danger/25 transition-colors duration-250 active:opacity-70 rounded-xl"
-                        aria-label={"Cancel friend request"}
-                        onPress={() => cancel.cancelFriendRequest(gamerTag)}
+                        className="bg-danger/10 hover:bg-danger/25 border-l border-white/5 transition-colors duration-250 active:opacity-70"
+                        aria-label={"Decline friend request"}
+                        onPress={() => decline.declineFriendRequest(gamerTag)}
                     >
-                        {getButtonContent(cancel, <X size={20}/>, <AlertTriangle size={20}/>)}
+                        {getButtonContent(decline, <X size={20}/>, <AlertTriangle size={20}/>)}
                     </Button>
-                )}
-            </div>
+                </ButtonGroup>
+            )}
+
+            {type === "outgoing" && (
+                <Button
+                    isIconOnly
+                    disabled={cancel.isPending}
+                    size="sm"
+                    color="danger"
+                    variant="flat"
+                    className="ml-4 bg-danger/10 hover:bg-danger/25 transition-colors duration-250 active:opacity-70 rounded-xl"
+                    aria-label={"Cancel friend request"}
+                    onPress={() => cancel.cancelFriendRequest(gamerTag)}
+                >
+                    {getButtonContent(cancel, <X size={20}/>, <AlertTriangle size={20}/>)}
+                </Button>
+            )}
+
         </div>
     );
 }

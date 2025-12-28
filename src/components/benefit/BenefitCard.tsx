@@ -57,8 +57,6 @@ export function BenefitCard({ benefit, profile, userPoints, onBuy, isBuying }: P
         <Card className={`py-0 w-[250px] h-[380px] sm:w-[300px] bg-black/30 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-300 ${isOwned ? 'opacity-90' : ''}`}>
             <CardBody className="p-0 overflow-hidden bg-white/5 flex items-center justify-center relative">
                 {renderPreview()}
-
-                {/* 'Owned' badge */}
                 {isOwned && (
                     <div className="absolute top-3 right-3">
                         <Chip

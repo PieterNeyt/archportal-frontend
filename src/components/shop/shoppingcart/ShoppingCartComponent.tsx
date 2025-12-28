@@ -2,7 +2,7 @@ import { Card, CardBody } from "@heroui/card";
 import { closeAll } from "@heroui/toast";
 import { useContext, useMemo, useState, useEffect } from "react";
 import SecurityContext from "@/context/SecurityContext.ts";
-import { useBenefits } from "@/hooks/useBenefits.ts";
+import { useInventory } from "@/hooks/useBenefits.ts";
 import { BenefitType } from "@/model/benefit.ts";
 import { Game } from "@/model/game.ts";
 
@@ -10,6 +10,7 @@ import { CartHeader } from "./CartHeader";
 import { CartItem } from "./CartItem";
 import { CartCoupons } from "./CartCoupons";
 import { CartFooter } from "./CartFooter";
+import { useCheckout } from "@/hooks/useCheckout";
 
 interface Cart {
     items: Game[];
@@ -21,36 +22,38 @@ interface ShoppingCartProps {
     isOpen: boolean;
     onClose: () => void;
     onRemoveItem: (gameId: string) => void;
-    onCheckout: (benefitId?: string) => void;
     isCheckingOut: boolean;
 }
 
-export function ShoppingCartComponent({ cart, isOpen, onClose, onRemoveItem, onCheckout, isCheckingOut }: ShoppingCartProps) {
+export function ShoppingCartComponent({ cart, isOpen, onClose, onRemoveItem, isCheckingOut }: ShoppingCartProps) {
     const { loggedInUser } = useContext(SecurityContext);
-    const { data: allBenefits } = useBenefits();
+    const {data: myBenefits = []} = useInventory(loggedInUser?.platformBenefits);
     const [selectedBenefitId, setSelectedBenefitId] = useState<string | undefined>(undefined);
+    const { checkout } = useCheckout();
 
     useEffect(() => {
         if (isOpen) closeAll();
     }, [isOpen]);
 
     const userCoupons = useMemo(() => {
-        if (!allBenefits || !loggedInUser?.platformBenefits) return [];
-        return allBenefits.filter(
-            (benefit) => benefit.type === BenefitType.GAME_DISCOUNT && loggedInUser.platformBenefits.includes(benefit.id)
+        return myBenefits.filter(
+            (benefit) => benefit.type === BenefitType.GAME_DISCOUNT
         );
-    }, [allBenefits, loggedInUser]);
+    }, [myBenefits]);
 
     const discountDetails = useMemo(() => {
-        if (!selectedBenefitId || !allBenefits || !cart) return { amount: 0, percentage: 0 };
-        const coupon = allBenefits.find((b) => b.id === selectedBenefitId);
+        if (!selectedBenefitId || !myBenefits || !cart) return { amount: 0, percentage: 0 };
+        const coupon = myBenefits.find((b) => b.id === selectedBenefitId);
         if (!coupon) return { amount: 0, percentage: 0 };
         const percentage = parseInt(coupon.configuration.replace("%", ""));
         return { amount: cart.totalPrice * (percentage / 100), percentage };
-    }, [selectedBenefitId, allBenefits, cart]);
+    }, [selectedBenefitId, myBenefits, cart]);
 
     const finalPrice = (cart?.totalPrice || 0) - discountDetails.amount;
 
+    const handleCheckout = () => {
+        checkout(selectedBenefitId);
+    };
     return (
         <div className={`fixed inset-0 z-50 flex justify-end transition-all duration-500 ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}>
             <div
@@ -93,7 +96,7 @@ export function ShoppingCartComponent({ cart, isOpen, onClose, onRemoveItem, onC
                                 discountDetails={discountDetails}
                                 finalPrice={finalPrice}
                                 selectedBenefitId={selectedBenefitId}
-                                onCheckout={onCheckout}
+                                onCheckout={handleCheckout}
                                 isCheckingOut={isCheckingOut}
                             />
                         )}

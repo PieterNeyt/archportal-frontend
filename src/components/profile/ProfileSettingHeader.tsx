@@ -1,6 +1,6 @@
+import { useInventory } from "@/hooks/useBenefits";
 import {Profile} from "@/model/profile.ts";
 import {Avatar, Chip} from "@heroui/react";
-import {useBenefits} from "@/hooks/useBenefits.ts";
 import {useMemo} from "react";
 
 interface ProfileSettingHeaderProps {
@@ -8,12 +8,12 @@ interface ProfileSettingHeaderProps {
 }
 
 export function ProfileSettingHeader({profile}: ProfileSettingHeaderProps) {
-    const { data: benefits } = useBenefits();
+    const { data: myBenefits = []} = useInventory(profile?.platformBenefits);
 
     const activeColor = useMemo(() => {
-        if (!profile?.activeUsernameColorId || !benefits) return null;
-        return benefits.find(b => b.id === profile.activeUsernameColorId)?.configuration;
-    }, [profile?.activeUsernameColorId, benefits]);
+        if (!profile?.activeUsernameColorId || !myBenefits) return null;
+        return myBenefits.find(b => b.id === profile.activeUsernameColorId)?.configuration;
+    }, [profile?.activeUsernameColorId, myBenefits]);
 
     return (
         <div className="flex gap-5 items-center">

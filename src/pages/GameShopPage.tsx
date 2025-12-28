@@ -27,7 +27,7 @@ export function GameShopPage() {
         itemCount,
     } = useCart();
 
-    const { checkout, isCheckingOut } = useCheckout();
+    const { isCheckingOut } = useCheckout();
     const [isCartOpen, setIsCartOpen] = useState(false);
 
     const { isAuthenticated, login } = useContext(SecurityContext);
@@ -140,7 +140,6 @@ export function GameShopPage() {
                 isOpen={isCartOpen}
                 onClose={() => setIsCartOpen(false)}
                 onRemoveItem={removeFromCart}
-                onCheckout={checkout}
                 isCheckingOut={isCheckingOut}
             />
         </>
