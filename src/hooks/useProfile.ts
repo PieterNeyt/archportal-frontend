@@ -15,8 +15,8 @@ export function useProfile() {
 export function useToggleBenefit() {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ benefitId, type, config, active }: { benefitId: string, type: string, config: string, active: boolean }) =>
-            toggleBenefit(benefitId, type, config, active),
+        mutationFn: ({ benefitId }: { benefitId: string}) =>
+            toggleBenefit(benefitId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [PROFILE_KEY] });
         }

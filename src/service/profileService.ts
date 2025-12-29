@@ -6,9 +6,7 @@ export async function getProfile(): Promise<Profile> {
     return profile;
 }
 
-export async function toggleBenefit(benefitId: string, type: string, config: string, active: boolean) {
-    const { data } = await axios.put<Profile>('/api/profile/benefits/toggle', {
-        benefitId, type, config, active
-    });
+export async function toggleBenefit(benefitId: string) {
+    const { data } = await axios.put<Profile>(`/api/profile/benefits/${benefitId}/toggle`);
     return data;
 }

@@ -18,8 +18,8 @@ export function ProfileInventory() {
     const colors = myBenefits.filter(b => b.type === BenefitType.USERNAME_COLOR);
     const discounts = myBenefits.filter(b => b.type === BenefitType.GAME_DISCOUNT);
 
-    const handleToggle = (benefitId: string, type: string, config: string, isActive: boolean) => {
-        toggle({benefitId, type, config, active: !isActive}, {
+    const handleToggle = (benefitId: string) => {
+        toggle({benefitId}, {
             onSuccess: async () => {
                 await refetchProfile();
             }
