@@ -10,6 +10,7 @@ export interface Member {
     icon: string;
     isLeader: boolean;
     isReady: boolean;
+    activeUsernameColorId?: string;
 }
 
 export interface FriendToInvite {

@@ -12,7 +12,7 @@ import {CreateGamePage} from "@/pages/CreateGamePage.tsx";
 import RouteGuardCreateGame from "@/components/security/RouteGuardCreateGame.tsx";
 import {GameStudioPage} from "@/pages/GameStudioPage.tsx";
 import FriendsPage from "@/pages/FriendsPage.tsx";
-import {ProfileSettingsPage} from "@/pages/ProfileSettings.tsx";
+import {ProfileSettingsPage} from "@/pages/ProfileSettingsPage.tsx";
 import RouteGuardLoggedIn from "@/components/security/RouteGuardLoggedIn.tsx";
 import {GameShopPage} from "@/pages/GameShopPage.tsx";
 import LibraryGamePage from "@/pages/LibraryGamePage.tsx";

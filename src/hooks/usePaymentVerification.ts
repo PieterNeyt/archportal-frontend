@@ -1,5 +1,6 @@
 import {useEffect, useRef, useState} from 'react';
 import {verifyPayment} from '@/service/paymentService';
+import {useNavigate} from "react-router-dom";
 
 type VerificationStatus = 'verifying' | 'success' | 'failed' | 'error';
 
@@ -17,6 +18,7 @@ export function usePaymentVerification(orderId: string | null) {
     });
 
     const hasVerified = useRef(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (hasVerified.current) return;
@@ -50,7 +52,7 @@ export function usePaymentVerification(orderId: string | null) {
                     });
 
                     setTimeout(() => {
-                        window.location.href = '/shop?paymentSuccess=true';
+                        navigate("/shop?paymentSuccess=true")
                     }, 2000);
                 } else {
                     setState({
@@ -69,8 +71,8 @@ export function usePaymentVerification(orderId: string | null) {
             }
         };
 
-        verify();
-    }, [orderId]);
+        verify().then();
+    }, [navigate, orderId]);
 
     return state;
 }

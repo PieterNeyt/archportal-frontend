@@ -5,7 +5,7 @@ import {Badge} from "@heroui/badge";
 import {useGame} from "@/hooks/useGames";
 import {useCart} from "@/hooks/useCart";
 import {useCheckout} from "@/hooks/useCheckout";
-import {ShoppingCartComponent} from "@/components/shop/ShoppingCartComponent";
+import {ShoppingCartComponent} from "@/components/shop/shoppingcart/ShoppingCartComponent.tsx";
 import {useContext, useState} from "react";
 import SecurityContext from "@/context/SecurityContext";
 import {ArrowLeft, Gamepad2, LogIn, ShoppingCart} from "lucide-react";
@@ -27,7 +27,7 @@ export function GameShopPage() {
         itemCount,
     } = useCart();
 
-    const { checkout, isCheckingOut } = useCheckout();
+    const { isCheckingOut } = useCheckout();
     const [isCartOpen, setIsCartOpen] = useState(false);
 
     const { isAuthenticated, login } = useContext(SecurityContext);
@@ -140,7 +140,6 @@ export function GameShopPage() {
                 isOpen={isCartOpen}
                 onClose={() => setIsCartOpen(false)}
                 onRemoveItem={removeFromCart}
-                onCheckout={checkout}
                 isCheckingOut={isCheckingOut}
             />
         </>
