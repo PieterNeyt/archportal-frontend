@@ -11,6 +11,7 @@ import {EmptyTab} from "@/components/library/game/EmptyTab.tsx";
 import {Game} from "@/model/game.ts";
 import {InLobbyCard} from "@/components/library/game/lobby/InLobbyCard.tsx";
 import {LobbiesListCard} from "@/components/library/game/lobby/LobbiesTabList.tsx";
+import InOtherGameLobbyCard from "@/components/library/game/lobby/InOtherGameLobbyCard.tsx";
 
 interface LobbiesTabProps {
     game: Game;
@@ -32,7 +33,7 @@ export function LobbiesTabContent({game}: LobbiesTabProps) {
     const {
         isInLobby,
         isLoading: isCheckingLobby,
-        isError: isCheckError
+        isError: isCheckError,
     } = useIsPLayerInLobby();
 
     const {joinLobby, isPending: isJoining} = useJoinMultiplayerLobby();
@@ -70,8 +71,8 @@ export function LobbiesTabContent({game}: LobbiesTabProps) {
             );
 
         return (
-            <div>
-                Already in lobby from another game
+            <div className={"py-4"}>
+                <InOtherGameLobbyCard otherGameId={isInLobby.gameId}/>
             </div>
         )
     }

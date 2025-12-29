@@ -27,7 +27,7 @@ export function useGameFromStudio() {
 
 export function useGame(id: string) {
     const {isLoading, isError, refetch, data: game} = useQuery({
-        queryKey: [GAME_KEY],
+        queryKey: [GAME_KEY, id],
         queryFn: () => getGame(id)
     });
 

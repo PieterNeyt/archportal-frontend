@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Heart } from "lucide-react";
-import { LibraryGame } from "@/model/library";
-import { useStartSinglePlayerGame } from "@/hooks/useLobbies.ts";
-import { useAddToFavorites, useRemoveFromFavorites } from "@/hooks/useLibrary.ts";
-import { LibraryGridView } from "./LibraryGridView";
-import { LibraryListView } from "./LibraryListView";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {Heart} from "lucide-react";
+import {LibraryGame} from "@/model/library";
+import {useStartSinglePlayerGame} from "@/hooks/useLobbies.ts";
+import {useAddToFavorites, useRemoveFromFavorites} from "@/hooks/useLibrary.ts";
+import {LibraryGridView} from "./LibraryGridView";
+import {LibraryListView} from "./LibraryListView";
 import useToastEffect from "@/hooks/useToastEffect.ts";
 
 interface LibraryGameCardProps {
@@ -13,21 +13,33 @@ interface LibraryGameCardProps {
     viewMode: 'grid' | 'list';
 }
 
-export function LibraryGameCard({ libraryItem, viewMode }: LibraryGameCardProps) {
-    const { game, favorite } = libraryItem;
+export function LibraryGameCard({libraryItem, viewMode}: LibraryGameCardProps) {
+    const {game, favorite} = libraryItem;
     const navigate = useNavigate();
     const [imageFailed, setImageFailed] = useState(false);
 
-    const { isPending, startSinglePlayer } = useStartSinglePlayerGame();
-    const { addToFavorites, isPending: isAdding,isError:isErrorAddFavorite,error:errorAddFavorites,isSuccess:isSuccesAddToFavorites } = useAddToFavorites();
-    const { removeFromFavorites, isPending: isRemoving,isError:isErrorRemoveFromFavorites ,error:errorRemoveFromFavorites ,isSuccess:isSuccesRemoveFromFavorites  } = useRemoveFromFavorites();
+    const {isPending, startSinglePlayer} = useStartSinglePlayerGame();
+    const {
+        addToFavorites,
+        isPending: isAdding,
+        isError: isErrorAddFavorite,
+        error: errorAddFavorites,
+        isSuccess: isSuccessAddToFavorites
+    } = useAddToFavorites();
+    const {
+        removeFromFavorites,
+        isPending: isRemoving,
+        isError: isErrorRemoveFromFavorites,
+        error: errorRemoveFromFavorites,
+        isSuccess: isSuccessRemoveFromFavorites
+    } = useRemoveFromFavorites();
 
     const handleCardClick = () => navigate(`/library/${game.id}`);
 
     const handleFavoriteClick = async (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        if(favorite) {
+        if (favorite) {
             await removeFromFavorites(game.id);
         } else {
             await addToFavorites(game.id);
@@ -36,7 +48,7 @@ export function LibraryGameCard({ libraryItem, viewMode }: LibraryGameCardProps)
 
     useToastEffect(
         {
-            isSuccess: isSuccesAddToFavorites,
+            isSuccess: isSuccessAddToFavorites,
             isError: isErrorAddFavorite,
             error: errorAddFavorites
         },
@@ -46,7 +58,7 @@ export function LibraryGameCard({ libraryItem, viewMode }: LibraryGameCardProps)
 
     useToastEffect(
         {
-            isSuccess: isSuccesRemoveFromFavorites,
+            isSuccess: isSuccessRemoveFromFavorites,
             isError: isErrorRemoveFromFavorites,
             error: errorRemoveFromFavorites
         },
@@ -68,7 +80,8 @@ export function LibraryGameCard({ libraryItem, viewMode }: LibraryGameCardProps)
             onClick={handleFavoriteClick}
             className={`p-2 cursor-pointer transition-transform hover:scale-125 active:scale-95 z-50 ${(isAdding || isRemoving) ? 'opacity-50 pointer-events-none' : ''}`}
         >
-            <Heart size={34} className={`transition-all duration-300 stroke-[2.5px] ${favorite ? "text-red-500 fill-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]" : "text-gray-400 fill-gray-400"}`} />
+            <Heart size={34}
+                   className={`transition-all duration-300 stroke-[2.5px] ${favorite ? "text-red-500 fill-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]" : "text-gray-400 fill-gray-400"}`}/>
         </div>
     );
 
