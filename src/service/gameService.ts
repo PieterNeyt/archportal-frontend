@@ -47,10 +47,15 @@ export async function removeFromCart(gameId: string): Promise<Cart> {
     return cart;
 }
 
-export async function checkout(): Promise<PaymentCreation> {
-    const {data: payment} = await axios.post<PaymentCreation>('/api/shop/checkout');
+export async function checkout(benefitId?: string): Promise<PaymentCreation> {
+    const {data: payment} = await axios.post<PaymentCreation>(
+        '/api/shop/checkout',
+        null,
+        { params: { benefitId } }
+    );
     return payment;
 }
+
 
 export async function AddGame(newGame: CreateGame) {
     const {data: game} = await axios.post<CreateGame>(`/api/games`, newGame)

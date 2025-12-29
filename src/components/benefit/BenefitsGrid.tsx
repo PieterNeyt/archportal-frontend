@@ -1,11 +1,10 @@
-import { BenefitCard } from "@/components/benefit/BenefitCard";
-import { SkeletonCard } from "@/components/shop/SkeletonCard";
-import { Benefit } from "@/model/benefit";
-import { Profile } from "@/model/profile";
+import {BenefitCard} from "@/components/benefit/BenefitCard";
+import {SkeletonCard} from "@/components/shop/SkeletonCard";
+import {Benefit} from "@/model/benefit";
+import {useProfileBenefits} from "@/hooks/useBenefits.ts";
 
 interface BenefitsGridProps {
     benefits: Benefit[];
-    profile: Profile | undefined;
     userPoints: number;
     isBuying: boolean;
     isLoading: boolean;
@@ -14,16 +13,17 @@ interface BenefitsGridProps {
 
 export function BenefitsGrid({
                                  benefits,
-                                 profile,
                                  userPoints,
                                  isBuying,
                                  isLoading,
                                  onBuy
                              }: BenefitsGridProps) {
-    if (isLoading) {
+    const {isLoading: isLoadingBenefit, data: profileBenefits} = useProfileBenefits();
+
+    if (isLoading || isLoadingBenefit) {
         return (
             <div className="grid gap-6 justify-items-center"
-                 style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
+                 style={{gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))'}}>
                 {Array(8).fill(0).map((_, index) => <SkeletonCard key={index}/>)}
             </div>
         );
@@ -32,7 +32,7 @@ export function BenefitsGrid({
     if (benefits.length === 0) {
         return (
             <div className="grid gap-6 justify-items-center"
-                 style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
+                 style={{gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))'}}>
                 <div className="col-span-full py-20 text-white/50">No benefits found.</div>
             </div>
         );
@@ -40,12 +40,12 @@ export function BenefitsGrid({
 
     return (
         <div className="grid gap-6 justify-items-center"
-             style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
+             style={{gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))'}}>
             {benefits.map((benefit) => (
                 <BenefitCard
                     key={benefit.id}
                     benefit={benefit}
-                    profile={profile}
+                    profileBenefits={profileBenefits}
                     userPoints={userPoints}
                     isBuying={isBuying}
                     onBuy={onBuy}

@@ -12,20 +12,30 @@ interface PartyMemberProps {
     gamerTag: string,
     isLeader: boolean,
     isReady: boolean,
-    canKick: boolean
+    canKick: boolean,
+    activeUsernameColorId?: string
 }
 
-export default function PartyMember({icon, gamerTag, isLeader, isReady, canKick}: PartyMemberProps) {
+export default function PartyMember({icon, gamerTag, isLeader, isReady, canKick, activeUsernameColorId}: PartyMemberProps) {
     const kick = useKickFromParty();
     const {loggedInUser} = useContext(securityContext);
     const [isOpen, setIsOpen] = useState(false);
     useToastEffect(kick, "Successfully kicked player from party", "", "");
 
-    const isSelf = loggedInUser?.gamerTag !== gamerTag;
-    const canTriggerKick = canKick && isSelf;
+    const isSelf = loggedInUser?.gamerTag === gamerTag;
+    const canTriggerKick = canKick && !isSelf;
 
-    const CardContent = <PartyMemberContent canTriggerKick={canTriggerKick} gamerTag={gamerTag} isLeader={isLeader}
-                                            icon={icon} isReady={isReady} isSelf={isSelf}/>
+    const CardContent = (
+        <PartyMemberContent
+            canTriggerKick={canTriggerKick}
+            gamerTag={gamerTag}
+            isLeader={isLeader}
+            icon={icon}
+            isReady={isReady}
+            isSelf={isSelf}
+            activeUsernameColorId={activeUsernameColorId}
+        />
+    );
 
     if (!canTriggerKick) {
         return CardContent;
@@ -38,11 +48,11 @@ export default function PartyMember({icon, gamerTag, isLeader, isReady, canKick}
             placement="bottom"
             showArrow
             classNames={{
-                content: "bg-[#1a1a1e] border border-white/10 p-4 shadow-2xl",
+                content: "bg-[#1a1a1e]/90 backdrop-blur-xl border border-white/10 p-4 shadow-2xl rounded-2xl",
             }}
         >
             <PopoverTrigger>
-                {CardContent}
+                <div className="w-full">{CardContent}</div>
             </PopoverTrigger>
             <PopoverContent>
                 <div className="space-y-4 flex flex-col items-center min-w-[180px]">

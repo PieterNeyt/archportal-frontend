@@ -1,26 +1,20 @@
-import { useProfile } from "@/hooks/useProfile.ts";
-import { useBenefits, useBuyBenefit, usePoints } from "@/hooks/useBenefits.ts";
-import { useEffect, useMemo, useState } from "react";
-import { useDisclosure } from "@heroui/modal";
+import {useBenefits, useBuyBenefit, usePoints} from "@/hooks/useBenefits.ts";
+import {useMemo, useState} from "react";
+import {useDisclosure} from "@heroui/modal";
 import useToastEffect from "@/hooks/useToastEffect.ts";
-import { Benefit } from "@/model/benefit";
-import { PointsHeader } from "@/components/benefit/PointsHeader";
-import { BenefitsGrid } from "@/components/benefit/BenefitsGrid";
-import { PurchaseConfirmationModal } from "@/components/benefit/PurchaseConfirmationModal";
+import {Benefit} from "@/model/benefit";
+import {PointsHeader} from "@/components/benefit/PointsHeader";
+import {BenefitsGrid} from "@/components/benefit/BenefitsGrid";
+import {PurchaseConfirmationModal} from "@/components/benefit/PurchaseConfirmationModal";
 
 export default function PointsPage() {
-    const { profile, refetch: fetchProfile, isLoading: profileLoading } = useProfile();
-    const { data: benefits, isLoading: benefitsLoading } = useBenefits();
-    const { data: points, isLoading: pointsLoading } = usePoints();
-    const { mutate: buyBenefit, isPending: isBuying, ...buyMutation } = useBuyBenefit();
+    const {data: benefits, isLoading: benefitsLoading} = useBenefits();
+    const {data: points, isLoading: pointsLoading} = usePoints();
+    const {mutate: buyBenefit, isPending: isBuying, ...buyMutation} = useBuyBenefit();
 
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedBenefit, setSelectedBenefit] = useState<Benefit | null>(null);
-    const { isOpen, onOpen, onClose } = useDisclosure();
-
-    useEffect(() => {
-        fetchProfile();
-    }, [fetchProfile]);
+    const {isOpen, onOpen, onClose} = useDisclosure();
 
     useToastEffect(
         buyMutation,
@@ -36,8 +30,11 @@ export default function PointsPage() {
 
     const confirmPurchase = () => {
         if (selectedBenefit) {
-            buyBenefit(selectedBenefit.id);
-            onClose();
+            buyBenefit(selectedBenefit.id, {
+                onSuccess: () => {
+                    onClose();
+                }
+            });
         }
     };
 
@@ -49,7 +46,7 @@ export default function PointsPage() {
         );
     }, [benefits, searchQuery]);
 
-    const isLoading = profileLoading || benefitsLoading || pointsLoading;
+    const isLoading = benefitsLoading || pointsLoading;
 
     return (
         <div className="p-4 sm:p-8">
@@ -61,7 +58,6 @@ export default function PointsPage() {
 
             <BenefitsGrid
                 benefits={filteredBenefits}
-                profile={profile}
                 userPoints={points ?? 0}
                 isBuying={isBuying}
                 isLoading={isLoading}
@@ -78,3 +74,4 @@ export default function PointsPage() {
         </div>
     );
 }
+
