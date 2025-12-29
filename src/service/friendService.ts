@@ -6,6 +6,11 @@ export async function getFriends(): Promise<ProfileSyncDto[]> {
     return friends;
 }
 
+export async function getFriendsFromProfileId(profileId:string): Promise<ProfileSyncDto[]> {
+    const {data: friends} = await axios.get<ProfileSyncDto[]>(`/api/profile/${profileId}/friends`);
+    return friends;
+}
+
 export async function sendFriendRequest(gamertag: string): Promise<void> {
     const {data: profile} = await axios.post("/api/profile/friend-request", {
         gamerTag: gamertag,

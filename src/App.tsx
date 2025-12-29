@@ -39,7 +39,7 @@ function App() {
                             <Route element={<RouteGuardGameStudio><GameStudioPage/></RouteGuardGameStudio>}
                                    path="/gamestudio"/>
                             <Route element={<RouteGuardLoggedIn><ProfilePage/></RouteGuardLoggedIn>}
-                                   path="/profile"/>
+                                   path="/profile/:id"/>
                             <Route element={<RouteGuardLoggedIn><GamePage/></RouteGuardLoggedIn>}
                                    path="/gamestudio/game/:id"/>
                             <Route element={<RouteGuardLoggedIn><LibraryPage/></RouteGuardLoggedIn>} path="/library"/>
