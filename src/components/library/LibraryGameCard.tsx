@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {Heart} from "lucide-react";
 import {LibraryGame} from "@/model/library";
@@ -7,6 +7,7 @@ import {useAddToFavorites, useRemoveFromFavorites} from "@/hooks/useLibrary.ts";
 import {LibraryGridView} from "./LibraryGridView";
 import {LibraryListView} from "./LibraryListView";
 import useToastEffect from "@/hooks/useToastEffect.ts";
+import ImageMemo from "@/components/ImageMemo.tsx";
 
 interface LibraryGameCardProps {
     libraryItem: LibraryGame;
@@ -16,8 +17,6 @@ interface LibraryGameCardProps {
 export function LibraryGameCard({libraryItem, viewMode}: LibraryGameCardProps) {
     const {game, favorite} = libraryItem;
     const navigate = useNavigate();
-    const [imageFailed, setImageFailed] = useState(false);
-
     const {isPending, startSinglePlayer} = useStartSinglePlayerGame();
     const {
         addToFavorites,
@@ -33,6 +32,17 @@ export function LibraryGameCard({libraryItem, viewMode}: LibraryGameCardProps) {
         error: errorRemoveFromFavorites,
         isSuccess: isSuccessRemoveFromFavorites
     } = useRemoveFromFavorites();
+
+    const [imageFailed, setImageFailed] = useState(false);
+    const onImageError = () => {
+        setImageFailed(true);
+    };
+    const imageElement = useMemo(() => {
+        const image = game.imageUrl;
+        const title = game.title;
+        return ImageMemo({image, title, imageFailed, onImageError});
+    }, [game, imageFailed]);
+
 
     const handleCardClick = () => navigate(`/library/${game.id}`);
 
@@ -89,9 +99,8 @@ export function LibraryGameCard({libraryItem, viewMode}: LibraryGameCardProps) {
         libraryItem,
         onPress: handleCardClick,
         onPlay: handlePlayClick,
+        imageElement,
         isPending,
-        imageFailed,
-        setImageFailed,
         renderFavorite: FavoriteHeart
     };
 
