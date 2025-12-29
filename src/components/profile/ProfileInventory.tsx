@@ -1,22 +1,22 @@
-import { useToggleBenefit} from "@/hooks/useProfile";
-import {BenefitType} from "@/model/benefit";
-import {useInventory} from "@/hooks/useBenefits";
+import {useToggleBenefit} from "@/hooks/useProfile";
+import {Benefit, BenefitType} from "@/model/benefit";
 import {ProfileInventoryItem} from "./ProfileInventoryItem";
 import {TicketPercent} from "lucide-react";
 import SecurityContext from "@/context/SecurityContext.ts";
 import {useContext} from "react";
 
+interface ProfileInventoryProps {
+    benefits: Benefit[];
+}
 
-export function ProfileInventory() {
+export function ProfileInventory({benefits}: ProfileInventoryProps) {
 
     const { loggedInUser, refetchProfile } = useContext(SecurityContext);
-    const {data: myBenefits = []} = useInventory(loggedInUser?.platformBenefits);
-
     const {mutate: toggle} = useToggleBenefit();
 
-    const avatars = myBenefits.filter(b => b.type === BenefitType.UNIQUE_PROFILE_PICTURE);
-    const colors = myBenefits.filter(b => b.type === BenefitType.USERNAME_COLOR);
-    const discounts = myBenefits.filter(b => b.type === BenefitType.GAME_DISCOUNT);
+    const avatars = benefits.filter(b => b.type === BenefitType.UNIQUE_PROFILE_PICTURE);
+    const colors = benefits.filter(b => b.type === BenefitType.USERNAME_COLOR);
+    const discounts = benefits.filter(b => b.type === BenefitType.GAME_DISCOUNT);
 
     const handleToggle = (benefitId: string) => {
         toggle({benefitId}, {

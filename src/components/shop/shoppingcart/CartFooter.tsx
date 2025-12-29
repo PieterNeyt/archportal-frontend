@@ -2,6 +2,7 @@ import { CardFooter } from "@heroui/card";
 import { TicketPercent } from "lucide-react";
 import { Button } from "@heroui/button";
 import { Cart } from "@/model/shop";
+import {useCheckout} from "@/hooks/useCheckout.ts";
 
 
 interface CartFooterProps {
@@ -10,10 +11,10 @@ interface CartFooterProps {
     finalPrice: number;
     selectedBenefitId?: string;
     onCheckout: (benefitId?: string) => void;
-    isCheckingOut: boolean;
 }
 
-export function CartFooter({ cart, discountDetails, finalPrice, selectedBenefitId, onCheckout, isCheckingOut }: CartFooterProps) {
+export function CartFooter({ cart, discountDetails, finalPrice, selectedBenefitId, onCheckout }: CartFooterProps) {
+    const { isCheckingOut} = useCheckout();
     return (
         <CardFooter className="border-t border-white/10 p-6 flex flex-col gap-4 bg-white/5 backdrop-blur-xl">
             <div className="w-full space-y-3">

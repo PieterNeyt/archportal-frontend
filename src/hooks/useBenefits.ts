@@ -1,10 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import {buyBenefit, getAllBenefits, getBenefitsByIds, getPoints} from "@/service/benefitService";
+import {
+    buyBenefit,
+    getActiveUsernameColor,
+    getAllBenefits,
+    getBenefitsByIds,
+    getPoints,
+    getProfileDiscounts
+} from "@/service/benefitService";
 
 const BENEFITS_KEY = "benefits";
+const INVENTORY = "inventory";
 const POINTS_KEY = "profile-points";
 const PROFILE_KEY = "profile"
+const PROFILE_DISCOUNTS_KEY = "profile-discounts"
+const USERNAME_COLOUR_KEY = "active-username-color"
 
 export function useBenefits() {
     return useQuery({
@@ -27,7 +37,7 @@ export function useBuyBenefit() {
 }
 export function useInventory(benefitIds: string[] | undefined) {
     return useQuery({
-        queryKey: ["inventory", benefitIds],
+        queryKey: [INVENTORY, benefitIds],
         queryFn: () => getBenefitsByIds(benefitIds || []),
         enabled: !!benefitIds && benefitIds.length > 0,
     });
@@ -36,5 +46,17 @@ export function usePoints() {
     return useQuery({
         queryKey: [POINTS_KEY],
         queryFn: getPoints
+    });
+}
+export function useProfileDiscounts() {
+    return useQuery({
+        queryKey: [PROFILE_DISCOUNTS_KEY],
+        queryFn: getProfileDiscounts
+    });
+}
+export function useActiveUsernameColor() {
+    return useQuery({
+        queryKey: [USERNAME_COLOUR_KEY],
+        queryFn: getActiveUsernameColor
     });
 }

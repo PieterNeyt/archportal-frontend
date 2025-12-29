@@ -1,16 +1,14 @@
-import { Card, CardBody } from "@heroui/card";
-import { closeAll } from "@heroui/toast";
-import { useContext, useMemo, useState, useEffect } from "react";
-import SecurityContext from "@/context/SecurityContext.ts";
-import { useInventory } from "@/hooks/useBenefits.ts";
-import { BenefitType } from "@/model/benefit.ts";
-import { Game } from "@/model/game.ts";
+import {Card, CardBody} from "@heroui/card";
+import {closeAll} from "@heroui/toast";
+import {useEffect, useMemo, useState} from "react";
+import {useProfileDiscounts} from "@/hooks/useBenefits.ts";
+import {Game} from "@/model/game.ts";
 
-import { CartHeader } from "./CartHeader";
-import { CartItem } from "./CartItem";
-import { CartCoupons } from "./CartCoupons";
-import { CartFooter } from "./CartFooter";
-import { useCheckout } from "@/hooks/useCheckout";
+import {CartHeader} from "./CartHeader";
+import {CartItem} from "./CartItem";
+import {CartCoupons} from "./CartCoupons";
+import {CartFooter} from "./CartFooter";
+import {useCheckout} from "@/hooks/useCheckout";
 
 interface Cart {
     items: Game[];
@@ -22,12 +20,10 @@ interface ShoppingCartProps {
     isOpen: boolean;
     onClose: () => void;
     onRemoveItem: (gameId: string) => void;
-    isCheckingOut: boolean;
 }
 
-export function ShoppingCartComponent({ cart, isOpen, onClose, onRemoveItem, isCheckingOut }: ShoppingCartProps) {
-    const { loggedInUser } = useContext(SecurityContext);
-    const {data: myBenefits = []} = useInventory(loggedInUser?.platformBenefits);
+export function ShoppingCartComponent({ cart, isOpen, onClose, onRemoveItem}: ShoppingCartProps) {
+    const {data: userCoupons = []} = useProfileDiscounts();
     const [selectedBenefitId, setSelectedBenefitId] = useState<string | undefined>(undefined);
     const { checkout } = useCheckout();
 
@@ -35,19 +31,14 @@ export function ShoppingCartComponent({ cart, isOpen, onClose, onRemoveItem, isC
         if (isOpen) closeAll();
     }, [isOpen]);
 
-    const userCoupons = useMemo(() => {
-        return myBenefits.filter(
-            (benefit) => benefit.type === BenefitType.GAME_DISCOUNT
-        );
-    }, [myBenefits]);
 
     const discountDetails = useMemo(() => {
-        if (!selectedBenefitId || !myBenefits || !cart) return { amount: 0, percentage: 0 };
-        const coupon = myBenefits.find((b) => b.id === selectedBenefitId);
+        if (!selectedBenefitId || !userCoupons || !cart) return { amount: 0, percentage: 0 };
+        const coupon = userCoupons.find((b) => b.id === selectedBenefitId);
         if (!coupon) return { amount: 0, percentage: 0 };
         const percentage = parseInt(coupon.configuration.replace("%", ""));
         return { amount: cart.totalPrice * (percentage / 100), percentage };
-    }, [selectedBenefitId, myBenefits, cart]);
+    }, [selectedBenefitId, userCoupons, cart]);
 
     const finalPrice = (cart?.totalPrice || 0) - discountDetails.amount;
 
@@ -97,7 +88,6 @@ export function ShoppingCartComponent({ cart, isOpen, onClose, onRemoveItem, isC
                                 finalPrice={finalPrice}
                                 selectedBenefitId={selectedBenefitId}
                                 onCheckout={handleCheckout}
-                                isCheckingOut={isCheckingOut}
                             />
                         )}
                     </Card>

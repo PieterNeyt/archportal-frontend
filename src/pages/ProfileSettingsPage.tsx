@@ -9,10 +9,13 @@ import {ProfileCardSkeleton} from "@/components/profile/ProfileCardSkeleton.tsx"
 import {useContext} from "react";
 import securityContext from "@/context/SecurityContext.ts";
 import {ProfileInventory} from "@/components/profile/ProfileInventory.tsx";
+import {useInventory} from "@/hooks/useBenefits.ts";
+
 
 export function ProfileSettingsPage() {
     const { isError, isLoading, profile } = useProfile();
-    const {updateUser} = useContext(securityContext)
+    const { data: myBenefits = [] } = useInventory(profile?.platformBenefits);
+    const { updateUser } = useContext(securityContext);
 
     if (isLoading) {
         return <ProfileCardSkeleton/>
@@ -26,7 +29,7 @@ export function ProfileSettingsPage() {
         <div className="min-h-screen flex items-center justify-center p-4">
             <Card className={BLURRY_BACKGROUND}>
                 <CardHeader className="flex justify-between items-start pb-6">
-                    <ProfileSettingHeader profile={profile}/>
+                    <ProfileSettingHeader profile={profile} benefits={myBenefits} />
                     <Button
                         className="bg-white text-black font-semibold shadow-none hover:bg-white/90 border-none"
                         radius="full"
@@ -39,11 +42,11 @@ export function ProfileSettingsPage() {
                 <Divider className="my-2 bg-white/10" />
 
                 <CardBody className="gap-8">
-                    <ProfileSettingBody profile={profile}/>
+                    <ProfileSettingBody profile={profile} benefits={myBenefits} />
 
                     <Divider className="bg-white/10" />
 
-                    <ProfileInventory />
+                    <ProfileInventory benefits={myBenefits} />
 
                     <Divider className="bg-white/10" />
 

@@ -1,11 +1,11 @@
 import {User} from "@heroui/user";
 import {Avatar} from "@heroui/avatar";
 import SecurityContext from "@/context/SecurityContext.ts";
-import React, {useContext, useMemo} from "react";
+import React, {useContext} from "react";
 import {useNavigate} from "react-router-dom";
 import {ChevronDown, ChevronUp} from "lucide-react";
 import {Button} from "@heroui/button";
-import { useInventory} from "@/hooks/useBenefits.ts";
+import {useActiveUsernameColor} from "@/hooks/useBenefits.ts";
 
 interface SidebarUserProfileProps {
     isOpen: boolean;
@@ -15,13 +15,8 @@ interface SidebarUserProfileProps {
 
 export default function SidebarUserProfile({isOpen, dropdownOpen, setDropdownOpen}: SidebarUserProfileProps) {
     const {loggedInUser} = useContext(SecurityContext);
-    const {data: myBenefits = []} = useInventory(loggedInUser?.platformBenefits);
+    const {data: activeColor} = useActiveUsernameColor();
     const navigate = useNavigate();
-
-    const activeColor = useMemo(() => {
-        if (!loggedInUser?.activeUsernameColorId || !myBenefits) return undefined;
-        return myBenefits.find(b => b.id === loggedInUser.activeUsernameColorId)?.configuration;
-    }, [loggedInUser, myBenefits]);
 
     const hasCustomAvatar =
         loggedInUser?.icon && loggedInUser.icon.trim() !== "";

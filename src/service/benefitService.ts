@@ -22,3 +22,12 @@ export async function getPoints(): Promise<number> {
     const { data } = await axios.get<number>('/api/profile/points');
     return data;
 }
+export async function getProfileDiscounts(): Promise<Benefit[]> {
+    const { data } = await axios.get<Benefit[]>('/api/shop/benefits/discounts');
+    return data;
+}
+
+export async function getActiveUsernameColor(): Promise<string | null> {
+    const { data } = await axios.get<string>('/api/shop/benefits/active-color');
+    return data;
+}

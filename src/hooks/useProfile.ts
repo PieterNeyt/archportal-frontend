@@ -2,7 +2,7 @@ import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {getProfile, toggleBenefit} from "@/service/profileService.ts";
 
 const PROFILE_KEY = "profile"
-
+const USERNAME_COLOUR_KEY = "active-username-color"
 export function useProfile() {
     const {isLoading, isError, refetch, data: profile} = useQuery({
         queryKey: [PROFILE_KEY],
@@ -19,6 +19,7 @@ export function useToggleBenefit() {
             toggleBenefit(benefitId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [PROFILE_KEY] });
+            queryClient.invalidateQueries({ queryKey: [USERNAME_COLOUR_KEY] });
         }
     });
 }
