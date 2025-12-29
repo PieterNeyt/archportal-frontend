@@ -1,20 +1,21 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 
 import {
     buyBenefit,
     getActiveUsernameColor,
     getAllBenefits,
-    getBenefitsByIds,
     getPoints,
+    getProfileBenefits,
     getProfileDiscounts
 } from "@/service/benefitService";
+import {useContext} from "react";
+import securityContext from "@/context/SecurityContext.ts";
 
 const BENEFITS_KEY = "benefits";
-const INVENTORY = "inventory";
 const POINTS_KEY = "profile-points";
-const PROFILE_KEY = "profile"
 const PROFILE_DISCOUNTS_KEY = "profile-discounts"
 const USERNAME_COLOUR_KEY = "active-username-color"
+const PROFILE_BENEFITS_KEY = "profile benefits";
 
 export function useBenefits() {
     return useQuery({
@@ -29,34 +30,40 @@ export function useBuyBenefit() {
     return useMutation({
         mutationFn: (id: string) => buyBenefit(id),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [POINTS_KEY] });
-            queryClient.invalidateQueries({ queryKey: [PROFILE_KEY] });
+            queryClient.invalidateQueries({queryKey: [POINTS_KEY]});
+            queryClient.invalidateQueries({queryKey: [PROFILE_BENEFITS_KEY]})
         }
+    });
+}
 
-    });
-}
-export function useInventory(benefitIds: string[] | undefined) {
-    return useQuery({
-        queryKey: [INVENTORY, benefitIds],
-        queryFn: () => getBenefitsByIds(benefitIds || []),
-        enabled: !!benefitIds && benefitIds.length > 0,
-    });
-}
 export function usePoints() {
     return useQuery({
         queryKey: [POINTS_KEY],
         queryFn: getPoints
     });
 }
+
 export function useProfileDiscounts() {
+    const {isAuthenticated, isInitialised} = useContext(securityContext);
     return useQuery({
         queryKey: [PROFILE_DISCOUNTS_KEY],
-        queryFn: getProfileDiscounts
+        queryFn: getProfileDiscounts,
+        enabled: isAuthenticated() && isInitialised,
     });
 }
+
 export function useActiveUsernameColor() {
     return useQuery({
         queryKey: [USERNAME_COLOUR_KEY],
         queryFn: getActiveUsernameColor
+    });
+}
+
+export function useProfileBenefits() {
+    const {isAuthenticated, isInitialised} = useContext(securityContext);
+    return useQuery({
+        queryKey: [PROFILE_BENEFITS_KEY],
+        queryFn: getProfileBenefits,
+        enabled: isAuthenticated() && isInitialised,
     });
 }

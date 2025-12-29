@@ -1,6 +1,7 @@
 import {createContext} from "react";
 import {User} from "@/model/user.ts";
 import {GameStudio} from "@/model/gameStudio.ts";
+import {Profile} from "@/model/profile.ts";
 
 export type SecurityContext = {
     isInitialised: boolean;
@@ -10,7 +11,7 @@ export type SecurityContext = {
     logout: () => void;
     updateGameStudioStatus: (gameStudio: GameStudio) => void;
     updateUser: () => void;
-    refetchProfile: () => Promise<void>;
+    updateProfile: (profile: Profile) => void;
 }
 
 export default createContext<SecurityContext>({
@@ -25,5 +26,6 @@ export default createContext<SecurityContext>({
     },
     updateUser: () => {
     },
-    refetchProfile: async () => {},
+    updateProfile: () => {
+    },
 })

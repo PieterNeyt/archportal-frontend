@@ -1,27 +1,23 @@
-import {useToggleBenefit} from "@/hooks/useProfile";
-import {Benefit, BenefitType} from "@/model/benefit";
+import {useToggleBenefit} from "@/hooks/useSyncProfile.ts";
+import {BenefitType} from "@/model/benefit";
 import {ProfileInventoryItem} from "./ProfileInventoryItem";
 import {TicketPercent} from "lucide-react";
 import SecurityContext from "@/context/SecurityContext.ts";
 import {useContext} from "react";
+import {useProfileBenefits} from "@/hooks/useBenefits.ts";
 
-interface ProfileInventoryProps {
-    benefits: Benefit[];
-}
-
-export function ProfileInventory({benefits}: ProfileInventoryProps) {
-
-    const { loggedInUser, refetchProfile } = useContext(SecurityContext);
+export function ProfileInventory() {
+    const {data: benefits = []} = useProfileBenefits();
+    const {loggedInUser, updateProfile} = useContext(SecurityContext);
     const {mutate: toggle} = useToggleBenefit();
-
     const avatars = benefits.filter(b => b.type === BenefitType.UNIQUE_PROFILE_PICTURE);
     const colors = benefits.filter(b => b.type === BenefitType.USERNAME_COLOR);
     const discounts = benefits.filter(b => b.type === BenefitType.GAME_DISCOUNT);
 
     const handleToggle = (benefitId: string) => {
         toggle({benefitId}, {
-            onSuccess: async () => {
-                await refetchProfile();
+            onSuccess: async (updatedProfile) => {
+                updateProfile(updatedProfile);
             }
         });
     };

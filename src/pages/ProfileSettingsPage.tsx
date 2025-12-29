@@ -1,5 +1,5 @@
 import {ChangeChannelType} from "@/components/profile/ChangeChannelType.tsx";
-import {useProfile} from "@/hooks/useProfile.ts";
+import {useProfile} from "@/hooks/useSyncProfile.ts";
 import {Button, Card, CardBody, CardHeader, Divider} from "@heroui/react";
 import {ProfileSettingHeader} from "@/components/profile/ProfileSettingHeader.tsx";
 import {ProfileSettingBody} from "@/components/profile/ProfileSettingBody.tsx";
@@ -9,13 +9,13 @@ import {ProfileCardSkeleton} from "@/components/profile/ProfileCardSkeleton.tsx"
 import {useContext} from "react";
 import securityContext from "@/context/SecurityContext.ts";
 import {ProfileInventory} from "@/components/profile/ProfileInventory.tsx";
-import {useInventory} from "@/hooks/useBenefits.ts";
+import {useActiveUsernameColor} from "@/hooks/useBenefits.ts";
 
 
 export function ProfileSettingsPage() {
-    const { isError, isLoading, profile } = useProfile();
-    const { data: myBenefits = [] } = useInventory(profile?.platformBenefits);
-    const { updateUser } = useContext(securityContext);
+    const {isError, isLoading, profile} = useProfile();
+    const {updateUser} = useContext(securityContext);
+    const {data: activeColor} = useActiveUsernameColor();
 
     if (isLoading) {
         return <ProfileCardSkeleton/>
@@ -29,7 +29,7 @@ export function ProfileSettingsPage() {
         <div className="min-h-screen flex items-center justify-center p-4">
             <Card className={BLURRY_BACKGROUND}>
                 <CardHeader className="flex justify-between items-start pb-6">
-                    <ProfileSettingHeader profile={profile} benefits={myBenefits} />
+                    <ProfileSettingHeader profile={profile} activeColor={activeColor}/>
                     <Button
                         className="bg-white text-black font-semibold shadow-none hover:bg-white/90 border-none"
                         radius="full"
@@ -39,20 +39,20 @@ export function ProfileSettingsPage() {
                     </Button>
                 </CardHeader>
 
-                <Divider className="my-2 bg-white/10" />
+                <Divider className="my-2 bg-white/10"/>
 
                 <CardBody className="gap-8">
-                    <ProfileSettingBody profile={profile} benefits={myBenefits} />
+                    <ProfileSettingBody profile={profile} activeColor={activeColor}/>
 
-                    <Divider className="bg-white/10" />
+                    <Divider className="bg-white/10"/>
 
-                    <ProfileInventory benefits={myBenefits} />
+                    <ProfileInventory/>
 
-                    <Divider className="bg-white/10" />
+                    <Divider className="bg-white/10"/>
 
                     <div>
                         <h3 className="text-xl font-semibold text-white mb-2">Notification Channels</h3>
-                        <ChangeChannelType />
+                        <ChangeChannelType/>
                     </div>
                 </CardBody>
             </Card>

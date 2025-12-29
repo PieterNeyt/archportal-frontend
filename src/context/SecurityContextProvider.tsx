@@ -4,9 +4,10 @@ import {addAccessTokenToAuthHeader, removeAccessTokenFromAuthHeader} from "@/ser
 import {isExpired} from "react-jwt";
 import SecurityContext from "@/context/SecurityContext.ts";
 import {User} from "@/model/user.ts";
-import {useProfile} from "@/hooks/useProfile.ts"
+import {useSyncProfile} from "@/hooks/useSyncProfile.ts"
 import {useGameStudioStatus} from "@/hooks/useGameStudio.ts";
 import {GameStudio} from "@/model/gameStudio.ts";
+import {Profile} from "@/model/profile.ts";
 
 const keycloakConfig = {
     url: import.meta.env.VITE_KC_URL,
@@ -19,7 +20,7 @@ const keycloak: Keycloak = new Keycloak(keycloakConfig);
 export default function SecurityContextProvider({children}: PropsWithChildren) {
     const [loggedInUser, setLoggedInUser] = useState<User | undefined>(undefined);
     const [isInitialised, setIsInitialised] = useState(false);
-    const {profile, refetch} = useProfile();
+    const {profile, refetch} = useSyncProfile();
     const {gameStudioStatus, refetch: refetchStudio} = useGameStudioStatus();
 
     useEffect(() => {
@@ -79,14 +80,18 @@ export default function SecurityContextProvider({children}: PropsWithChildren) {
         keycloak.accountManagement();
     }
 
-    async function refetchProfile() {
+    async function updateProfile(profile: Profile) {
         try {
-            await refetch();
-            await refetchStudio();
+            if (!loggedInUser) return;
+            setLoggedInUser({
+                ...loggedInUser,
+                ...profile
+            })
         } catch (e) {
             console.error("Failed to refetch profile", e);
         }
     }
+
     async function updateGameStudioStatus(gameStudio: GameStudio) {
         try {
             if (!loggedInUser) return;
@@ -104,7 +109,16 @@ export default function SecurityContextProvider({children}: PropsWithChildren) {
 
 
     return (
-        <SecurityContext.Provider value={{isInitialised, isAuthenticated, loggedInUser, login, logout, updateGameStudioStatus, updateUser, refetchProfile}}>
+        <SecurityContext.Provider value={{
+            isInitialised,
+            isAuthenticated,
+            loggedInUser,
+            login,
+            logout,
+            updateGameStudioStatus,
+            updateUser,
+            updateProfile
+        }}>
             {children}
         </SecurityContext.Provider>
     )

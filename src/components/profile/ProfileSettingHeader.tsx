@@ -1,20 +1,12 @@
-import {Benefit} from "@/model/benefit";
 import {Profile} from "@/model/profile.ts";
 import {Avatar, Chip} from "@heroui/react";
-import {useMemo} from "react";
 
 interface ProfileSettingHeaderProps {
     profile: Profile;
-    benefits: Benefit[];
+    activeColor: string | null | undefined;
 }
 
-export function ProfileSettingHeader({profile,benefits}: ProfileSettingHeaderProps) {
-
-    const activeColor = useMemo(() => {
-        if (!profile?.activeUsernameColorId || !benefits) return null;
-        return benefits.find(b => b.id === profile.activeUsernameColorId)?.configuration;
-    }, [profile?.activeUsernameColorId, benefits]);
-
+export function ProfileSettingHeader({profile, activeColor}: ProfileSettingHeaderProps) {
     return (
         <div className="flex gap-5 items-center">
             <Avatar
