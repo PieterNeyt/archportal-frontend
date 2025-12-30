@@ -81,7 +81,7 @@ export default function PartyCard({title, max, count}: PartyCardProps) {
     };
 
     const getButtonColor = () => {
-        if (hasActiveLobby) return "secondary";
+        if (hasActiveLobby) return "success";
         if (!selectedGame) return "default";
         if (isLeader && allReady) return "success";
         if (amIReady) return "danger";
