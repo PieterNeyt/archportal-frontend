@@ -89,9 +89,9 @@ export default function PartyCard({title, max, count}: PartyCardProps) {
     };
 
     const getButtonIcon = () => {
-        if (hasActiveLobby) return <Rocket size={20} />;
-        if (isLeader && allReady) return <Rocket size={20} />;
-        return <CheckCircle2 size={20} />;
+        if (hasActiveLobby) return <Rocket size={20}/>;
+        if (isLeader && allReady) return <Rocket size={20}/>;
+        return <CheckCircle2 size={20}/>;
     };
 
     return (
@@ -111,22 +111,21 @@ export default function PartyCard({title, max, count}: PartyCardProps) {
                     </div>
 
                     <div
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border transition-all
-                            ${hasActiveLobby ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
-                            ${selectedGame ? "bg-primary/10 border-primary/30" : "bg-white/5 border-white/10 hover:bg-white/10"}`}
-                        onClick={() => !hasActiveLobby && setIsExpanded(!isExpanded)}
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border transition-all cursor-pointer
+                        ${selectedGame ? "bg-primary/10 border-primary/30" : "bg-white/5 border-white/10 hover:bg-white/10"}`}
+                        onClick={() => setIsExpanded(!isExpanded)}
                     >
-                        <Gamepad2 size={14} className={selectedGame ? "text-primary" : "text-white/40"} />
+
+                        <Gamepad2 size={14} className={selectedGame ? "text-primary" : "text-white/40"}/>
                         <span className="text-sm font-bold text-white">
                             {selectedGame ? selectedGame.title : "Select Game"}
                         </span>
-                        {!hasActiveLobby && (
-                            <motion.div animate={{rotate: isExpanded ? 180 : 0}}>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <polyline points="6 9 12 15 18 9"/>
-                                </svg>
-                            </motion.div>
-                        )}
+                        <motion.div animate={{ rotate: isExpanded ? 180 : 0 }} className="text-white/60">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                        </motion.div>
+
                     </div>
                 </div>
 
@@ -163,6 +162,7 @@ export default function PartyCard({title, max, count}: PartyCardProps) {
                 selectedGameId={selectedGame?.id}
                 games={games}
                 isLoading={isLoadingGames}
+                isLocked={hasActiveLobby}
             />
 
             <Divider className="mx-6 bg-white/5"/>

@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useSelectGame } from "@/hooks/useParties.ts";
 import { Image, Card, CardFooter } from "@heroui/react";
-import { CheckCircle2, Gamepad2 } from "lucide-react";
+import { CheckCircle2, Gamepad2, Lock } from "lucide-react";
 import { GlobalGameDto } from "@/model/library";
 
 interface SelectGameDropdownProps {
@@ -9,6 +9,7 @@ interface SelectGameDropdownProps {
     selectedGameId?: string;
     games?: GlobalGameDto[];
     isLoading: boolean;
+    isLocked: boolean;
 }
 
 export default function SelectGameDropdown({
@@ -16,6 +17,7 @@ export default function SelectGameDropdown({
                                                selectedGameId,
                                                games,
                                                isLoading,
+                                               isLocked,
                                            }: SelectGameDropdownProps) {
     const { mutate: selectGame } = useSelectGame();
 
@@ -30,7 +32,7 @@ export default function SelectGameDropdown({
                     className="overflow-hidden bg-gradient-to-b from-white/5 to-transparent border-t border-white/10"
                 >
                     <div className="px-6 py-6">
-                        <div className="flex items-center gap-2 mb-5">
+                        <div className="flex items-center gap-2 mb-2">
                             <Gamepad2 size={14} className="text-primary/60" />
                             <p className="text-xs font-bold text-white/40 uppercase tracking-widest">
                                 Available Games
@@ -42,6 +44,13 @@ export default function SelectGameDropdown({
                                 </span>
                             )}
                         </div>
+
+                        {isLocked && (
+                            <div className="mb-4 flex items-center gap-2 text-xs text-warning font-semibold">
+                                <Lock size={14} />
+                                Game selection is locked because the lobby has started
+                            </div>
+                        )}
 
                         {isLoading ? (
                             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -75,22 +84,26 @@ export default function SelectGameDropdown({
                                             }}
                                         >
                                             <Card
-                                                isPressable
+                                                isPressable={!isLocked}
                                                 onPress={() => {
+                                                    if (isLocked) return;
                                                     selectGame(game.id);
                                                 }}
                                                 className={`relative group overflow-hidden transition-all duration-300
                                                     ${
                                                     isSelected
                                                         ? "border-2 border-success shadow-lg shadow-success/30 scale-[1.02]"
-                                                        : "border-2 border-white/5 hover:border-primary/50 hover:scale-[1.02]"
+                                                        : isLocked
+                                                            ? "border-2 border-white/10 opacity-40 cursor-not-allowed"
+                                                            : "border-2 border-white/5 hover:border-primary/50 hover:scale-[1.02]"
                                                 }`}
                                             >
                                                 <div className="relative overflow-hidden">
                                                     <Image
                                                         alt={game.title}
                                                         src={game.imageUrl}
-                                                        className="z-0 w-full h-40 object-cover transition-transform duration-300 group-hover:scale-110"
+                                                        className={`z-0 w-full h-40 object-cover transition-transform duration-300
+                                                            ${!isLocked && "group-hover:scale-110"}`}
                                                     />
 
                                                     <div
@@ -98,7 +111,9 @@ export default function SelectGameDropdown({
                                                             ${
                                                             isSelected
                                                                 ? "from-success/30 via-success/10 to-transparent opacity-100"
-                                                                : "from-black/60 to-transparent opacity-0 group-hover:opacity-100"
+                                                                : !isLocked
+                                                                    ? "from-black/60 to-transparent opacity-0 group-hover:opacity-100"
+                                                                    : "from-black/60 to-transparent opacity-100"
                                                         }`}
                                                     />
 
@@ -116,11 +131,17 @@ export default function SelectGameDropdown({
                                                         </motion.div>
                                                     )}
 
-                                                    {!isSelected && (
+                                                    {!isSelected && !isLocked && (
                                                         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
                                                             <div className="bg-primary/90 backdrop-blur-sm rounded-full p-3 shadow-xl">
                                                                 <Gamepad2 size={20} className="text-white" />
                                                             </div>
+                                                        </div>
+                                                    )}
+
+                                                    {isLocked && !isSelected && (
+                                                        <div className="absolute inset-0 flex items-center justify-center z-10">
+                                                            <Lock size={28} className="text-white/40" />
                                                         </div>
                                                     )}
                                                 </div>
@@ -130,7 +151,7 @@ export default function SelectGameDropdown({
                                                         ${
                                                         isSelected
                                                             ? "bg-black/90 backdrop-blur-xl border-success/50"
-                                                            : "bg-black/80 backdrop-blur-xl border-white/20 group-hover:bg-black/90"
+                                                            : "bg-black/80 backdrop-blur-xl border-white/20"
                                                     }`}
                                                 >
                                                     <p className="text-sm font-bold truncate text-white">
