@@ -1,5 +1,6 @@
 import axios from "axios";
 import {CreateParty, FriendToInvite, Member, Party, PartyInvite} from "@/model/party.ts";
+import { GlobalGameDto } from "@/model/library";
 
 export async function getParty(): Promise<Party | null> {
     try {
@@ -57,4 +58,22 @@ export async function leaveParty(): Promise<void> {
 
 export async function kickFromParty(gamertag: string): Promise<void> {
     await axios.patch(`/api/party/kick/${gamertag}`);
+}
+
+export async function getEligibleGames(): Promise<GlobalGameDto[]> {
+    const { data } = await axios.get<GlobalGameDto[]>("/api/party/eligible-games");
+    return data;
+}
+
+export async function selectPartyGame(gameId: string): Promise<void> {
+    await axios.patch(`/api/party/select-game/${gameId}`);
+}
+
+export async function getSelectedGame(): Promise<GlobalGameDto | null> {
+    try {
+        const {data} = await axios.get<GlobalGameDto>("/api/party/selected-game");
+        return data;
+    } catch {
+        return null;
+    }
 }

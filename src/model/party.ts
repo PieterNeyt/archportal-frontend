@@ -3,6 +3,7 @@ export interface Party {
     maxMembers: number;
     hostIsYou: boolean;
     chatRoomId: string;
+    selectedGameId: string;
 }
 
 export interface Member {
