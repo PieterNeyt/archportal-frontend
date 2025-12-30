@@ -3,9 +3,8 @@ import {Button} from "@heroui/button";
 import {Avatar} from "@heroui/avatar";
 import {Spinner} from "@heroui/spinner";
 import {Chip} from "@heroui/chip";
-import {Loader2, LogOut, Play} from "lucide-react";
+import {Loader2, LogOut, Play, Rocket} from "lucide-react";
 import {useGetLobbyInfo, useGetMySession, useLeaveLobby, useStartMultiplayerGame} from "@/hooks/useLobbies.ts";
-import {SinglePlayerLaunchResponse} from "@/model/singlePlayerLaunchResponse.ts";
 import {useEffect} from "react";
 import {InLobbyError} from "@/components/library/game/lobby/InLobbyError.tsx";
 import useToastEffect from "@/hooks/useToastEffect.ts";
@@ -17,38 +16,40 @@ interface InLobbyCardProps {
 export function InLobbyCard({lobbyId}: InLobbyCardProps) {
     const {isError, isLoading, lobby} = useGetLobbyInfo(lobbyId);
     const {isPending, isError: isGameError, error, isSuccess, startMultiplayer} = useStartMultiplayerGame();
-    const {mySession, refetch: getMySessionData} = useGetMySession(lobbyId);
+    const {mySession, refetch: getMySessionData, isLoading: isLoadingSession} = useGetMySession(lobbyId);
+
     const leaveLobby = useLeaveLobby();
-    useToastEffect(leaveLobby, "Left lobby", "Failed to leave lobby", "You successfully left the lobby.")
+
+    useToastEffect(leaveLobby, "Left lobby", "Failed to leave lobby", "You successfully left the lobby.");
     useToastEffect({
         isError: isGameError,
         error: error,
         isSuccess: isSuccess
-    }, "The game started successfully.", "There was an error launching the game.", "Game started successfully.")
+    }, "The game started successfully.", "There was an error launching the game.", "Game started successfully.");
 
     useEffect(() => {
         if (!lobby) return;
-
         if (lobby.status === "CLOSED" || lobby.status === "STARTED") {
-            getMySessionData()
+            getMySessionData();
         }
     }, [lobby, getMySessionData]);
 
-
-    useEffect(() => {
-        if (lobby && (lobby.status === "CLOSED" || lobby.status === "STARTED") && mySession) {
-            window.open(mySession.launchUrl, "_blank");
-        }
-    }, [lobby, mySession]);
-
     const handleLeaveLobby = async () => {
-        await leaveLobby.leaveLobby()
+        await leaveLobby.leaveLobby();
     };
 
     const handleStartGame = async () => {
-        const response: SinglePlayerLaunchResponse = await startMultiplayer(lobbyId);
+        if ((lobby?.status === "STARTED" || lobby?.status === "CLOSED")) {
+            if (mySession?.launchUrl) {
+                window.open(mySession.launchUrl, "_blank", "noopener,noreferrer");
+            } else {
+                getMySessionData();
+            }
+            return;
+        }
 
-        if (!isGameError) {
+        const response = await startMultiplayer(lobbyId);
+        if (response?.launchUrl) {
             window.open(response.launchUrl, "_blank", "noopener,noreferrer");
         }
     };
@@ -62,12 +63,14 @@ export function InLobbyCard({lobbyId}: InLobbyCardProps) {
     }
 
     if (isError || !lobby) {
-        return <InLobbyError handleLeaveLobby={handleLeaveLobby}/>
+        return <InLobbyError handleLeaveLobby={handleLeaveLobby}/>;
     }
 
     const filledSlots = lobby.players.length;
     const totalSlots = lobby.maxPlayers;
     const emptySlots = Math.max(0, totalSlots - filledSlots);
+
+    const isGameLive = lobby.status === "STARTED" || lobby.status === "CLOSED";
 
     return (
         <Card className="w-full bg-black/20 border border-white/10 overflow-visible">
@@ -92,7 +95,7 @@ export function InLobbyCard({lobbyId}: InLobbyCardProps) {
                         <Chip
                             size="sm"
                             variant="flat"
-                            color={lobby.status === "WAITING" ? "success" : "warning"}
+                            color={isGameLive ? "secondary" : "success"}
                             className="border-none"
                         >
                             {lobby.status}
@@ -158,14 +161,14 @@ export function InLobbyCard({lobbyId}: InLobbyCardProps) {
             <CardFooter className="flex justify-center pb-8 pt-2">
                 <Button
                     size="lg"
-                    color="primary"
+                    color={isGameLive ? "success" : "primary"}
                     variant="shadow"
                     className="font-bold text-lg px-12 py-6 shadow-primary/25 w-full max-w-md"
-                    startContent={<Play size={24} fill="currentColor"/>}
-                    isLoading={isPending}
+                    startContent={isGameLive ? <Rocket size={24} /> : <Play size={24} fill="currentColor"/>}
+                    isLoading={isPending || (isGameLive && isLoadingSession)}
                     onPress={handleStartGame}
                 >
-                    START GAME
+                    {isGameLive ? "ENTER GAME" : "START GAME"}
                 </Button>
             </CardFooter>
         </Card>

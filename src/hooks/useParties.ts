@@ -12,7 +12,8 @@ import {
     kickFromParty,
     leaveParty,
     selectPartyGame,
-    sendPartyInvite
+    sendPartyInvite,
+    startPartyGame, toggleReady
 } from "@/service/partyService.ts";
 import {CreateParty} from "@/model/party.ts";
 
@@ -47,13 +48,19 @@ export function useCreateParty() {
 }
 
 export function useGetPartyMembers() {
-    const {isLoading, isError, data: members, refetch} = useQuery({
+    const {isLoading, isError, data, refetch} = useQuery({
         queryKey: [PARTY_MEMBERS_KEY],
         queryFn: () => getMembersOfParty(),
         refetchInterval: 1000
-    })
+    });
 
-    return {isLoading, isError, members, refetch}
+    return {
+        isLoading,
+        isError,
+        members: data?.members ?? [],
+        startedLobbyId: data?.startedLobbyId ?? null,
+        refetch
+    };
 }
 
 export function useSendPartyInvite() {
@@ -176,6 +183,28 @@ export function useSelectGame() {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [SELECTED_GAME_KEY] });
+        }
+    });
+}
+
+export function useToggleReady() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: () => toggleReady(),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [PARTY_MEMBERS_KEY] });
+        }
+    });
+}
+export function useStartPartyGame() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: () => startPartyGame(),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [PARTY_KEY] });
+            queryClient.invalidateQueries({ queryKey: [PARTY_MEMBERS_KEY] });
         }
     });
 }

@@ -54,7 +54,9 @@ export function useStartMultiplayerGame() {
             mutationFn: (lobbyId: string) => {
                 return startMultiPlayer(lobbyId)
             },
-            onSuccess: () => queryClient.invalidateQueries({queryKey: [SESSION_KEY]}),
+            onSuccess: () => {
+                queryClient.invalidateQueries({queryKey: [SESSION_KEY]});
+            },
         })
 
     return {

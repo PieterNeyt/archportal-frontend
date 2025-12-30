@@ -1,6 +1,6 @@
 import axios from "axios";
-import {CreateParty, FriendToInvite, Member, Party, PartyInvite} from "@/model/party.ts";
-import { GlobalGameDto } from "@/model/library";
+import {CreateParty, FriendToInvite, Party, PartyInvite, PartyMembersResponse} from "@/model/party.ts";
+import {GlobalGameDto} from "@/model/library";
 
 export async function getParty(): Promise<Party | null> {
     try {
@@ -13,13 +13,13 @@ export async function getParty(): Promise<Party | null> {
     }
 }
 
-export async function getMembersOfParty(): Promise<Member[]> {
+export async function getMembersOfParty(): Promise<PartyMembersResponse> {
     try {
-        const {data: members} = await axios.get<Member[]>("/api/party/members");
-        return members;
+        const {data} = await axios.get<PartyMembersResponse>("/api/party/members");
+        return data;
     } catch (error) {
         if (axios.isAxiosError(error) && error.response?.status === 404)
-            return [];
+            return { members: [], startedLobbyId: null };
         throw error;
     }
 }
@@ -76,4 +76,12 @@ export async function getSelectedGame(): Promise<GlobalGameDto | null> {
     } catch {
         return null;
     }
+}
+export async function toggleReady(): Promise<void> {
+    await axios.patch("/api/party/ready");
+}
+
+export async function startPartyGame(): Promise<string> {
+    const { data } = await axios.post<string>("/api/party/start-game");
+    return data;
 }
