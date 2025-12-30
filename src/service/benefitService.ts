@@ -1,16 +1,32 @@
 import axios from "axios";
-import { Benefit } from "@/model/benefit";
+import {Benefit} from "@/model/benefit";
 
-export async function getBenefits(): Promise<Benefit[]> {
-    const { data } = await axios.get<Benefit[]>('/api/shop/benefits');
+export async function getAllBenefits(): Promise<Benefit[]> {
+    const {data} = await axios.get<Benefit[]>('/api/shop/benefits');
     return data;
 }
 
-export async function buyBenefit(benefitId: string): Promise<void> {
-    await axios.post(`/api/shop/benefits/${benefitId}/buy`);
+export async function buyBenefit(benefitId: string): Promise<number> {
+    const {data} = await axios.post<number>(`/api/shop/benefits/${benefitId}/buy`);
+    return data;
 }
 
 export async function getPoints(): Promise<number> {
-    const { data } = await axios.get<number>('/api/profile/points');
+    const {data} = await axios.get<number>('/api/profile/points');
+    return data;
+}
+
+export async function getProfileDiscounts(): Promise<Benefit[]> {
+    const {data} = await axios.get<Benefit[]>('/api/shop/benefits/discounts');
+    return data;
+}
+
+export async function getActiveUsernameColor(): Promise<string | null> {
+    const {data} = await axios.get<string>('/api/shop/benefits/active-color');
+    return data;
+}
+
+export async function getProfileBenefits(): Promise<Benefit[]> {
+    const {data} = await axios.get<Benefit[]>('/api/shop/benefits/profile');
     return data;
 }

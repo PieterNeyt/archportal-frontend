@@ -1,10 +1,9 @@
 import {useGames} from "@/hooks/useGames.ts";
 import {useCart} from "@/hooks/useCart.ts";
-import {useCheckout} from "@/hooks/useCheckout.ts";
 import {GameCard} from "@/components/shop/GameCard.tsx";
 import {SkeletonCard} from "@/components/shop/SkeletonCard.tsx";
 import {GameLoadError} from "@/components/shop/GameLoadError.tsx";
-import {ShoppingCartComponent} from "@/components/shop/ShoppingCartComponent.tsx";
+import {ShoppingCartComponent} from "@/components/shop/shoppingcart/ShoppingCartComponent.tsx";
 import {useMemo, useState} from "react";
 import {Button} from "@heroui/button";
 import {ArrowUpDown, Filter, Search, ShoppingCart} from "lucide-react";
@@ -32,7 +31,6 @@ const formatLabel = (label: string) => {
 export default function ShopPage() {
     const {isError, isLoading, refetch, games} = useGames();
     const {cart, addToCartMutation, addToCart, removeFromCart, itemCount} = useCart();
-    const {checkout, isCheckingOut} = useCheckout();
 
     const navigate = useNavigate();
 
@@ -209,8 +207,6 @@ export default function ShopPage() {
                 isOpen={isCartOpen}
                 onClose={() => setIsCartOpen(false)}
                 onRemoveItem={removeFromCart}
-                onCheckout={checkout}
-                isCheckingOut={isCheckingOut}
             />
         </>
     );
