@@ -171,7 +171,8 @@ export function useSelectedGame() {
     return useQuery({
         queryKey: [SELECTED_GAME_KEY],
         queryFn: () => getSelectedGame(),
-        refetchInterval: 1000
+        refetchInterval: 1000,
+        retry: false
     });
 }
 

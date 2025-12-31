@@ -69,14 +69,13 @@ export async function selectPartyGame(gameId: string): Promise<void> {
     await axios.patch(`/api/party/select-game/${gameId}`);
 }
 
-export async function getSelectedGame(): Promise<GlobalGameDto | null> {
-    try {
-        const {data} = await axios.get<GlobalGameDto>("/api/party/selected-game");
-        return data;
-    } catch {
-        return null;
-    }
+export async function getSelectedGame(): Promise<GlobalGameDto> {
+    const { data } = await axios.get<GlobalGameDto>(
+        "/api/party/selected-game"
+    );
+    return data;
 }
+
 export async function toggleReady(): Promise<void> {
     await axios.patch("/api/party/ready");
 }
