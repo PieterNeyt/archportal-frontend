@@ -97,11 +97,7 @@ export function useStartMultiplayerLobby() {
 export function useJoinMultiplayerLobby() {
     const queryClient = useQueryClient();
 
-    const {
-        mutateAsync,
-        isPending,
-        isError,
-    } = useMutation({
+    const mutation = useMutation({
         mutationFn: (lobbyId: string) => {
             return joinMultiplayerLobby(lobbyId);
         },
@@ -113,9 +109,8 @@ export function useJoinMultiplayerLobby() {
     });
 
     return {
-        isPending,
-        isError,
-        joinLobby: mutateAsync
+        ...mutation,
+        joinLobby: mutation.mutateAsync
     };
 }
 
@@ -124,6 +119,7 @@ export function useGetAllLobbies(gameId: string) {
         queryKey: [LOBBIES_KEY, gameId],
         queryFn: () => getAllLobbies(gameId),
         enabled: !!gameId,
+        refetchInterval: 1000,
     });
 
     return {lobbies, isLoading, isError, refetch};
@@ -145,6 +141,7 @@ export function useIsPLayerInLobby() {
     const {data: isInLobby, isLoading, isError, refetch} = useQuery<InLobby>({
         queryKey: [PLAYER_IN_LOBBY_KEY],
         queryFn: () => isPlayerInLobby(),
+        refetchInterval: 1000,
     });
 
     return {isInLobby, isLoading, isError, refetch};
