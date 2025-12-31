@@ -65,13 +65,9 @@ export default function PartyCard({title, max, count}: PartyCardProps) {
     const amIReady = myMemberData?.isReady ?? false;
 
     const hasActiveLobby = !!startedLobbyId;
-
     const isAlreadyInAnyLobby = !!playerLobbyState?.isPlayerInLobby;
-
     const isInThisPartyLobby = isAlreadyInAnyLobby && String(playerLobbyState?.lobbyId) === String(startedLobbyId);
-
     const isInDifferentLobby = isAlreadyInAnyLobby && !isInThisPartyLobby;
-
     const isLobbyAccessible = activeLobbyInfo?.status === "OPEN";
 
     const handleReadyOrLaunch = async () => {
