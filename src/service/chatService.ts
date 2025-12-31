@@ -16,3 +16,10 @@ export async function sendMessage(message: SendMessage): Promise<void> {
         text: message.text
     })
 }
+
+export async function sendChatbotMessage(message: SendMessage): Promise<SendMessage> {
+    const {data: receivedMessage} = await axios.post<SendMessage>("/api/chat-room/bot", {
+        text: message.text
+    })
+    return receivedMessage;
+}
