@@ -10,7 +10,7 @@ import {
     startMultiplayerLobby,
     startSinglePlayer
 } from "../service/lobbyService";
-import {inLobby, LobbiesResponse, MultiplayerLobbyInfo, StartMultiPlayerRequest} from "@/model/lobby.ts";
+import {InLobby, LobbiesResponse, MultiplayerLobbyInfo, StartMultiPlayerRequest} from "@/model/lobby.ts";
 
 const SESSION_KEY = "session";
 const LOBBIES_KEY = "lobbies";
@@ -142,7 +142,7 @@ export function useGetLobbyInfo(lobbyId: string) {
 }
 
 export function useIsPLayerInLobby() {
-    const {data: isInLobby, isLoading, isError, refetch} = useQuery<inLobby>({
+    const {data: isInLobby, isLoading, isError, refetch} = useQuery<InLobby>({
         queryKey: [PLAYER_IN_LOBBY_KEY],
         queryFn: () => isPlayerInLobby(),
     });
