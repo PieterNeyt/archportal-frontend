@@ -38,7 +38,7 @@ export default function FloatingAssistant() {
 
         await sendMessage({id: "", text: userText}, {
             onSuccess: (response) => {
-                setMessages((prev) => [...prev, {id: "bot", text: response.text}]);
+                setMessages((prev) => [...prev, {id: "bot", text: response}]);
             },
             onError: () => {
                 setMessages((prev) => [
@@ -100,7 +100,7 @@ export default function FloatingAssistant() {
                                 <Input
                                     size={"sm"}
                                     variant={"flat"}
-                                    placeholder={"Ask about games..."}
+                                    placeholder={"Ask away..."}
                                     value={input}
                                     onChange={(e) => setInput(e.target.value)}
                                     disabled={isPending}
