@@ -7,5 +7,5 @@ export function ProfilePublicPage() {
     const {id} = useParams<{ id: string }>();
     const {isLoading, isError, profile} = useAllProfileWithId(id ?? "");
 
-    return (<Profile profile={profile} isLoading={isLoading} isError={isError} />);
+    return (<Profile profile={profile} isLoading={isLoading} isError={isError} isOwner={false} />);
 }

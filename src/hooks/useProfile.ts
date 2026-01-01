@@ -1,5 +1,12 @@
-import {useQuery} from "@tanstack/react-query";
-import {getAllProfile, getAllProfileWithId, getGamesFromProfileId, getProfile} from "@/service/profileService.ts";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {
+    getAllProfile,
+    getAllProfileWithId,
+    getGamesFromProfileId,
+    getProfile,
+    updateSectionVisibility
+} from "@/service/profileService.ts";
+import {SectionDto} from "@/model/profileSyncDto.ts";
 
 const PROFILE_KEY = "profile"
 
@@ -27,6 +34,20 @@ export function useAllProfile() {
         queryFn: () => getAllProfile()
     })
     return {isLoading, isError, refetch, profile}
+}
+
+export function useUpdateSectionVisibility() {
+    const queryClient = useQueryClient();
+    const {isPending, isError, isSuccess, error, mutateAsync} = useMutation({
+        mutationFn: (sections: SectionDto[]) => {
+            return updateSectionVisibility(sections);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: [PROFILE_KEY,"all"]})
+        }
+    })
+
+    return {isPending, isError, isSuccess, error, updateSectionVisibility: mutateAsync}
 }
 
 

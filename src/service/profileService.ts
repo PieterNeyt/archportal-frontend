@@ -1,4 +1,4 @@
-import {ProfileDto, ProfileSyncDto} from "@/model/profileSyncDto.ts";
+import {ProfileDto, ProfileSyncDto, SectionDto} from "@/model/profileSyncDto.ts";
 import axios from "axios";
 import {LibraryGame} from "@/model/library.ts";
 
@@ -19,5 +19,10 @@ export async function getAllProfile(): Promise<ProfileDto> {
 
 export async function getGamesFromProfileId(profileId:string): Promise<LibraryGame[]> {
     const {data: games} = await axios.get<LibraryGame[]>(`/api/profile/${profileId}/library`);
+    return games;
+}
+
+export async function updateSectionVisibility(sections:SectionDto[]): Promise<SectionDto[]> {
+    const {data: games} = await axios.put<SectionDto[]>(`/api/profile/section-visibility`, sections);
     return games;
 }
