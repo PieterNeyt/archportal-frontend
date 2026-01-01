@@ -21,7 +21,7 @@ export interface ProfileProps {
 export function Profile({ profile, isError, isLoading, isOwner }: ProfileProps) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const {isError:isErrorSV,isPending:isPendingSv,isSuccess,error,updateSectionVisibility} = useUpdateSectionVisibility()
-    useToastEffect({isError:isErrorSV,isSuccess,error:error},"Updated Section Visibility","Unabailable to update Section Visibility");
+    useToastEffect({isError:isErrorSV,isSuccess,error:error},"Updated Section Visibility","Unabailable to update Section Visibility","");
     const handleUpdateSettings = async (updatedSections: SectionDto[]) => {
         await updateSectionVisibility(updatedSections);
     };
