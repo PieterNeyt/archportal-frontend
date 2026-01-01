@@ -3,12 +3,17 @@ import axios from "axios";
 import {LibraryGame} from "@/model/library.ts";
 
 export async function getProfile(): Promise<ProfileSyncDto> {
-    const {data: profile} = await axios.get<ProfileSyncDto>(`/api/profile`);
+    const {data: profile} = await axios.get<ProfileSyncDto>(`/api/profile/sync`);
     return profile;
 }
 
-export async function getAllProfile(profileId:string): Promise<ProfileDto> {
+export async function getAllProfileWithId(profileId:string): Promise<ProfileDto> {
     const {data: profile} = await axios.get<ProfileDto>(`/api/profile/${profileId}`);
+    return profile;
+}
+
+export async function getAllProfile(): Promise<ProfileDto> {
+    const {data: profile} = await axios.get<ProfileDto>(`/api/profile`);
     return profile;
 }
 
