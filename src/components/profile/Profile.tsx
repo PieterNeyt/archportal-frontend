@@ -1,5 +1,5 @@
 import {Button, Spinner, useDisclosure} from "@heroui/react";
-import {Settings} from "lucide-react";
+import {Settings, AlertTriangle, ShieldCheck} from "lucide-react";
 import {GLASS_CARD_STYLES} from "@/styles/customClasses.ts";
 import {ProfileHeader} from "@/components/profile/ProfileHeader.tsx";
 import {ProfileGames} from "@/components/profile/ProfileGames.tsx";
@@ -11,51 +11,120 @@ import {useUpdateSectionVisibility} from "@/hooks/useProfile.ts";
 import useToastEffect from "@/hooks/useToastEffect.ts";
 
 export interface ProfileProps {
-    profile:ProfileDto;
+    profile: ProfileDto;
     isLoading: boolean;
     isError: boolean;
     isOwner: boolean;
 }
 
+export function Profile({profile, isError, isLoading, isOwner}: ProfileProps) {
+    const {isOpen, onOpen, onOpenChange} = useDisclosure();
+    const {
+        isError: isErrorSV,
+        isPending: isPendingSv,
+        isSuccess,
+        error,
+        updateSectionVisibility
+    } = useUpdateSectionVisibility()
 
-export function Profile({ profile, isError, isLoading, isOwner }: ProfileProps) {
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const {isError:isErrorSV,isPending:isPendingSv,isSuccess,error,updateSectionVisibility} = useUpdateSectionVisibility()
-
-    useToastEffect({isError:isErrorSV,isSuccess,error:error},"Updated Section Visibility","Unabailable to update Section Visibility","");
+    useToastEffect({
+        isError: isErrorSV,
+        isSuccess,
+        error: error
+    }, "Updated Section Visibility", "Unable to update Section Visibility", "");
 
     const handleUpdateSettings = async (updatedSections: SectionDto[]) => {
         await updateSectionVisibility(updatedSections);
     };
 
     const getSectionVisibility = (sectionType: SectionType): Visibility => {
-        const section = profile.sections.find(s => s.type === sectionType);
+        const section = profile?.sections?.find(s => s.type === sectionType);
         return section ? section.visibility : Visibility.PRIVATE;
     };
 
+    // --- LOADING STATE ---
+    if (isLoading) {
+        return (
+            <div className="h-screen w-full flex flex-col justify-center items-center bg-black gap-4">
+                <Spinner size="lg" color="primary" />
+                <p className="text-white/20 uppercase tracking-[0.3em] font-bold text-xs">Loading Profile</p>
+            </div>
+        );
+    }
 
-    if (isLoading) return <div className="h-screen flex justify-center items-center bg-black"><Spinner color="primary" /></div>;
-    if (isError || !profile) return <div className="h-screen flex justify-center items-center text-white">Error.</div>;
+    // --- ERROR STATE ---
+    if (isError || !profile) {
+        return (
+            <div className="h-[70vh] flex flex-col justify-center items-center text-white gap-4">
+                <div className="p-4 rounded-full bg-red-500/10 border border-red-500/20">
+                    <AlertTriangle className="text-red-500" size={32} />
+                </div>
+                <div className="text-center">
+                    <h2 className="text-xl font-bold uppercase tracking-tighter">Profile not found</h2>
+                    <p className="text-white/40 text-sm">The profile you are looking for does not exist or is private.</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
-        <div className="p-4 sm:p-8 max-w-7xl mx-auto space-y-8">
-            <section className={`${GLASS_CARD_STYLES} p-8 relative border-white/10`}>
-                <ProfileHeader profile={profile} />
-                {isOwner && (
-                    <Button isIconOnly variant="flat" className="absolute top-4 right-4 text-white" onPress={onOpen}>
-                        <Settings size={20} />
+        <div className="p-4 sm:p-8 max-w-7xl mx-auto space-y-6">
+
+            {/* TOP ACTION BAR - Clean place for settings */}
+            {isOwner && (
+                <div className="flex justify-between items-center px-2">
+                    <div className="flex items-center gap-2 text-white/20">
+                        <ShieldCheck size={14} />
+                        <span className="text-[10px] uppercase font-bold tracking-widest">Owner View</span>
+                    </div>
+                    <Button
+                        size="sm"
+                        variant="flat"
+                        className="bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-full px-4"
+                        startContent={<Settings size={16} />}
+                        onPress={onOpen}
+                    >
+                        Profile Settings
                     </Button>
-                )}
+                </div>
+            )}
+
+            {/* HEADER SECTION */}
+            <section className={`${GLASS_CARD_STYLES} p-8 relative border-white/10 overflow-hidden`}>
+                {/* Decoratie op achtergrond */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[100px] -mr-32 -mt-32" />
+
+                <ProfileHeader
+                    profile={profile}
+                    visibility={getSectionVisibility(SectionType.STATISTICS)}
+                    isOwner={isOwner}
+                />
             </section>
 
+            {/* MAIN CONTENT GRID */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                {/* LEFT COLUMN: Games */}
                 <div className="lg:col-span-8">
-                    <ProfileGames profileId={profile.id} gameVisibility={getSectionVisibility(SectionType.GAMES)}
-                                  favoriteGameVisibility={getSectionVisibility(SectionType.FAVORIETES)} />
+                    <ProfileGames
+                        profileId={profile.id}
+                        isOwner={isOwner}
+                        gameVisibility={getSectionVisibility(SectionType.GAMES)}
+                        favoriteGameVisibility={getSectionVisibility(SectionType.FAVORIETES)}
+                    />
                 </div>
+
+                {/* RIGHT COLUMN: Sidebar (Friends & Achievements) */}
                 <div className="lg:col-span-4 space-y-8">
-                    <ProfileFriendsList profileId={profile.id} />
-                    <ProfileAchievementList profileId={profile.id} />
+                    <ProfileFriendsList
+                        profileId={profile.id}
+                        isOwner={isOwner}
+                        visibility={getSectionVisibility(SectionType.FRIENDS)}
+                    />
+                    <ProfileAchievementList
+                        profileId={profile.id}
+                        isOwner={isOwner}
+                        visibility={getSectionVisibility(SectionType.ACHIEVEMENTS)}
+                    />
                 </div>
             </div>
 

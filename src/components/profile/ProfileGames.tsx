@@ -8,9 +8,10 @@ interface ProfileGamesProps {
     profileId: string;
     gameVisibility: Visibility;
     favoriteGameVisibility: Visibility;
+    isOwner: boolean;
 }
 
-export function ProfileGames({profileId, gameVisibility, favoriteGameVisibility}: ProfileGamesProps) {
+export function ProfileGames({profileId, gameVisibility, favoriteGameVisibility, isOwner}: ProfileGamesProps) {
     const {isLoading, isError, games} = useProfileGames(profileId);
 
     const filteredItems = games?.filter(item => {
@@ -30,12 +31,16 @@ export function ProfileGames({profileId, gameVisibility, favoriteGameVisibility}
             <section className="space-y-6">
                 <div className="flex items-center justify-between border-b border-white/5 pb-4">
                     <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Featured Favorites</h2>
-                    <VisibilityBadge section={{ type: SectionType.FAVORIETES, visibility: favoriteGameVisibility }} size="md" />
+                    {isOwner && (
+                        <VisibilityBadge section={{type: SectionType.FAVORIETES, visibility: favoriteGameVisibility}}
+                                         size="md"/>
+                    )
+                    }
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {favoriteGames.map((game, i) => (
-                        <ProfileGameCard key={i} game={game.game}  />
+                        <ProfileGameCard key={i} game={game.game}/>
                     ))}
                 </div>
             </section>
@@ -44,13 +49,14 @@ export function ProfileGames({profileId, gameVisibility, favoriteGameVisibility}
             <section className="space-y-6">
                 <div className="flex items-center justify-between border-b border-white/5 pb-4">
                     <h2 className="text-lg font-bold text-white/60 uppercase tracking-tighter">Full Library</h2>
-                    <VisibilityBadge section={{ type: SectionType.GAMES, visibility: gameVisibility }} size="sm" />
+                    {isOwner && ( <VisibilityBadge section={{type: SectionType.GAMES, visibility: gameVisibility}}
+                                                   size="sm"/>)}
                 </div>
 
                 {/* Veel meer kolommen = veel kleinere kaarten */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {otherGames.map((game, i) => (
-                        <ProfileGameCard key={i} game={game.game} />
+                        <ProfileGameCard key={i} game={game.game}/>
                     ))}
                 </div>
             </section>
