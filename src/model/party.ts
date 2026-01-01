@@ -3,6 +3,8 @@ export interface Party {
     maxMembers: number;
     hostIsYou: boolean;
     chatRoomId: string;
+    selectedGameId: string;
+    startedLobbyId: string;
 }
 
 export interface Member {
@@ -10,6 +12,7 @@ export interface Member {
     icon: string;
     isLeader: boolean;
     isReady: boolean;
+    activeUsernameColorId?: string;
 }
 
 export interface FriendToInvite {
@@ -29,4 +32,8 @@ export interface PartyInvite {
 export interface CreateParty {
     title: string;
     maxMembers: number;
+}
+export interface PartyMembersResponse {
+    members: Member[];
+    startedLobbyId: string | null;
 }

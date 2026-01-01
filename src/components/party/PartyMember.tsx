@@ -1,61 +1,95 @@
-import {User} from "@heroui/user";
-import {CheckCircle2, CircleDashed, Crown} from "lucide-react";
-import {Tooltip} from "@heroui/tooltip";
-import {Chip} from "@heroui/chip";
+import {AlertTriangle} from "lucide-react";
+import {Button} from "@heroui/button";
+import {useKickFromParty} from "@/hooks/useParties.ts";
+import useToastEffect from "@/hooks/useToastEffect.ts";
+import securityContext from "@/context/SecurityContext.ts";
+import {useContext, useState} from "react";
+import {Popover, PopoverContent, PopoverTrigger} from "@heroui/popover";
+import PartyMemberContent from "@/components/party/PartyMemberContent.tsx";
 
 interface PartyMemberProps {
     icon: string,
     gamerTag: string,
     isLeader: boolean,
-    isReady: boolean
+    isReady: boolean,
+    canKick: boolean,
+    activeUsernameColorId?: string
 }
 
-export default function PartyMember({icon, gamerTag, isLeader, isReady}: PartyMemberProps) {
-    return (
-        <div
-            className={"w-full flex justify-between p-3 rounded-xl hover:bg-white/5 hover:border-white/5"}
-        >
-            <User
-                name={
-                    <div className={"flex items-center gap-2"}>
-                        <span className={"font-bold text-white"}>{gamerTag}</span>
-                        {isLeader && (
-                            <Tooltip content="Squad Leader">
-                                <Crown size={14} className="text-warning fill-warning/20"/>
-                            </Tooltip>
-                        )}
-                    </div>
-                }
-                avatarProps={{
-                    src: icon,
-                    isBordered: isLeader,
-                    color: isLeader ? "warning" : "default",
-                    className: "w-10 h-10",
-                }}
-            />
+export default function PartyMember({icon, gamerTag, isLeader, isReady, canKick, activeUsernameColorId}: PartyMemberProps) {
+    const kick = useKickFromParty();
+    const {loggedInUser} = useContext(securityContext);
+    const [isOpen, setIsOpen] = useState(false);
+    useToastEffect(kick, "Successfully kicked player from party", "", "");
 
-            <div className="flex items-center gap-3">
-                {isReady ? (
-                    <Chip
-                        startContent={<CheckCircle2 size={14}/>}
-                        variant="flat"
-                        color="success"
-                        size="sm"
-                        className="capitalize border-1 border-success/20"
-                    >
-                        Ready
-                    </Chip>
-                ) : (
-                    <Chip
-                        startContent={<CircleDashed size={14} className="animate-spin-slow"/>}
-                        variant="flat"
-                        className="bg-white/5 text-white/40 border-1 border-white/10 capitalize"
-                        size="sm"
-                    >
-                        Waiting
-                    </Chip>
-                )}
-            </div>
-        </div>
-    )
+    const isSelf = loggedInUser?.gamerTag === gamerTag;
+    const canTriggerKick = canKick && !isSelf;
+
+    const CardContent = (
+        <PartyMemberContent
+            canTriggerKick={canTriggerKick}
+            gamerTag={gamerTag}
+            isLeader={isLeader}
+            icon={icon}
+            isReady={isReady}
+            isSelf={isSelf}
+            activeUsernameColorId={activeUsernameColorId}
+        />
+    );
+
+    if (!canTriggerKick) {
+        return CardContent;
+    }
+
+    return (
+        <Popover
+            isOpen={isOpen}
+            onOpenChange={setIsOpen}
+            placement="bottom"
+            showArrow
+            classNames={{
+                content: "bg-[#1a1a1e]/90 backdrop-blur-xl border border-white/10 p-4 shadow-2xl rounded-2xl",
+            }}
+        >
+            <PopoverTrigger>
+                <div className="w-full">{CardContent}</div>
+            </PopoverTrigger>
+            <PopoverContent>
+                <div className="space-y-4 flex flex-col items-center min-w-[180px]">
+                    <div className="p-3 bg-danger/10 rounded-full">
+                        <AlertTriangle size={24} className="text-danger"/>
+                    </div>
+                    <div className="text-center">
+                        <p className="text-base font-bold text-white">Kick Player?</p>
+                        <p className="text-xs text-white/40 mt-1">
+                            Remove <span className="text-white font-semibold">{gamerTag}</span> from the party?
+                        </p>
+                    </div>
+                    <div className="flex gap-2 w-full pt-2">
+                        <Button
+                            fullWidth
+                            size="sm"
+                            variant="light"
+                            className="text-white/50"
+                            onPress={() => setIsOpen(false)}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            fullWidth
+                            size="sm"
+                            color="danger"
+                            className="font-bold shadow-lg shadow-danger/20"
+                            onPress={async () => {
+                                await kick.kickFromParty(gamerTag);
+                                setIsOpen(false);
+                            }}
+                        >
+                            Kick
+                        </Button>
+                    </div>
+                </div>
+            </PopoverContent>
+        </Popover>
+    );
 }

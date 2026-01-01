@@ -10,7 +10,7 @@ import {
     startMultiplayerLobby,
     startSinglePlayer
 } from "../service/lobbyService";
-import {inLobby, LobbiesResponse, MultiplayerLobbyInfo, StartMultiPlayerRequest} from "@/model/lobby.ts";
+import {InLobby, LobbiesResponse, MultiplayerLobbyInfo, StartMultiPlayerRequest} from "@/model/lobby.ts";
 
 const SESSION_KEY = "session";
 const LOBBIES_KEY = "lobbies";
@@ -54,7 +54,9 @@ export function useStartMultiplayerGame() {
             mutationFn: (lobbyId: string) => {
                 return startMultiPlayer(lobbyId)
             },
-            onSuccess: () => queryClient.invalidateQueries({queryKey: [SESSION_KEY]}),
+            onSuccess: () => {
+                queryClient.invalidateQueries({queryKey: [SESSION_KEY]});
+            },
         })
 
     return {
@@ -95,11 +97,7 @@ export function useStartMultiplayerLobby() {
 export function useJoinMultiplayerLobby() {
     const queryClient = useQueryClient();
 
-    const {
-        mutateAsync,
-        isPending,
-        isError,
-    } = useMutation({
+    const mutation = useMutation({
         mutationFn: (lobbyId: string) => {
             return joinMultiplayerLobby(lobbyId);
         },
@@ -111,9 +109,8 @@ export function useJoinMultiplayerLobby() {
     });
 
     return {
-        isPending,
-        isError,
-        joinLobby: mutateAsync
+        ...mutation,
+        joinLobby: mutation.mutateAsync
     };
 }
 
@@ -122,6 +119,7 @@ export function useGetAllLobbies(gameId: string) {
         queryKey: [LOBBIES_KEY, gameId],
         queryFn: () => getAllLobbies(gameId),
         enabled: !!gameId,
+        refetchInterval: 1000,
     });
 
     return {lobbies, isLoading, isError, refetch};
@@ -140,9 +138,10 @@ export function useGetLobbyInfo(lobbyId: string) {
 }
 
 export function useIsPLayerInLobby() {
-    const {data: isInLobby, isLoading, isError, refetch} = useQuery<inLobby>({
+    const {data: isInLobby, isLoading, isError, refetch} = useQuery<InLobby>({
         queryKey: [PLAYER_IN_LOBBY_KEY],
         queryFn: () => isPlayerInLobby(),
+        refetchInterval: 1000,
     });
 
     return {isInLobby, isLoading, isError, refetch};

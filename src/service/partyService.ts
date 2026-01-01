@@ -1,5 +1,6 @@
 import axios from "axios";
-import {CreateParty, FriendToInvite, Member, Party, PartyInvite} from "@/model/party.ts";
+import {CreateParty, FriendToInvite, Party, PartyInvite, PartyMembersResponse} from "@/model/party.ts";
+import {GlobalGameDto} from "@/model/library";
 
 export async function getParty(): Promise<Party | null> {
     try {
@@ -12,13 +13,13 @@ export async function getParty(): Promise<Party | null> {
     }
 }
 
-export async function getMembersOfParty(): Promise<Member[]> {
+export async function getMembersOfParty(): Promise<PartyMembersResponse> {
     try {
-        const {data: members} = await axios.get<Member[]>("/api/party/members");
-        return members;
+        const {data} = await axios.get<PartyMembersResponse>("/api/party/members");
+        return data;
     } catch (error) {
         if (axios.isAxiosError(error) && error.response?.status === 404)
-            return [];
+            return { members: [], startedLobbyId: null };
         throw error;
     }
 }
@@ -49,4 +50,37 @@ export async function acceptPartyInvite(partyId: string): Promise<void> {
 
 export async function declinePartyInvite(partyId: string): Promise<void> {
     await axios.delete(`/api/party/${partyId}/decline`)
+}
+
+export async function leaveParty(): Promise<void> {
+    await axios.patch("/api/party/leave")
+}
+
+export async function kickFromParty(gamertag: string): Promise<void> {
+    await axios.patch(`/api/party/kick/${gamertag}`);
+}
+
+export async function getEligibleGames(): Promise<GlobalGameDto[]> {
+    const { data } = await axios.get<GlobalGameDto[]>("/api/party/eligible-games");
+    return data;
+}
+
+export async function selectPartyGame(gameId: string): Promise<void> {
+    await axios.patch(`/api/party/select-game/${gameId}`);
+}
+
+export async function getSelectedGame(): Promise<GlobalGameDto> {
+    const { data } = await axios.get<GlobalGameDto>(
+        "/api/party/selected-game"
+    );
+    return data;
+}
+
+export async function toggleReady(): Promise<void> {
+    await axios.patch("/api/party/ready");
+}
+
+export async function startPartyGame(): Promise<string> {
+    const { data } = await axios.post<string>("/api/party/start-game");
+    return data;
 }

@@ -20,7 +20,7 @@ export default function ImageMemo({image, title, imageFailed, onImageError}: Ima
     }
 
     return (
-        <div className="h-[300px] overflow-hidden border-b border-white/10">
+        <div className="h-full overflow-hidden border-b border-white/10">
             <Image
                 alt={title}
                 src={image}

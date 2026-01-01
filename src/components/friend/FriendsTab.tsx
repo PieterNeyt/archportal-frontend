@@ -39,8 +39,13 @@ export default function FriendsTab({isError, isLoading, filteredProfiles}: Frien
 
             {!isLoading && !isError && filteredProfiles.length > 0 && (
                 <div className={"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"}>
-                    {filteredProfiles.map((profile, i) => (
-                        <FriendCard key={i} {...profile}/>
+                    {filteredProfiles.map((profile) => (
+                        <FriendCard
+                            key={profile.gamerTag}
+                            gamerTag={profile.gamerTag}
+                            icon={profile.icon}
+                            activeUsernameColorId={profile.activeUsernameColorId}
+                        />
                     ))}
                 </div>
             )}

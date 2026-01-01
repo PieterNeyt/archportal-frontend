@@ -12,7 +12,7 @@ import {CreateGamePage} from "@/pages/CreateGamePage.tsx";
 import RouteGuardCreateGame from "@/components/security/RouteGuardCreateGame.tsx";
 import {GameStudioPage} from "@/pages/GameStudioPage.tsx";
 import FriendsPage from "@/pages/FriendsPage.tsx";
-import {ProfileSettingsPage} from "@/pages/ProfileSettings.tsx";
+import {ProfileSettingsPage} from "@/pages/ProfileSettingsPage.tsx";
 import RouteGuardLoggedIn from "@/components/security/RouteGuardLoggedIn.tsx";
 import {GameShopPage} from "@/pages/GameShopPage.tsx";
 import LibraryGamePage from "@/pages/LibraryGamePage.tsx";
@@ -21,6 +21,8 @@ import {GamePage} from "@/pages/GamePage.tsx";
 import PartyPage from "@/pages/PartyPage.tsx";
 import {ProfilePublicPage} from "@/pages/ProfilePublicPage.tsx";
 import {ProfilePage} from "@/pages/ProfilePage.tsx";
+import PointsPage from "@/pages/PointsPage.tsx";
+
 
 const queryClient = new QueryClient();
 
@@ -32,6 +34,7 @@ function App() {
                     <DefaultLayout>
                         <Routes>
                             <Route element={<ShopPage/>} path="/shop"/>
+                            <Route element={<RouteGuardLoggedIn><PointsPage/></RouteGuardLoggedIn>} path="/points"/>
                             <Route element={<PaymentReturnPage/>} path="/payment-return"/>
                             <Route path="/" element={<Navigate to={"/shop"}/>}/>
                             <Route element={<GameShopPage/>} path="/shop/game/:id"/>

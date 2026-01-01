@@ -2,10 +2,11 @@ import {ProfileSyncDto} from "@/model/profileSyncDto.ts";
 import {Avatar, Chip} from "@heroui/react";
 
 interface ProfileSettingHeaderProps {
-    profile: ProfileSyncDto;
+    profile: Profile;
+    activeColor: string | null | undefined;
 }
 
-export function ProfileSettingHeader({profile}: ProfileSettingHeaderProps) {
+export function ProfileSettingHeader({profile, activeColor}: ProfileSettingHeaderProps) {
     return (
         <div className="flex gap-5 items-center">
             <Avatar
@@ -20,10 +21,14 @@ export function ProfileSettingHeader({profile}: ProfileSettingHeaderProps) {
                     {profile?.firstName} {profile?.lastName}
                 </h1>
                 <Chip
-                    color="secondary"
-                    variant="shadow"
+                    variant={activeColor ? "bordered" : "shadow"}
                     size="sm"
-                    className="bg-purple-500/20 border border-purple-500/30"
+                    className={!activeColor ? "bg-purple-500/20 border border-purple-500/30" : ""}
+                    style={activeColor ? {
+                        color: activeColor,
+                        borderColor: activeColor,
+                        backgroundColor: `${activeColor}15`
+                    } : {}}
                 >
                     @{profile?.gamerTag}
                 </Chip>
