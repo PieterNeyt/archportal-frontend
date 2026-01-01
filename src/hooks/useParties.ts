@@ -3,13 +3,17 @@ import {
     acceptPartyInvite,
     createParty,
     declinePartyInvite,
+    getEligibleGames,
     getFriendsForInvite,
     getInvitedParties,
     getMembersOfParty,
     getParty,
+    getSelectedGame,
     kickFromParty,
     leaveParty,
-    sendPartyInvite
+    selectPartyGame,
+    sendPartyInvite,
+    startPartyGame, toggleReady
 } from "@/service/partyService.ts";
 import {CreateParty} from "@/model/party.ts";
 
@@ -17,6 +21,8 @@ const PARTY_KEY = "party"
 const PARTY_MEMBERS_KEY = "party members"
 const FRIENDS_TO_INVITE = "friends to invite"
 const PARTY_INVITES_KEY = "party invites"
+const ELEGIBLE_GAMES_KEY = "eligible-games"
+const SELECTED_GAME_KEY = "selected-game"
 
 export function useParty() {
     const {isLoading, isError, data: party, refetch} = useQuery({
@@ -42,13 +48,19 @@ export function useCreateParty() {
 }
 
 export function useGetPartyMembers() {
-    const {isLoading, isError, data: members, refetch} = useQuery({
+    const {isLoading, isError, data, refetch} = useQuery({
         queryKey: [PARTY_MEMBERS_KEY],
         queryFn: () => getMembersOfParty(),
         refetchInterval: 1000
-    })
+    });
 
-    return {isLoading, isError, members, refetch}
+    return {
+        isLoading,
+        isError,
+        members: data?.members ?? [],
+        startedLobbyId: data?.startedLobbyId ?? null,
+        refetch
+    };
 }
 
 export function useSendPartyInvite() {
@@ -142,4 +154,58 @@ export function useKickFromParty() {
     })
 
     return {isPending, isError, error, isSuccess, kickFromParty: mutateAsync};
+}
+
+export function useGetEligibleGames() {
+    const { members } = useGetPartyMembers();
+    const partySize = members?.length || 0;
+
+    return useQuery({
+        queryKey: [ELEGIBLE_GAMES_KEY, partySize],
+        queryFn: () => getEligibleGames(),
+        refetchInterval: 5000,
+    });
+}
+
+export function useSelectedGame() {
+    return useQuery({
+        queryKey: [SELECTED_GAME_KEY],
+        queryFn: () => getSelectedGame(),
+        refetchInterval: 1000,
+        retry: false
+    });
+}
+
+export function useSelectGame() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (gameId: string) => {
+            return selectPartyGame(gameId);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [SELECTED_GAME_KEY] });
+        }
+    });
+}
+
+export function useToggleReady() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: () => toggleReady(),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [PARTY_MEMBERS_KEY] });
+        }
+    });
+}
+export function useStartPartyGame() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: () => startPartyGame(),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [PARTY_KEY] });
+            queryClient.invalidateQueries({ queryKey: [PARTY_MEMBERS_KEY] });
+        }
+    });
 }
