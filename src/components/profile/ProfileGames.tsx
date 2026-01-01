@@ -1,58 +1,59 @@
-import {Layout, Loader} from "lucide-react";
-import {GLASS_CARD_STYLES} from "@/styles/customClasses.ts";
+import {Loader} from "lucide-react"; // Star toegevoegd voor de icon
 import {ProfileGameCard} from "@/components/profile/ProfileGameCard.tsx";
-import {ProfileFavoriteGames} from "@/components/profile/ProfileFavoriteGames.tsx";
 import {useProfileGames} from "@/hooks/useProfile.ts";
+import {SectionType, Visibility} from "@/model/profileSyncDto.ts"; // SectionType toegevoegd
+import {VisibilityBadge} from "./VisibilityBadge.tsx"; // Zorg dat het pad klopt
 
 interface ProfileGamesProps {
     profileId: string;
+    gameVisibility: Visibility;
+    favoriteGameVisibility: Visibility;
 }
 
-export function ProfileGames({profileId}: ProfileGamesProps) {
-    const { isLoading, isError, games } = useProfileGames(profileId);
+export function ProfileGames({profileId, gameVisibility, favoriteGameVisibility}: ProfileGamesProps) {
+    const {isLoading, isError, games} = useProfileGames(profileId);
 
     const filteredItems = games?.filter(item => {
         if (!item || !item.game) return false;
-        const title = item.game.title || "";
-
-        return title.toLowerCase();
+        return (item.game.title || "").toLowerCase();
     }) || [];
 
     const favoriteGames = filteredItems.filter(item => item.favorite);
     const otherGames = filteredItems.filter(item => !item.favorite);
 
-    if (isLoading) {
-        return <Loader />;
-    }
-    if (isError) {
-        return <div>Error</div>;
-    }
+    if (isLoading) return <Loader/>;
+    if (isError) return <div>Error</div>;
 
-    return (<>
-        <section className="space-y-4">
-            <ProfileFavoriteGames games={favoriteGames}/>
-        </section>
-        <section className="space-y-4">
-            <div className="flex items-center gap-3">
-                <Layout className="text-primary/60" size={20}/>
-                <h2 className="text-lg font-bold text-white/80 uppercase tracking-tighter">My Library</h2>
-                <span className="px-2 py-0.5 rounded-full bg-white/5 text-[10px] text-white/40 font-mono">
-                    {games?.length} Games
-                </span>
-            </div>
+    return (
+        <div className="space-y-16">
+            {/* FAVORITES - 3x groter effect door grid-cols-1 */}
+            <section className="space-y-6">
+                <div className="flex items-center justify-between border-b border-white/5 pb-4">
+                    <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Featured Favorites</h2>
+                    <VisibilityBadge section={{ type: SectionType.FAVORIETES, visibility: favoriteGameVisibility }} size="md" />
+                </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                {otherGames.map((game, i) => (
-                    <div
-                        key={i}
-                        className={`${GLASS_CARD_STYLES} group relative overflow-hidden flex flex-col hover:border-primary/40 transition-all duration-300 cursor-pointer border-white/5`}
-                    >
-                        <ProfileGameCard game={game.game} />
-                        <div
-                            className="absolute bottom-0 left-0 h-[2px] bg-primary/40 w-0 group-hover:w-full transition-all duration-500"/>
-                    </div>
-                ))}
-            </div>
-        </section>
-    </>)
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {favoriteGames.map((game, i) => (
+                        <ProfileGameCard key={i} game={game.game}  />
+                    ))}
+                </div>
+            </section>
+
+            {/* LIBRARY - Compacte weergave */}
+            <section className="space-y-6">
+                <div className="flex items-center justify-between border-b border-white/5 pb-4">
+                    <h2 className="text-lg font-bold text-white/60 uppercase tracking-tighter">Full Library</h2>
+                    <VisibilityBadge section={{ type: SectionType.GAMES, visibility: gameVisibility }} size="sm" />
+                </div>
+
+                {/* Veel meer kolommen = veel kleinere kaarten */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {otherGames.map((game, i) => (
+                        <ProfileGameCard key={i} game={game.game} />
+                    ))}
+                </div>
+            </section>
+        </div>
+    );
 }

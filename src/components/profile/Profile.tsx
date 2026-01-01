@@ -5,7 +5,7 @@ import {ProfileHeader} from "@/components/profile/ProfileHeader.tsx";
 import {ProfileGames} from "@/components/profile/ProfileGames.tsx";
 import {ProfileAchievementList} from "@/components/profile/ProfileAchievementList.tsx";
 import {ProfileFriendsList} from "@/components/profile/ProfileFriendsList.tsx";
-import {ProfileDto, SectionDto} from "@/model/profileSyncDto.ts";
+import {ProfileDto, SectionDto, SectionType, Visibility} from "@/model/profileSyncDto.ts";
 import {ProfileVisibilityModal} from "./ProfileVisibilityModal.tsx";
 import {useUpdateSectionVisibility} from "@/hooks/useProfile.ts";
 import useToastEffect from "@/hooks/useToastEffect.ts";
@@ -21,10 +21,18 @@ export interface ProfileProps {
 export function Profile({ profile, isError, isLoading, isOwner }: ProfileProps) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const {isError:isErrorSV,isPending:isPendingSv,isSuccess,error,updateSectionVisibility} = useUpdateSectionVisibility()
+
     useToastEffect({isError:isErrorSV,isSuccess,error:error},"Updated Section Visibility","Unabailable to update Section Visibility","");
+
     const handleUpdateSettings = async (updatedSections: SectionDto[]) => {
         await updateSectionVisibility(updatedSections);
     };
+
+    const getSectionVisibility = (sectionType: SectionType): Visibility => {
+        const section = profile.sections.find(s => s.type === sectionType);
+        return section ? section.visibility : Visibility.PRIVATE;
+    };
+
 
     if (isLoading) return <div className="h-screen flex justify-center items-center bg-black"><Spinner color="primary" /></div>;
     if (isError || !profile) return <div className="h-screen flex justify-center items-center text-white">Error.</div>;
@@ -42,7 +50,8 @@ export function Profile({ profile, isError, isLoading, isOwner }: ProfileProps) 
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <div className="lg:col-span-8">
-                    <ProfileGames profileId={profile.id} />
+                    <ProfileGames profileId={profile.id} gameVisibility={getSectionVisibility(SectionType.GAMES)}
+                                  favoriteGameVisibility={getSectionVisibility(SectionType.FAVORIETES)} />
                 </div>
                 <div className="lg:col-span-4 space-y-8">
                     <ProfileFriendsList profileId={profile.id} />
