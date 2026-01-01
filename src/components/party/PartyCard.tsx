@@ -1,6 +1,6 @@
 import {Card, CardBody, CardHeader} from "@heroui/card";
 import {Button} from "@heroui/button";
-import {AlertCircle, CheckCircle2, Gamepad2, LogOut, Rocket, Settings, Users} from "lucide-react";
+import {AlertCircle, CheckCircle2, Gamepad2, LogOut, Rocket, Settings, Users, XCircle} from "lucide-react";
 import {Divider} from "@heroui/react";
 import InviteFriendModal from "@/components/party/InviteFriendModal.tsx";
 import {
@@ -12,7 +12,6 @@ import {
     useStartPartyGame,
     useToggleReady
 } from "@/hooks/useParties.ts";
-
 import useToastEffect from "@/hooks/useToastEffect.ts";
 import {useContext, useState} from "react";
 import {motion} from "framer-motion";
@@ -22,6 +21,7 @@ import {
     useGetLobbyInfo,
     useIsPLayerInLobby,
     useJoinMultiplayerLobby,
+    useLeaveLobby,
     useStartMultiplayerGame
 } from "@/hooks/useLobbies.ts";
 
@@ -47,6 +47,7 @@ export default function PartyCard({title, max, count}: PartyCardProps) {
     const startPartyGame = useStartPartyGame();
     const joinLobbyMutation = useJoinMultiplayerLobby();
     const startMultiplayerMutation = useStartMultiplayerGame();
+    const leaveLobbyMutation = useLeaveLobby();
 
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -55,6 +56,7 @@ export default function PartyCard({title, max, count}: PartyCardProps) {
     useToastEffect(startPartyGame, "Lobby created!", "Failed to start party game", "");
     useToastEffect(joinLobbyMutation, "Joined lobby", "Failed to join lobby (maybe full?)", "");
     useToastEffect(startMultiplayerMutation, "Game launching...", "Failed to launch game", "");
+    useToastEffect(leaveLobbyMutation, "Left lobby", "Failed to leave lobby", "");
 
     const totalMembers = members?.length ?? 0;
     const readyMembersCount = members?.filter(m => m.isReady).length ?? 0;
@@ -80,31 +82,29 @@ export default function PartyCard({title, max, count}: PartyCardProps) {
         }
     };
 
+    const handleEnterLobby = async () => {
+        if (!startedLobbyId || isInDifferentLobby || !isLobbyAccessible) return;
+        await joinLobbyMutation.joinLobby(startedLobbyId);
+    };
+
     const handleEnterGame = async () => {
         if (!startedLobbyId || isInDifferentLobby) return;
-
-        try {
-            if (!isInThisPartyLobby) {
-                if (!isLobbyAccessible) return;
-                await joinLobbyMutation.joinLobby(startedLobbyId);
-            }
-            const response = await startMultiplayerMutation.startMultiplayer(startedLobbyId);
-
-            if (response?.launchUrl) {
-                window.open(response.launchUrl, "_blank", "noopener,noreferrer");
-            }
-        } catch (e) {
-            console.error("Enter game flow failed:", e);
+        const response = await startMultiplayerMutation.startMultiplayer(startedLobbyId);
+        if (response?.launchUrl) {
+            window.open(response.launchUrl, "_blank", "noopener,noreferrer");
         }
+    };
+
+    const handleLeaveLobby = async () => {
+        await leaveLobbyMutation.leaveLobby();
     };
 
     const getButtonText = () => {
         if (hasActiveLobby) {
-
             if (isInThisPartyLobby) return "Enter game";
             if (isInDifferentLobby) return "In another game";
             if (!isLobbyAccessible) return "Lobby Full";
-            return "Enter game";
+            return "Enter Lobby";
         }
 
         if (isInDifferentLobby) return "In another game";
@@ -132,13 +132,9 @@ export default function PartyCard({title, max, count}: PartyCardProps) {
         return <CheckCircle2 size={20}/>;
     };
 
-    const isBusy = toggleReady.isPending || startPartyGame.isPending || joinLobbyMutation.isPending || startMultiplayerMutation.isPending;
+    const isBusy = toggleReady.isPending || startPartyGame.isPending || joinLobbyMutation.isPending || startMultiplayerMutation.isPending || leaveLobbyMutation.isPending;
 
-    const isButtonDisabled =
-        isBusy ||
-        (!selectedGame && !hasActiveLobby) ||
-        isInDifferentLobby ||
-        (hasActiveLobby && !isInThisPartyLobby && !isLobbyAccessible);
+    const isButtonDisabled = isBusy || (!selectedGame && !hasActiveLobby) || isInDifferentLobby || (hasActiveLobby && !isInThisPartyLobby && !isLobbyAccessible);
 
     return (
         <Card className="w-full bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
@@ -157,22 +153,20 @@ export default function PartyCard({title, max, count}: PartyCardProps) {
                     </div>
 
                     <div
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border transition-all 
-                        ${hasActiveLobby ? "opacity-70 cursor-not-allowed" : "cursor-pointer hover:bg-white/10"} 
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border transition-all cursor-pointer hover:bg-white/10
                         ${selectedGame ? "bg-primary/10 border-primary/30" : "bg-white/5 border-white/10"}`}
-                        onClick={() => !hasActiveLobby && setIsExpanded(!isExpanded)}
+                        onClick={() => setIsExpanded(!isExpanded)}
                     >
                         <Gamepad2 size={14} className={selectedGame ? "text-primary" : "text-white/40"}/>
                         <span className="text-sm font-bold text-white">
                             {selectedGame ? selectedGame.title : "Select Game"}
                         </span>
-                        {!hasActiveLobby && (
-                            <motion.div animate={{ rotate: isExpanded ? 180 : 0 }} className="text-white/60">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <polyline points="6 9 12 15 18 9" />
-                                </svg>
-                            </motion.div>
-                        )}
+                        <motion.div animate={{rotate: isExpanded ? 180 : 0}} className="text-white/60">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 strokeWidth="2">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </motion.div>
                     </div>
                 </div>
 
@@ -223,13 +217,32 @@ export default function PartyCard({title, max, count}: PartyCardProps) {
                         size="lg"
                         color={getButtonColor()}
                         isDisabled={isButtonDisabled}
-                        onPress={hasActiveLobby ? handleEnterGame : handleReadyOrLaunch}
+                        onPress={
+                            hasActiveLobby
+                                ? (isInThisPartyLobby ? handleEnterGame : handleEnterLobby)
+                                : handleReadyOrLaunch
+                        }
                         className="font-bold uppercase shadow-lg"
                         startContent={getButtonIcon()}
                         isLoading={isBusy}
                     >
                         {getButtonText()}
                     </Button>
+
+                    {(isInThisPartyLobby || isInDifferentLobby) && (
+                        <Button
+                            size="lg"
+                            color="danger"
+                            variant="bordered"
+                            isDisabled={leaveLobbyMutation.isPending}
+                            onPress={handleLeaveLobby}
+                            className="font-bold uppercase shadow-lg min-w-fit px-6"
+                            startContent={<XCircle size={20}/>}
+                            isLoading={leaveLobbyMutation.isPending}
+                        >
+                            Leave Lobby
+                        </Button>
+                    )}
                 </div>
             </CardBody>
         </Card>
