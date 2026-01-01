@@ -5,18 +5,19 @@ import {Badge} from "@heroui/badge";
 import {useGame} from "@/hooks/useGames";
 import {useCart} from "@/hooks/useCart";
 import {ShoppingCartComponent} from "@/components/shop/shoppingcart/ShoppingCartComponent.tsx";
-import {useContext, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import SecurityContext from "@/context/SecurityContext";
 import {ArrowLeft, Gamepad2, LogIn, ShoppingCart} from "lucide-react";
 import useToastEffect from "@/hooks/useToastEffect";
 import {GameBody} from "@/components/shop/GameBody.tsx";
 import {GameBodyLoadError} from "@/components/shop/GameBodyLoadError.tsx";
+import {useUIStore} from "@/hooks/useUIStore.ts";
 
 export function GameShopPage() {
-    const { id } = useParams<{ id: string }>();
+    const {id} = useParams<{ id: string }>();
     const navigate = useNavigate();
 
-    const { game, isLoading, isError: isGameError } = useGame(id!);
+    const {game, isLoading, isError: isGameError} = useGame(id!);
 
     const {
         cart,
@@ -26,9 +27,9 @@ export function GameShopPage() {
         itemCount,
     } = useCart();
 
-    const [isCartOpen, setIsCartOpen] = useState(false);
+    const {isCartOpen, setCartOpen} = useUIStore();
 
-    const { isAuthenticated, login } = useContext(SecurityContext);
+    const {isAuthenticated, login} = useContext(SecurityContext);
     const isAuth = isAuthenticated();
 
     const [imageFailed, setImageFailed] = useState(false);
@@ -38,6 +39,12 @@ export function GameShopPage() {
         "Failed to add",
         `Succesfully added to ${game?.title} to cart`
     );
+
+    useEffect(() => {
+        return () => {
+            setCartOpen(false);
+        };
+    }, [setCartOpen]);
 
     const handleAddToCart = () => {
         if (isAuth && game) {
@@ -69,7 +76,7 @@ export function GameShopPage() {
                 <div className="flex justify-between items-center mb-6">
                     <Button
                         variant="light"
-                        startContent={<ArrowLeft size={20} />}
+                        startContent={<ArrowLeft size={20}/>}
                         onPress={() => navigate('/shop')}
                         className="pl-0 hover:bg-transparent hover:text-primary transition-colors"
                     >
@@ -81,9 +88,9 @@ export function GameShopPage() {
                             isIconOnly
                             color="primary"
                             variant="flat"
-                            onPress={() => setIsCartOpen(true)}
+                            onPress={() => setCartOpen(true)}
                         >
-                            <ShoppingCart size={24} />
+                            <ShoppingCart size={24}/>
                         </Button>
                     </Badge>
                 </div>
@@ -93,10 +100,11 @@ export function GameShopPage() {
 
                     {/* Image (Centered) */}
                     <div className="w-full flex justify-center items-center">
-                        <div className="relative w-full max-w-[400px] aspect-[3/4] md:aspect-square rounded-2xl overflow-hidden bg-black/30 border border-white/10 shadow-2xl shadow-purple-900/10 mx-auto">
+                        <div
+                            className="relative w-full max-w-[400px] aspect-[3/4] md:aspect-square rounded-2xl overflow-hidden bg-black/30 border border-white/10 shadow-2xl shadow-purple-900/10 mx-auto">
                             {(imageFailed || !game.imageUrl) ? (
                                 <div className="flex flex-col items-center justify-center w-full h-full text-white/20">
-                                    <Gamepad2 size={80} strokeWidth={1} />
+                                    <Gamepad2 size={80} strokeWidth={1}/>
                                     <p className="mt-4 text-sm">No artwork available</p>
                                 </div>
                             ) : (
@@ -115,7 +123,7 @@ export function GameShopPage() {
                     {/* Details */}
                     <div className="flex flex-col justify-center space-y-6">
 
-                        <GameBody game={game} />
+                        <GameBody game={game}/>
 
                         <div className="pt-4">
                             <Button
@@ -123,7 +131,7 @@ export function GameShopPage() {
                                 color={isAuth ? "primary" : "secondary"}
                                 variant={isAuth ? "solid" : "flat"}
                                 className="w-full md:w-auto min-w-[200px] font-semibold text-lg"
-                                startContent={isAuth ? <ShoppingCart /> : <LogIn />}
+                                startContent={isAuth ? <ShoppingCart/> : <LogIn/>}
                                 onPress={handleAddToCart}
                             >
                                 {isAuth ? "Add to Cart" : "Login to add to cart"}
@@ -136,7 +144,7 @@ export function GameShopPage() {
             <ShoppingCartComponent
                 cart={cart}
                 isOpen={isCartOpen}
-                onClose={() => setIsCartOpen(false)}
+                onClose={() => setCartOpen(false)}
                 onRemoveItem={removeFromCart}
             />
         </>
