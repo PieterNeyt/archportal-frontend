@@ -3,6 +3,7 @@ import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {
     buyBenefit,
     getActiveUsernameColor,
+    getActiveUsernameColorFromProfileID,
     getAllBenefits,
     getPoints,
     getProfileBenefits,
@@ -58,6 +59,17 @@ export function useActiveUsernameColor() {
         queryFn: getActiveUsernameColor
     });
 }
+
+
+export function useActiveUsernameColorFromProfileId(profileId:string) {
+    const {isLoading, isError, refetch, data: profileColor} = useQuery({
+        queryKey: [USERNAME_COLOUR_KEY],
+        queryFn: () => getActiveUsernameColorFromProfileID(profileId),
+        enabled: false
+    })
+    return {isLoading, isError, refetch, profileColor}
+}
+
 
 export function useProfileBenefits() {
     const {isAuthenticated, isInitialised} = useContext(securityContext);

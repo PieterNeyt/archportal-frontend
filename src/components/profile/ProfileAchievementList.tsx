@@ -15,7 +15,6 @@ interface ProfileAchievementListProps {
 export function ProfileAchievementList({profileId, visibility, isOwner}: ProfileAchievementListProps) {
     const {isError, isLoading, achievements} = useProfileAchievements(profileId);
 
-    // --- LOADING STATE (SKELETON) ---
     if (isLoading) {
         return (
             <div className="space-y-4">
@@ -38,7 +37,6 @@ export function ProfileAchievementList({profileId, visibility, isOwner}: Profile
         );
     }
 
-    // --- ERROR STATE ---
     if (isError) {
         return (
             <div className={`${GLASS_CARD_STYLES} p-6 border-red-500/20 flex flex-col items-center gap-2 text-center`}>

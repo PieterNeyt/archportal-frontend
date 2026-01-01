@@ -14,7 +14,6 @@ interface ProfileFriendsListProps {
 export function ProfileFriendsList({profileId, visibility, isOwner}: ProfileFriendsListProps) {
     const {isLoading, isError, friends} = useProfileFriends(profileId);
 
-    // --- LOADING STATE (SKELETON) ---
     if (isLoading) {
         return (
             <div className="space-y-4">
@@ -37,7 +36,6 @@ export function ProfileFriendsList({profileId, visibility, isOwner}: ProfileFrie
         );
     }
 
-    // --- ERROR STATE ---
     if (isError) {
         return (
             <div className={`${GLASS_CARD_STYLES} p-6 border-red-500/20 flex flex-col items-center gap-2 text-center`}>
@@ -47,7 +45,6 @@ export function ProfileFriendsList({profileId, visibility, isOwner}: ProfileFrie
         );
     }
 
-    // Limit to 5 friends
     const displayFriends = friends?.slice(0, 5) || [];
 
     return (
@@ -93,7 +90,6 @@ export function ProfileFriendsList({profileId, visibility, isOwner}: ProfileFrie
                         ))}
                     </div>
                 ) : (
-                    /* EMPTY STATE */
                     <div className="py-8 text-center flex flex-col items-center gap-2">
                         <Users size={24} className="text-white/5" />
                         <p className="text-xs text-white/30 uppercase tracking-widest font-medium">

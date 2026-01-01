@@ -1,5 +1,3 @@
-import {ChangeChannelType} from "@/components/profile/ChangeChannelType.tsx";
-import {useProfile} from "@/hooks/useSyncProfile.ts";
 import {Button, Card, CardBody, CardHeader, Divider} from "@heroui/react";
 import {ProfileSettingHeader} from "@/components/profile/settings/ProfileSettingHeader.tsx";
 import {ProfileSettingBody} from "@/components/profile/settings/ProfileSettingBody.tsx";
@@ -10,6 +8,8 @@ import {useContext} from "react";
 import securityContext from "@/context/SecurityContext.ts";
 import {ProfileInventory} from "@/components/profile/ProfileInventory.tsx";
 import {useActiveUsernameColor} from "@/hooks/useBenefits.ts";
+import {useProfile} from "@/hooks/useProfile.ts";
+import {ChangeChannelType} from "@/components/profile/settings/ChangeChannelType.tsx";
 
 
 export function ProfileSettingsPage() {

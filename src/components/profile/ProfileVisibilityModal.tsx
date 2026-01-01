@@ -2,6 +2,7 @@ import {useState} from "react";
 import {Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Radio, RadioGroup} from "@heroui/react";
 import {GLASS_CARD_STYLES} from "@/styles/customClasses.ts";
 import {SectionDto, SectionType, Visibility} from "@/model/profileSyncDto.ts";
+
 interface ProfileVisibilityModalProps {
     isOpen: boolean;
     onOpenChange: (isOpen: boolean) => void;
@@ -10,13 +11,8 @@ interface ProfileVisibilityModalProps {
     isLoading: boolean;
 }
 
-export function ProfileVisibilityModal({
-                                           isOpen,
-                                           onOpenChange,
-                                           initialSections,
-                                           onSave,
-                                           isLoading
-                                       }: ProfileVisibilityModalProps) {
+export function ProfileVisibilityModal({isOpen, onOpenChange, initialSections, onSave, isLoading
+}: ProfileVisibilityModalProps) {
 
     const [localSections, setLocalSections] = useState<SectionDto[]>(initialSections);
 
@@ -58,7 +54,7 @@ export function ProfileVisibilityModal({
                                 variant="flat"
                                 onPress={onClose}
                                 className="text-white"
-                                isDisabled={isLoading} // Deactiveer annuleren tijdens laden
+                                isDisabled={isLoading}
                             >
                                 Annuleren
                             </Button>

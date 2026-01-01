@@ -4,6 +4,9 @@ export interface ProfileSyncDto {
     gamerTag: string;
     icon: string;
     email: string;
+    platformBenefits: string[];
+    activeProfilePictureId?: string;
+    activeUsernameColorId?: string;
 }
 
 export enum SectionType {
@@ -38,6 +41,8 @@ export interface ProfileDto {
     icon: string;
     gamerTag: string;
     platformPoints: number;
+    activeProfilePictureId?: string;
+    activeUsernameColorId?: string;
     games: GameDto[];
     sections: SectionDto[];
 }

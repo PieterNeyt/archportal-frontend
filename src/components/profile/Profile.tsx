@@ -11,7 +11,7 @@ import {useUpdateSectionVisibility} from "@/hooks/useProfile.ts";
 import useToastEffect from "@/hooks/useToastEffect.ts";
 
 export interface ProfileProps {
-    profile: ProfileDto;
+    profile: ProfileDto | undefined;
     isLoading: boolean;
     isError: boolean;
     isOwner: boolean;
@@ -19,19 +19,9 @@ export interface ProfileProps {
 
 export function Profile({profile, isError, isLoading, isOwner}: ProfileProps) {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
-    const {
-        isError: isErrorSV,
-        isPending: isPendingSv,
-        isSuccess,
-        error,
-        updateSectionVisibility
-    } = useUpdateSectionVisibility()
+    const {isError: isErrorSV, isPending: isPendingSv, isSuccess, error, updateSectionVisibility} = useUpdateSectionVisibility()
 
-    useToastEffect({
-        isError: isErrorSV,
-        isSuccess,
-        error: error
-    }, "Updated Section Visibility", "Unable to update Section Visibility", "");
+    useToastEffect({isError: isErrorSV, isSuccess, error: error}, "Updated Section Visibility", "Unable to update Section Visibility", "");
 
     const handleUpdateSettings = async (updatedSections: SectionDto[]) => {
         await updateSectionVisibility(updatedSections);
@@ -42,7 +32,6 @@ export function Profile({profile, isError, isLoading, isOwner}: ProfileProps) {
         return section ? section.visibility : Visibility.PRIVATE;
     };
 
-    // --- LOADING STATE ---
     if (isLoading) {
         return (
             <div className="h-screen w-full flex flex-col justify-center items-center bg-black gap-4">
@@ -52,7 +41,6 @@ export function Profile({profile, isError, isLoading, isOwner}: ProfileProps) {
         );
     }
 
-    // --- ERROR STATE ---
     if (isError || !profile) {
         return (
             <div className="h-[70vh] flex flex-col justify-center items-center text-white gap-4">
@@ -69,8 +57,6 @@ export function Profile({profile, isError, isLoading, isOwner}: ProfileProps) {
 
     return (
         <div className="p-4 sm:p-8 max-w-7xl mx-auto space-y-6">
-
-            {/* TOP ACTION BAR - Clean place for settings */}
             {isOwner && (
                 <div className="flex justify-between items-center px-2">
                     <div className="flex items-center gap-2 text-white/20">
@@ -89,11 +75,8 @@ export function Profile({profile, isError, isLoading, isOwner}: ProfileProps) {
                 </div>
             )}
 
-            {/* HEADER SECTION */}
             <section className={`${GLASS_CARD_STYLES} p-8 relative border-white/10 overflow-hidden`}>
-                {/* Decoratie op achtergrond */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[100px] -mr-32 -mt-32" />
-
                 <ProfileHeader
                     profile={profile}
                     visibility={getSectionVisibility(SectionType.STATISTICS)}
@@ -101,9 +84,7 @@ export function Profile({profile, isError, isLoading, isOwner}: ProfileProps) {
                 />
             </section>
 
-            {/* MAIN CONTENT GRID */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                {/* LEFT COLUMN: Games */}
                 <div className="lg:col-span-8">
                     <ProfileGames
                         profileId={profile.id}
@@ -113,7 +94,6 @@ export function Profile({profile, isError, isLoading, isOwner}: ProfileProps) {
                     />
                 </div>
 
-                {/* RIGHT COLUMN: Sidebar (Friends & Achievements) */}
                 <div className="lg:col-span-4 space-y-8">
                     <ProfileFriendsList
                         profileId={profile.id}

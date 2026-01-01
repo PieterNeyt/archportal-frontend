@@ -1,20 +1,15 @@
+import { LibraryGame } from "@/model/library";
 import {Profile} from "@/model/profile.ts";
+import {ProfileDto, ProfileSyncDto, SectionDto} from "@/model/profileSyncDto";
 import axios from "axios";
 
-export async function getProfile(): Promise<ProfileSyncDto> {
+export async function getProfileSync(): Promise<ProfileSyncDto> {
     const {data: profile} = await axios.get<ProfileSyncDto>(`/api/profile/sync`);
     return profile;
 }
 
 export async function getAllProfileWithId(profileId:string): Promise<ProfileDto> {
     const {data: profile} = await axios.get<ProfileDto>(`/api/profile/${profileId}`);
-export async function syncProfile(): Promise<Profile> {
-    const {data: profile} = await axios.put<Profile>(`/api/profile/sync`);
-    return profile;
-}
-
-export async function getProfile(): Promise<Profile> {
-    const {data: profile} = await axios.get<Profile>(`/api/profile`);
     return profile;
 }
 
@@ -28,10 +23,12 @@ export async function getGamesFromProfileId(profileId:string): Promise<LibraryGa
     return games;
 }
 
-export async function updateSectionVisibility(sections:SectionDto[]): Promise<SectionDto[]> {
+async function updateSectionVisibility(sections:SectionDto[]): Promise<SectionDto[]> {
     const {data: games} = await axios.put<SectionDto[]>(`/api/profile/section-visibility`, sections);
     return games;
 }
+
+export default updateSectionVisibility
 
 export async function toggleBenefit(benefitId: string) {
     const {data} = await axios.put<Profile>(`/api/profile/benefits/${benefitId}/toggle`);
