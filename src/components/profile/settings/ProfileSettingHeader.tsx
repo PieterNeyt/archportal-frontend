@@ -1,8 +1,8 @@
 import {Avatar, Chip} from "@heroui/react";
-import {ProfileSyncDto} from "@/model/profileSyncDto.ts";
+import {User} from "@/model/user";
 
 interface ProfileSettingHeaderProps {
-    profile: ProfileSyncDto;
+    profile: User |undefined;
     activeColor: string | null | undefined;
 }
 
