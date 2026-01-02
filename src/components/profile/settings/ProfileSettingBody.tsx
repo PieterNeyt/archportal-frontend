@@ -1,7 +1,7 @@
-import {Profile} from "@/model/profile.ts";
+import {User} from "@/model/user";
 
 interface ProfileSettingBodyProps {
-    profile: Profile;
+    profile: User | undefined;
     activeColor: string | null | undefined;
 }
 

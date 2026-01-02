@@ -26,6 +26,11 @@ export async function getActiveUsernameColor(): Promise<string | null> {
     return data;
 }
 
+export async function getActiveUsernameColorFromProfileID(profileId:string): Promise<string | null> {
+    const {data} = await axios.get<string>(`/api/shop/benefits/active-color/profile/${profileId}`);
+    return data;
+}
+
 export async function getProfileBenefits(): Promise<Benefit[]> {
     const {data} = await axios.get<Benefit[]>('/api/shop/benefits/profile');
     return data;

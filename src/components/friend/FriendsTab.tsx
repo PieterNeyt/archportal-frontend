@@ -1,12 +1,12 @@
 import {Users} from "lucide-react";
 import FriendSkeletonCard from "@/components/friend/FriendSkeletonCard.tsx";
 import FriendCard from "@/components/friend/FriendCard.tsx";
-import {Profile} from "@/model/profile.ts";
+import {ProfileSyncDto} from "@/model/profileSyncDto.ts";
 
 interface FriendsTabProps {
     isError: boolean;
     isLoading: boolean;
-    filteredProfiles: Profile[];
+    filteredProfiles: ProfileSyncDto[];
 }
 
 export default function FriendsTab({isError, isLoading, filteredProfiles}: FriendsTabProps) {

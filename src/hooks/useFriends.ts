@@ -3,7 +3,7 @@ import {
     acceptFriendRequest,
     cancelFriendRequest,
     declineFriendRequest,
-    getFriends,
+    getFriends, getFriendsFromProfileId,
     getIncomingFriendRequests,
     getOutgoingFriendRequests,
     removeFriend,
@@ -25,6 +25,14 @@ export function useFriends() {
         enabled: isAuthenticated() && isInitialised,
     });
     return {isLoading, isError, profiles, refetch};
+}
+
+export function useProfileFriends(profileId:string) {
+    const {isLoading, isError, data: friends, refetch} = useQuery({
+        queryKey: [FRIENDS_KEY,profileId],
+        queryFn: () => getFriendsFromProfileId(profileId),
+    });
+    return {isLoading, isError, friends, refetch};
 }
 
 export function useSendFriendRequest() {

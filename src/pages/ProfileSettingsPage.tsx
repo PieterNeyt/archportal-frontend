@@ -1,20 +1,20 @@
-import {ChangeChannelType} from "@/components/profile/ChangeChannelType.tsx";
-import {useProfile} from "@/hooks/useSyncProfile.ts";
 import {Button, Card, CardBody, CardHeader, Divider} from "@heroui/react";
-import {ProfileSettingHeader} from "@/components/profile/ProfileSettingHeader.tsx";
-import {ProfileSettingBody} from "@/components/profile/ProfileSettingBody.tsx";
-import {ProfileLoadError} from "@/components/profile/ProfileLoadError.tsx";
+import {ProfileSettingHeader} from "@/components/profile/settings/ProfileSettingHeader.tsx";
+import {ProfileSettingBody} from "@/components/profile/settings/ProfileSettingBody.tsx";
+import {ProfileLoadError} from "@/components/profile/settings/ProfileLoadError.tsx";
 import {BLURRY_BACKGROUND} from "@/styles/customClasses.ts";
-import {ProfileCardSkeleton} from "@/components/profile/ProfileCardSkeleton.tsx";
+import {ProfileCardSkeleton} from "@/components/profile/settings/ProfileCardSkeleton.tsx";
 import {useContext} from "react";
 import securityContext from "@/context/SecurityContext.ts";
 import {ProfileInventory} from "@/components/profile/ProfileInventory.tsx";
 import {useActiveUsernameColor} from "@/hooks/useBenefits.ts";
+import {useProfile} from "@/hooks/useProfile.ts";
+import {ChangeChannelType} from "@/components/profile/settings/ChangeChannelType.tsx";
 
 
 export function ProfileSettingsPage() {
     const {isError, isLoading, profile} = useProfile();
-    const {updateUser} = useContext(securityContext);
+    const {updateUser, loggedInUser} = useContext(securityContext);
     const {data: activeColor} = useActiveUsernameColor();
 
     if (isLoading) {
@@ -29,7 +29,7 @@ export function ProfileSettingsPage() {
         <div className="min-h-screen flex items-center justify-center p-4">
             <Card className={BLURRY_BACKGROUND}>
                 <CardHeader className="flex justify-between items-start pb-6">
-                    <ProfileSettingHeader profile={profile} activeColor={activeColor}/>
+                    <ProfileSettingHeader profile={loggedInUser} activeColor={activeColor}/>
                     <Button
                         className="bg-white text-black font-semibold shadow-none hover:bg-white/90 border-none"
                         radius="full"
@@ -42,7 +42,7 @@ export function ProfileSettingsPage() {
                 <Divider className="my-2 bg-white/10"/>
 
                 <CardBody className="gap-8">
-                    <ProfileSettingBody profile={profile} activeColor={activeColor}/>
+                    <ProfileSettingBody profile={loggedInUser} activeColor={activeColor}/>
 
                     <Divider className="bg-white/10"/>
 

@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {getGameStatistics} from "@/service/analyticsService.ts";
+import {getGameStatistics, getPlayerStatistics} from "@/service/analyticsService.ts";
 import {GameStatistics} from "@/model/gameStatistics.ts";
 
 const GAME_STATISTICS_KEY = "game statistics";
@@ -31,3 +31,14 @@ export function useGameStatistics(gameId: string) {
         error
     };
 }
+
+    export function usePlayerStats(profileId: string) {
+        const {
+            isLoading, isError, refetch, data: PlayerStats,
+        } = useQuery({
+            queryKey: ["PlayerStats", profileId],
+            queryFn: () => getPlayerStatistics(profileId)
+        });
+
+        return {isLoading, isError, refetch, PlayerStats,};
+    }

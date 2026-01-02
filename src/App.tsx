@@ -19,6 +19,8 @@ import LibraryGamePage from "@/pages/LibraryGamePage.tsx";
 import ChatPage from "@/pages/ChatPage.tsx";
 import {GamePage} from "@/pages/GamePage.tsx";
 import PartyPage from "@/pages/PartyPage.tsx";
+import {ProfilePublicPage} from "@/pages/ProfilePublicPage.tsx";
+import {ProfilePage} from "@/pages/ProfilePage.tsx";
 import PointsPage from "@/pages/PointsPage.tsx";
 
 
@@ -40,6 +42,10 @@ function App() {
                             <Route element={<RouteGuardLoggedIn><PartyPage/></RouteGuardLoggedIn>} path={"/party"}/>
                             <Route element={<RouteGuardGameStudio><GameStudioPage/></RouteGuardGameStudio>}
                                    path="/gamestudio"/>
+                            <Route element={<RouteGuardLoggedIn><ProfilePublicPage/></RouteGuardLoggedIn>}
+                                   path="/profile/:id"/>
+                            <Route element={<RouteGuardLoggedIn><ProfilePage/></RouteGuardLoggedIn>}
+                                   path="/profile"/>
                             <Route element={<RouteGuardLoggedIn><GamePage/></RouteGuardLoggedIn>}
                                    path="/gamestudio/game/:id"/>
                             <Route element={<RouteGuardLoggedIn><LibraryPage/></RouteGuardLoggedIn>} path="/library"/>
