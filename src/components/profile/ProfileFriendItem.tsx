@@ -1,14 +1,11 @@
-import {ProfileDto} from "@/model/profileSyncDto.ts";
+import {ProfileSyncDto} from "@/model/profileSyncDto.ts";
 import {Avatar} from "@heroui/react";
-import {useActiveUsernameColorFromProfileId} from "@/hooks/useBenefits.ts";
 
 interface ProfileFriendItemProps {
-    profile: ProfileDto;
+    profile: ProfileSyncDto;
 }
 
 export function ProfileFriendItem ({profile}: ProfileFriendItemProps) {
-    const {profileColor} = useActiveUsernameColorFromProfileId(profile.id);
-
     return (
         <div
             key={profile.gamerTag}
@@ -23,7 +20,6 @@ export function ProfileFriendItem ({profile}: ProfileFriendItemProps) {
             <div className="flex flex-col min-w-0">
                 <span
                     className="text-sm font-medium transition-colors truncate"
-                    style={{ color: profileColor || 'rgba(255, 255, 255, 0.9)' }}
                 >
                     {profile.gamerTag}
                 </span>
