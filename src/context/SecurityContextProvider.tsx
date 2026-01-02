@@ -4,10 +4,10 @@ import {addAccessTokenToAuthHeader, removeAccessTokenFromAuthHeader} from "@/ser
 import {isExpired} from "react-jwt";
 import SecurityContext from "@/context/SecurityContext.ts";
 import {User} from "@/model/user.ts";
-import {useSyncProfile} from "@/hooks/useSyncProfile.ts"
 import {useGameStudioStatus} from "@/hooks/useGameStudio.ts";
 import {GameStudio} from "@/model/gameStudio.ts";
 import {Profile} from "@/model/profile.ts";
+import {useProfile} from "@/hooks/useProfile.ts";
 
 const keycloakConfig = {
     url: import.meta.env.VITE_KC_URL,
@@ -20,7 +20,7 @@ const keycloak: Keycloak = new Keycloak(keycloakConfig);
 export default function SecurityContextProvider({children}: PropsWithChildren) {
     const [loggedInUser, setLoggedInUser] = useState<User | undefined>(undefined);
     const [isInitialised, setIsInitialised] = useState(false);
-    const {profile, refetch} = useSyncProfile();
+    const {profile, refetch} = useProfile();
     const {gameStudioStatus, refetch: refetchStudio} = useGameStudioStatus();
 
     useEffect(() => {

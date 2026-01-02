@@ -1,8 +1,8 @@
-import {Profile} from "@/model/profile.ts";
 import {Avatar, Chip} from "@heroui/react";
+import {User} from "@/model/user";
 
 interface ProfileSettingHeaderProps {
-    profile: Profile;
+    profile: User |undefined;
     activeColor: string | null | undefined;
 }
 

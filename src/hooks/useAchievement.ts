@@ -3,7 +3,7 @@ import {Achievement} from "@/model/game.ts";
 import {addAchievement} from "@/service/gameService.ts";
 import {useContext} from "react";
 import SecurityContext from "@/context/SecurityContext.ts";
-import {getAchievemnts} from "@/service/analyticsService.ts";
+import {getAchievemnts, getAchievemntsFromProfile} from "@/service/analyticsService.ts";
 
 const GAME_KEY = "game";
 
@@ -36,6 +36,14 @@ export function useAchievemnts(gameId: string) {
         queryKey: ["achievemnts", gameId],
         queryFn: () => getAchievemnts(gameId),
         enabled: isAuthenticated() && isInitialised
+    });
+    return {isLoading, isError, achievements};
+}
+
+export function useProfileAchievements(profileId: string) {
+    const {isLoading, isError, data: achievements} = useQuery({
+        queryKey: ["achievemnts", profileId],
+        queryFn: () => getAchievemntsFromProfile(profileId),
     });
     return {isLoading, isError, achievements};
 }

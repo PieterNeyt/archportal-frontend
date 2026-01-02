@@ -1,6 +1,6 @@
-import {Profile} from "@/model/profile.ts";
+import {ProfileSyncDto} from "@/model/profileSyncDto.ts";
 
-export interface User extends Profile {
+export interface User extends ProfileSyncDto {
     hasStudio: boolean;
     studioId: string | undefined;
     name: string | undefined;

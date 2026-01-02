@@ -1,7 +1,6 @@
 import { Button } from "@heroui/react";
 import { Check } from "lucide-react";
 import { Benefit } from "@/model/benefit";
-import React from "react";
 
 interface ProfileInventoryItemProps {
     benefit: Benefit;
@@ -11,13 +10,7 @@ interface ProfileInventoryItemProps {
     onToggle: (benefitId: string, type: string, config: string, isActive: boolean) => void;
 }
 
-export function ProfileInventoryItem({
-                                         benefit,
-                                         preview,
-                                         isToggleable = true,
-                                         isActive = false,
-                                         onToggle
-                                     }: ProfileInventoryItemProps) {
+export function ProfileInventoryItem({benefit, preview, isToggleable = true, isActive = false, onToggle}: ProfileInventoryItemProps) {
     return (
         <div
             className={`p-3 rounded-xl border transition-all flex items-center justify-between ${

@@ -10,6 +10,7 @@ export function ProfileInventory() {
     const {data: benefits = []} = useProfileBenefits();
     const {loggedInUser, updateProfile} = useContext(SecurityContext);
     const {mutate: toggle} = useToggleBenefit();
+
     const avatars = benefits.filter(b => b.type === BenefitType.UNIQUE_PROFILE_PICTURE);
     const colors = benefits.filter(b => b.type === BenefitType.USERNAME_COLOR);
     const discounts = benefits.filter(b => b.type === BenefitType.GAME_DISCOUNT);
@@ -25,7 +26,6 @@ export function ProfileInventory() {
     return (
         <div className="space-y-8">
             <h3 className="text-xl font-semibold text-white">My inventory</h3>
-
             {/* Avatars */}
             {avatars.length > 0 && (
                 <div className="space-y-3">
