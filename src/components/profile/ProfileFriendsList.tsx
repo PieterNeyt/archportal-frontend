@@ -1,8 +1,8 @@
-import {Users, AlertCircle} from "lucide-react";
+import {AlertCircle, Users} from "lucide-react";
 import {GLASS_CARD_STYLES} from "@/styles/customClasses.ts";
-import {Avatar, Skeleton} from "@heroui/react";
+import {Skeleton} from "@heroui/react";
 import {useProfileFriends} from "@/hooks/useFriends.ts";
-import {Visibility, SectionType} from "@/model/profileSyncDto.ts";
+import {SectionType, Visibility} from "@/model/profileSyncDto.ts";
 import {VisibilityBadge} from "./VisibilityBadge.tsx";
 import {ProfileFriendItem} from "@/components/profile/ProfileFriendItem.tsx";
 
