@@ -114,6 +114,7 @@ export default function FloatingAssistant() {
                                         value={input}
                                         onChange={(e) => setInput(e.target.value)}
                                         disabled={isPending}
+                                        autoComplete={"off"}
                                         classNames={{
                                             inputWrapper: "bg-white/5 border-white/10",
                                             input: "text-white"
