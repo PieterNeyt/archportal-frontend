@@ -1,7 +1,7 @@
-import {ProfileSyncDto} from "@/model/profileSyncDto.ts";
+import {User} from "@/model/user";
 
 interface ProfileSettingBodyProps {
-    profile: ProfileSyncDto;
+    profile: User | undefined;
     activeColor: string | null | undefined;
 }
 

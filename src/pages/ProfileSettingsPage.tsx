@@ -14,7 +14,7 @@ import {ChangeChannelType} from "@/components/profile/settings/ChangeChannelType
 
 export function ProfileSettingsPage() {
     const {isError, isLoading, profile} = useProfile();
-    const {updateUser} = useContext(securityContext);
+    const {updateUser, loggedInUser} = useContext(securityContext);
     const {data: activeColor} = useActiveUsernameColor();
 
     if (isLoading) {
@@ -29,7 +29,7 @@ export function ProfileSettingsPage() {
         <div className="min-h-screen flex items-center justify-center p-4">
             <Card className={BLURRY_BACKGROUND}>
                 <CardHeader className="flex justify-between items-start pb-6">
-                    <ProfileSettingHeader profile={profile} activeColor={activeColor}/>
+                    <ProfileSettingHeader profile={loggedInUser} activeColor={activeColor}/>
                     <Button
                         className="bg-white text-black font-semibold shadow-none hover:bg-white/90 border-none"
                         radius="full"
@@ -42,7 +42,7 @@ export function ProfileSettingsPage() {
                 <Divider className="my-2 bg-white/10"/>
 
                 <CardBody className="gap-8">
-                    <ProfileSettingBody profile={profile} activeColor={activeColor}/>
+                    <ProfileSettingBody profile={loggedInUser} activeColor={activeColor}/>
 
                     <Divider className="bg-white/10"/>
 
