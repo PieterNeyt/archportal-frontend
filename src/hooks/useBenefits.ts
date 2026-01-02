@@ -61,13 +61,14 @@ export function useActiveUsernameColor() {
 }
 
 
-export function useActiveUsernameColorFromProfileId(profileId:string) {
-    const {isLoading, isError, refetch, data: profileColor} = useQuery({
-        queryKey: [USERNAME_COLOUR_KEY],
+export function useActiveUsernameColorFromProfileId(profileId: string) {
+    const { isLoading, isError, data: profileColor } = useQuery({
+        queryKey: [USERNAME_COLOUR_KEY, profileId],
         queryFn: () => getActiveUsernameColorFromProfileID(profileId),
-        enabled: false
-    })
-    return {isLoading, isError, refetch, profileColor}
+        enabled: !!profileId
+    });
+
+    return { isLoading, isError, profileColor };
 }
 
 

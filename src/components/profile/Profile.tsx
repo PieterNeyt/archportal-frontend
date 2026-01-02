@@ -1,14 +1,12 @@
 import {Button, Spinner, useDisclosure} from "@heroui/react";
-import {Settings, AlertTriangle, ShieldCheck} from "lucide-react";
+import {AlertTriangle, Settings, ShieldCheck} from "lucide-react";
 import {GLASS_CARD_STYLES} from "@/styles/customClasses.ts";
 import {ProfileHeader} from "@/components/profile/ProfileHeader.tsx";
 import {ProfileGames} from "@/components/profile/ProfileGames.tsx";
 import {ProfileAchievementList} from "@/components/profile/ProfileAchievementList.tsx";
 import {ProfileFriendsList} from "@/components/profile/ProfileFriendsList.tsx";
-import {ProfileDto, SectionDto, SectionType, Visibility} from "@/model/profileSyncDto.ts";
+import {ProfileDto, SectionType, Visibility} from "@/model/profileSyncDto.ts";
 import {ProfileVisibilityModal} from "./ProfileVisibilityModal.tsx";
-import {useUpdateSectionVisibility} from "@/hooks/useProfile.ts";
-import useToastEffect from "@/hooks/useToastEffect.ts";
 
 export interface ProfileProps {
     profile: ProfileDto | undefined;
@@ -19,13 +17,6 @@ export interface ProfileProps {
 
 export function Profile({profile, isError, isLoading, isOwner}: ProfileProps) {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
-    const {isError: isErrorSV, isPending: isPendingSv, isSuccess, error, updateSectionVisibility} = useUpdateSectionVisibility()
-
-    useToastEffect({isError: isErrorSV, isSuccess, error: error}, "Updated Section Visibility", "Unable to update Section Visibility", "");
-
-    const handleUpdateSettings = async (updatedSections: SectionDto[]) => {
-        await updateSectionVisibility(updatedSections);
-    };
 
     const getSectionVisibility = (sectionType: SectionType): Visibility => {
         const section = profile?.sections?.find(s => s.type === sectionType);
@@ -90,7 +81,7 @@ export function Profile({profile, isError, isLoading, isOwner}: ProfileProps) {
                         profileId={profile.id}
                         isOwner={isOwner}
                         gameVisibility={getSectionVisibility(SectionType.GAMES)}
-                        favoriteGameVisibility={getSectionVisibility(SectionType.FAVORIETES)}
+                        favoriteGameVisibility={getSectionVisibility(SectionType.FAVORITES)}
                     />
                 </div>
 
@@ -112,8 +103,6 @@ export function Profile({profile, isError, isLoading, isOwner}: ProfileProps) {
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
                 initialSections={profile.sections}
-                onSave={handleUpdateSettings}
-                isLoading={isPendingSv}
             />
         </div>
     );

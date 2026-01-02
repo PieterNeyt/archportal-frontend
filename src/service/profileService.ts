@@ -23,12 +23,11 @@ export async function getGamesFromProfileId(profileId:string): Promise<LibraryGa
     return games;
 }
 
-async function updateSectionVisibility(sections:SectionDto[]): Promise<SectionDto[]> {
+export async function updateSectionVisibility(sections:SectionDto[]): Promise<SectionDto[]> {
     const {data: games} = await axios.put<SectionDto[]>(`/api/profile/section-visibility`, sections);
     return games;
 }
 
-export default updateSectionVisibility
 
 export async function toggleBenefit(benefitId: string) {
     const {data} = await axios.put<Profile>(`/api/profile/benefits/${benefitId}/toggle`);

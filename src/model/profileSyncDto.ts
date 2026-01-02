@@ -11,7 +11,7 @@ export interface ProfileSyncDto {
 
 export enum SectionType {
     GAMES = 'GAMES',
-    FAVORIETES = 'FAVORIETES',
+    FAVORITES = 'FAVORITES',
     STATISTICS = 'STATISTICS',
     FRIENDS = 'FRIENDS',
     ACHIEVEMENTS = 'ACHIEVEMENTS'

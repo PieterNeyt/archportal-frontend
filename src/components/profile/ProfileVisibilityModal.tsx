@@ -2,24 +2,29 @@ import {useState} from "react";
 import {Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Radio, RadioGroup} from "@heroui/react";
 import {GLASS_CARD_STYLES} from "@/styles/customClasses.ts";
 import {SectionDto, SectionType, Visibility} from "@/model/profileSyncDto.ts";
+import {useUpdateSectionVisibility} from "@/hooks/useProfile.ts";
+import useToastEffect from "@/hooks/useToastEffect.ts";
 
 interface ProfileVisibilityModalProps {
     isOpen: boolean;
     onOpenChange: (isOpen: boolean) => void;
     initialSections: SectionDto[];
-    onSave: (updatedSections: SectionDto[]) => void;
-    isLoading: boolean;
 }
 
-export function ProfileVisibilityModal({isOpen, onOpenChange, initialSections, onSave, isLoading
-}: ProfileVisibilityModalProps) {
+export function ProfileVisibilityModal({isOpen, onOpenChange, initialSections}: ProfileVisibilityModalProps) {
 
     const [localSections, setLocalSections] = useState<SectionDto[]>(initialSections);
+    const {isError: isErrorSV, isPending: isPendingSv, isSuccess, error, updateSectionVisibility} = useUpdateSectionVisibility()
 
     const handleChange = (type: SectionType, visibility: Visibility) => {
         setLocalSections(prev =>
             prev.map(s => s.type === type ? { ...s, visibility } : s)
         );
+    };
+    useToastEffect({isError: isErrorSV, isSuccess, error: error}, "Updated Section Visibility", "Unable to update Section Visibility", "");
+
+    const handleUpdateSettings = async (updatedSections: SectionDto[]) => {
+        await updateSectionVisibility(updatedSections);
     };
 
     return (
@@ -54,19 +59,19 @@ export function ProfileVisibilityModal({isOpen, onOpenChange, initialSections, o
                                 variant="flat"
                                 onPress={onClose}
                                 className="text-white"
-                                isDisabled={isLoading}
+                                isDisabled={isPendingSv}
                             >
                                 Annuleren
                             </Button>
                             <Button
                                 color="primary"
-                                isLoading={isLoading}
+                                isLoading={isPendingSv}
                                 onPress={() => {
-                                    onSave(localSections);
-                                    if (!isLoading) onClose();
+                                    handleUpdateSettings(localSections);
+                                    if (!isPendingSv) onClose();
                                 }}
                             >
-                                Opslaan
+                                Save
                             </Button>
                         </ModalFooter>
                     </>

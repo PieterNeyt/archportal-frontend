@@ -4,6 +4,7 @@ import {Avatar, Skeleton} from "@heroui/react";
 import {useProfileFriends} from "@/hooks/useFriends.ts";
 import {Visibility, SectionType} from "@/model/profileSyncDto.ts";
 import {VisibilityBadge} from "./VisibilityBadge.tsx";
+import {ProfileFriendItem} from "@/components/profile/ProfileFriendItem.tsx";
 
 interface ProfileFriendsListProps {
     profileId: string;
@@ -13,6 +14,7 @@ interface ProfileFriendsListProps {
 
 export function ProfileFriendsList({profileId, visibility, isOwner}: ProfileFriendsListProps) {
     const {isLoading, isError, friends} = useProfileFriends(profileId);
+
 
     if (isLoading) {
         return (
@@ -68,25 +70,7 @@ export function ProfileFriendsList({profileId, visibility, isOwner}: ProfileFrie
                 {displayFriends.length > 0 ? (
                     <div className="space-y-3">
                         {displayFriends.map(friend => (
-                            <div
-                                key={friend.gamerTag}
-                                className="flex items-center gap-3 hover:bg-white/5 p-2 rounded-lg transition-colors cursor-pointer group"
-                            >
-                                <Avatar
-                                    src={friend.icon}
-                                    size="sm"
-                                    radius="md"
-                                    className="border border-white/10"
-                                />
-                                <div className="flex flex-col min-w-0">
-                                    <span className="text-sm font-medium text-white/90 group-hover:text-primary transition-colors truncate">
-                                        {friend.firstName}
-                                    </span>
-                                    <span className="text-[10px] text-white/30 uppercase tracking-tight truncate">
-                                        {friend.lastName}
-                                    </span>
-                                </div>
-                            </div>
+                            <ProfileFriendItem profile={friend}/>
                         ))}
                     </div>
                 ) : (

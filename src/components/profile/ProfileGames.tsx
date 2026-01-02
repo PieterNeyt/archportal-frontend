@@ -41,7 +41,7 @@ export function ProfileGames({profileId, gameVisibility, favoriteGameVisibility,
                     <div className="flex items-center justify-between border-b border-white/5 pb-4">
                         <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Featured Favorites</h2>
                         {isOwner && (
-                            <VisibilityBadge section={{type: SectionType.FAVORIETES, visibility: favoriteGameVisibility}}
+                            <VisibilityBadge section={{type: SectionType.FAVORITES, visibility: favoriteGameVisibility}}
                                              size="md"/>
                         )}
                     </div>

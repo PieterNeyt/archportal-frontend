@@ -1,9 +1,9 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import updateSectionVisibility, {
+import {
     getAllProfile,
     getAllProfileWithId,
     getGamesFromProfileId,
-    getProfileSync
+    getProfileSync, updateSectionVisibility
 } from "@/service/profileService.ts";
 import {SectionDto} from "@/model/profileSyncDto.ts";
 
@@ -20,7 +20,7 @@ export function useProfile() {
 
 export function useAllProfileWithId(profileId:string) {
     const {isLoading, isError, refetch, data: profile} = useQuery({
-        queryKey: [PROFILE_KEY,"all"],
+        queryKey: [PROFILE_KEY,`all-${profileId}`],
         queryFn: () => getAllProfileWithId(profileId)
     })
     return {isLoading, isError, refetch, profile}
@@ -29,7 +29,7 @@ export function useAllProfileWithId(profileId:string) {
 
 export function useAllProfile() {
     const {isLoading, isError, refetch, data: profile} = useQuery({
-        queryKey: [PROFILE_KEY,"all"],
+        queryKey: [PROFILE_KEY,"me"],
         queryFn: () => getAllProfile()
     })
     return {isLoading, isError, refetch, profile}
@@ -42,7 +42,7 @@ export function useUpdateSectionVisibility() {
             return updateSectionVisibility(sections);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: [PROFILE_KEY,"all"]})
+            queryClient.invalidateQueries({queryKey: [PROFILE_KEY,"me"]})
         }
     })
 
