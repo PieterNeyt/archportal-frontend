@@ -8,6 +8,7 @@ import {Input} from "@heroui/input";
 import {useSendChatbotMessage} from "@/hooks/useChatRooms.ts";
 import {GLASS_CARD_STYLES} from "@/styles/customClasses.ts";
 import {useUIStore} from "@/hooks/useUIStore.ts";
+import {useEscapeKey} from "@/hooks/useEscapeKey.ts";
 
 export default function FloatingAssistant() {
     const {isCartOpen} = useUIStore();
@@ -19,6 +20,8 @@ export default function FloatingAssistant() {
 
     const scrollRef = useRef<HTMLDivElement>(null);
     const {sendMessage, isPending} = useSendChatbotMessage();
+
+    useEscapeKey(() => setIsOpen(false));
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -109,6 +112,7 @@ export default function FloatingAssistant() {
                                 <form onSubmit={handleSendMessage} className={"flex gap-2"}>
                                     <Input
                                         size={"sm"}
+                                        autoFocus={true}
                                         variant={"flat"}
                                         placeholder={"Ask away..."}
                                         value={input}
