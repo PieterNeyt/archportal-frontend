@@ -7,16 +7,19 @@ import {CircularProgress} from "@heroui/progress";
 import useToastEffect from "@/hooks/useToastEffect.ts";
 import {useBenefits} from "@/hooks/useBenefits.ts";
 import {useMemo} from "react";
+import {useNavigate} from "react-router-dom";
 
 interface UserProps {
+    id: string;
     gamerTag: string;
     icon: string;
     activeUsernameColorId?: string;
 }
 
-export default function FriendCard({gamerTag, icon, activeUsernameColorId}: UserProps) {
+export default function FriendCard({id,gamerTag, icon, activeUsernameColorId}: UserProps) {
     const remove = useRemoveFriend();
     const { data: benefits } = useBenefits();
+    const navigate = useNavigate();
 
     useToastEffect(remove, "Friend removed", "Failed to remove friend", "The friend has been removed from your list.");
 
@@ -46,6 +49,7 @@ export default function FriendCard({gamerTag, icon, activeUsernameColorId}: User
                     name: gamerTag,
                     className: "w-10 h-10 flex-shrink-0"
                 }}
+                onClick={() => navigate(`/profile/${id}`)}
                 name={
                     <span
                         className="text-base font-bold truncate transition-colors"

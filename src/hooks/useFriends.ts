@@ -4,7 +4,7 @@ import {
     cancelFriendRequest,
     declineFriendRequest,
     getFriends, getFriendsFromProfileId,
-    getIncomingFriendRequests,
+    getIncomingFriendRequests, getIsFriendsFromProfileId,
     getOutgoingFriendRequests,
     removeFriend,
     sendFriendRequest
@@ -31,6 +31,15 @@ export function useProfileFriends(profileId:string) {
     const {isLoading, isError, data: friends, refetch} = useQuery({
         queryKey: [FRIENDS_KEY,profileId],
         queryFn: () => getFriendsFromProfileId(profileId),
+    });
+    return {isLoading, isError, friends, refetch};
+}
+
+export function useIsProfileFriend(profileId:string) {
+    const {isLoading, isError, data: friends, refetch} = useQuery({
+        queryKey: [FRIENDS_KEY,`isfriends-${profileId}`],
+        queryFn: () => getIsFriendsFromProfileId(profileId),
+        enabled:!!profileId
     });
     return {isLoading, isError, friends, refetch};
 }

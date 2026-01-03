@@ -44,6 +44,7 @@ export default function FriendsTab({isError, isLoading, filteredProfiles}: Frien
                             key={profile.gamerTag}
                             gamerTag={profile.gamerTag}
                             icon={profile.icon}
+                            id={profile.id}
                             activeUsernameColorId={profile.activeUsernameColorId}
                         />
                     ))}

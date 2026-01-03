@@ -11,6 +11,11 @@ export async function getFriendsFromProfileId(profileId:string): Promise<Profile
     return friends;
 }
 
+export async function getIsFriendsFromProfileId(profileId:string): Promise<boolean> {
+    const {data: friends} = await axios.get<boolean>(`/api/profile/${profileId}/is-friends`);
+    return friends;
+}
+
 export async function sendFriendRequest(gamertag: string): Promise<void> {
     const {data: profile} = await axios.post("/api/profile/friend-request", {
         gamerTag: gamertag,
