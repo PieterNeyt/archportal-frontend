@@ -7,6 +7,7 @@ import {ProfileAchievementList} from "@/components/profile/ProfileAchievementLis
 import {ProfileFriendsList} from "@/components/profile/ProfileFriendsList.tsx";
 import {ProfileDto, SectionType, Visibility} from "@/model/profileSyncDto.ts";
 import {ProfileVisibilityModal} from "./ProfileVisibilityModal.tsx";
+import {useIsProfileFriend} from "@/hooks/useFriends.ts";
 
 export interface ProfileProps {
     profile: ProfileDto | undefined;
@@ -17,6 +18,8 @@ export interface ProfileProps {
 
 export function Profile({profile, isError, isLoading, isOwner}: ProfileProps) {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
+
+    const {friends} = useIsProfileFriend(!isOwner && profile?.id ? profile.id : "");
 
     const getSectionVisibility = (sectionType: SectionType): Visibility => {
         const section = profile?.sections?.find(s => s.type === sectionType);
@@ -72,6 +75,7 @@ export function Profile({profile, isError, isLoading, isOwner}: ProfileProps) {
                     profile={profile}
                     visibility={getSectionVisibility(SectionType.STATISTICS)}
                     isOwner={isOwner}
+                    isFriend={!!friends}
                 />
             </section>
 
@@ -80,6 +84,7 @@ export function Profile({profile, isError, isLoading, isOwner}: ProfileProps) {
                     <ProfileGames
                         profileId={profile.id}
                         isOwner={isOwner}
+                        isFriend={!!friends}
                         gameVisibility={getSectionVisibility(SectionType.GAMES)}
                         favoriteGameVisibility={getSectionVisibility(SectionType.FAVORITES)}
                     />
@@ -89,11 +94,13 @@ export function Profile({profile, isError, isLoading, isOwner}: ProfileProps) {
                     <ProfileFriendsList
                         profileId={profile.id}
                         isOwner={isOwner}
+                        isFriend={!!friends}
                         visibility={getSectionVisibility(SectionType.FRIENDS)}
                     />
                     <ProfileAchievementList
                         profileId={profile.id}
                         isOwner={isOwner}
+                        isFriend={!!friends}
                         visibility={getSectionVisibility(SectionType.ACHIEVEMENTS)}
                     />
                 </div>

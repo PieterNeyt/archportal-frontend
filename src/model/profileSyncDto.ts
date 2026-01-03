@@ -1,4 +1,5 @@
 export interface ProfileSyncDto {
+    id:string;
     firstName: string;
     lastName: string;
     gamerTag: string;

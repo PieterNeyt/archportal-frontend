@@ -1,5 +1,5 @@
 import {Avatar, Skeleton} from "@heroui/react";
-import {Calendar, Clock, AlertCircle} from "lucide-react";
+import {Calendar, Clock, AlertCircle, ShieldCheck} from "lucide-react";
 import {ProfileDto, Visibility, SectionType} from "@/model/profileSyncDto.ts";
 import {usePlayerStats} from "@/hooks/useAnalytics.ts";
 import {formatTimeAgo} from "@/lib/dateUtils.ts";
@@ -10,11 +10,17 @@ interface ProfileHeaderProps {
     profile: ProfileDto;
     visibility: Visibility;
     isOwner: boolean;
+    isFriend: boolean;
 }
 
-export function ProfileHeader({profile, visibility, isOwner}: ProfileHeaderProps) {
+export function ProfileHeader({profile, visibility, isOwner, isFriend}: ProfileHeaderProps) {
     const {isLoading, isError, PlayerStats} = usePlayerStats(profile.id);
     const {profileColor} = useActiveUsernameColorFromProfileId(profile.id);
+
+    const canSeeStats =
+        isOwner ||
+        visibility === Visibility.PUBLIC ||
+        (visibility === Visibility.FRIENDS && isFriend);
 
     if (isLoading) {
         return (
@@ -29,20 +35,6 @@ export function ProfileHeader({profile, visibility, isOwner}: ProfileHeaderProps
                 <div className="flex flex-col gap-6 md:border-l border-white/10 md:pl-8 w-full md:w-auto">
                     <Skeleton className="h-12 w-40 rounded-lg bg-white/10"/>
                     <Skeleton className="h-12 w-40 rounded-lg bg-white/10"/>
-                </div>
-            </div>
-        );
-    }
-
-    if (isError || !PlayerStats) {
-        return (
-            <div
-                className="p-8 border-2 border-dashed border-white/5 rounded-3xl flex flex-col items-center justify-center text-center gap-3">
-                <AlertCircle size={24} className="text-red-500/50"/>
-                <div>
-                    <p className="text-white font-bold uppercase tracking-widest text-xs">Stats unavailable</p>
-                    <p className="text-white/30 text-[10px] mt-1">We couldn't retrieve the player statistics at this
-                        time.</p>
                 </div>
             </div>
         );
@@ -72,41 +64,57 @@ export function ProfileHeader({profile, visibility, isOwner}: ProfileHeaderProps
                 </div>
             </div>
 
-            <div className="flex flex-col justify-center gap-6 md:border-l border-white/10 md:pl-10 min-w-[240px]">
-                <div className="flex items-center justify-between gap-4">
-                    <span
-                        className="text-[10px] uppercase font-bold tracking-[0.2em] text-white/30">Player Statistics</span>
-                    {isOwner && (
-                        <VisibilityBadge
-                            section={{type: SectionType.STATISTICS, visibility}}
-                            size="sm"
-                        />
+            {canSeeStats ? (
+                <div className="flex flex-col justify-center gap-6 md:border-l border-white/10 md:pl-10 min-w-[240px]">
+                    <div className="flex items-center justify-between gap-4">
+                        <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-white/30">
+                            Player Statistics
+                        </span>
+                        {isOwner && (
+                            <VisibilityBadge
+                                section={{type: SectionType.STATISTICS, visibility}}
+                                size="sm"
+                            />
+                        )}
+                    </div>
+
+                    {isError || !PlayerStats ? (
+                        <div className="flex items-center gap-2 text-red-500/50">
+                            <AlertCircle size={16}/>
+                            <span className="text-[10px] uppercase font-bold">Stats unavailable</span>
+                        </div>
+                    ) : (
+                        <div className="space-y-6">
+                            <div>
+                                <div className="flex items-center gap-2 text-primary mb-1">
+                                    <Clock size={14}/>
+                                    <span className="text-[10px] uppercase font-bold tracking-widest text-white/40">Total Playtime</span>
+                                </div>
+                                <p className="text-4xl font-black text-white leading-none">
+                                    {((PlayerStats.totalPlayTimeMinutes || 0) / 60).toFixed(2)}
+                                    <span className="text-sm font-normal text-white/40 ml-2 font-mono uppercase tracking-tighter">
+                                        Hours
+                                    </span>
+                                </p>
+                            </div>
+                            <div>
+                                <div className="flex items-center gap-2 text-primary mb-1">
+                                    <Calendar size={14}/>
+                                    <span className="text-[10px] uppercase font-bold tracking-widest text-white/40">Last Activity</span>
+                                </div>
+                                <p className="text-lg font-bold text-white/80 uppercase tracking-tight">
+                                    {formatTimeAgo(PlayerStats.lastPlayed)}
+                                </p>
+                            </div>
+                        </div>
                     )}
                 </div>
-                <div className="space-y-6">
-                    <div>
-                        <div className="flex items-center gap-2 text-primary mb-1">
-                            <Clock size={14}/>
-                            <span className="text-[10px] uppercase font-bold tracking-widest text-white/40">Total Playtime</span>
-                        </div>
-                        <p className="text-4xl font-black text-white leading-none">
-                            {((PlayerStats.totalPlayTimeMinutes || 0) / 60).toFixed(2)}
-                            <span className="text-sm font-normal text-white/40 ml-2 font-mono uppercase tracking-tighter">
-                                Hours
-                            </span>
-                        </p>
-                    </div>
-                    <div>
-                        <div className="flex items-center gap-2 text-primary mb-1">
-                            <Calendar size={14}/>
-                            <span className="text-[10px] uppercase font-bold tracking-widest text-white/40">Last Activity</span>
-                        </div>
-                        <p className="text-lg font-bold text-white/80 uppercase tracking-tight">
-                            {formatTimeAgo(PlayerStats.lastPlayed)}
-                        </p>
-                    </div>
+            ) : (
+                <div className="flex flex-col justify-center items-center md:border-l border-white/5 md:pl-10 text-white/10 italic">
+                    <ShieldCheck size={24} className="mb-2 opacity-20" />
+                    <span className="text-[10px] uppercase font-bold tracking-widest">Statistics Private</span>
                 </div>
-            </div>
+            )}
         </div>
     );
 }
