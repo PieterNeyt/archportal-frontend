@@ -1,4 +1,4 @@
-import {AlertCircle, Users, Lock} from "lucide-react"; // Lock toegevoegd
+import {AlertCircle, Users, Lock} from "lucide-react";
 import {GLASS_CARD_STYLES} from "@/styles/customClasses.ts";
 import {Skeleton} from "@heroui/react";
 import {useProfileFriends} from "@/hooks/useFriends.ts";

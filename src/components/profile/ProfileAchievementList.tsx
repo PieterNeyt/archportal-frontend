@@ -1,4 +1,4 @@
-import {Calendar, Trophy, AlertCircle, Lock} from "lucide-react"; // Lock toegevoegd
+import {Calendar, Trophy, AlertCircle, Lock} from "lucide-react";
 import {GLASS_CARD_STYLES} from "@/styles/customClasses.ts";
 import {useProfileAchievements} from "@/hooks/useAchievement.ts";
 import {formatTimeAgo} from "@/lib/dateUtils.ts";
