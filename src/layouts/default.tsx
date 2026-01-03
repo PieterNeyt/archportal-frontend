@@ -3,6 +3,7 @@ import {GameLauncherSidebar} from "@/components/sidebar/Sidebar.tsx";
 import Starfield from "@/layouts/background.tsx";
 import {HeroUIProvider} from "@heroui/system";
 import {ToastProvider} from "@heroui/toast";
+import Chatbot from "@/components/chatbot/Chatbot.tsx";
 
 function DefaultLayout({children}: { children: ReactNode }) {
     return (
@@ -16,6 +17,7 @@ function DefaultLayout({children}: { children: ReactNode }) {
             {/* Sidebar en main content */}
             <div className="flex h-full w-full relative z-10">
                 <GameLauncherSidebar/>
+                <Chatbot/>
                 <main className="dark text-foreground flex-1 overflow-auto relative z-10">
                     <HeroUIProvider>
                         <ToastProvider placement={"bottom-right"} maxVisibleToasts={3}/>

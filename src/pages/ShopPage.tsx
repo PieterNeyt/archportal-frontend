@@ -4,7 +4,7 @@ import {GameCard} from "@/components/shop/GameCard.tsx";
 import {SkeletonCard} from "@/components/shop/SkeletonCard.tsx";
 import {GameLoadError} from "@/components/shop/GameLoadError.tsx";
 import {ShoppingCartComponent} from "@/components/shop/shoppingcart/ShoppingCartComponent.tsx";
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {Button} from "@heroui/button";
 import {ArrowUpDown, Filter, Search, ShoppingCart} from "lucide-react";
 import {Badge} from "@heroui/badge";
@@ -15,6 +15,7 @@ import {selectClasses} from "@/styles/customClasses.ts";
 import {Game} from "@/model/game.ts";
 import {useNavigate} from "react-router-dom";
 import useToastEffect from "@/hooks/useToastEffect.ts";
+import {useUIStore} from "@/hooks/useUIStore.ts";
 
 enum SortOption {
     ALPHABETICAL = "ALPHABETICAL",
@@ -37,7 +38,7 @@ export default function ShopPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedGenres, setSelectedGenres] = useState<Set<string>>(new Set([]));
     const [sortOption, setSortOption] = useState<Set<string>>(new Set([SortOption.ALPHABETICAL]));
-    const [isCartOpen, setIsCartOpen] = useState(false);
+    const {isCartOpen, setCartOpen} = useUIStore();
 
     const hasActiveFilters = searchQuery !== "" ||
         selectedGenres.size > 0 ||
@@ -54,6 +55,12 @@ export default function ShopPage() {
         "Failed to add",
         `Successfully added Game to cart`
     );
+
+    useEffect(() => {
+        return () => {
+            setCartOpen(false);
+        };
+    }, [setCartOpen]);
 
     const filteredAndSortedGames = useMemo(() => {
         if (!games) return [];
@@ -158,7 +165,7 @@ export default function ShopPage() {
                                 isIconOnly
                                 color="primary"
                                 variant="flat"
-                                onPress={() => setIsCartOpen(true)}
+                                onPress={() => setCartOpen(true)}
                             >
                                 <ShoppingCart size={24}/>
                             </Button>
@@ -205,7 +212,7 @@ export default function ShopPage() {
             <ShoppingCartComponent
                 cart={cart}
                 isOpen={isCartOpen}
-                onClose={() => setIsCartOpen(false)}
+                onClose={() => setCartOpen(false)}
                 onRemoveItem={removeFromCart}
             />
         </>

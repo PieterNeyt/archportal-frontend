@@ -1,7 +1,7 @@
 import {useContext} from "react";
 import SecurityContext from "@/context/SecurityContext.ts";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {getChatRoom, getChatRooms, sendMessage} from "@/service/chatService.ts";
+import {getChatRoom, getChatRooms, sendChatbotMessage, sendMessage} from "@/service/chatService.ts";
 import {SendMessage} from "@/model/chatRoom.ts";
 
 const CHATROOMS_KEY = "chat rooms";
@@ -46,5 +46,14 @@ export function useSendMessage() {
         }
     })
 
+    return {sendMessage: mutateAsync, isPending, isError, isSuccess, error, reset}
+}
+
+export function useSendChatbotMessage() {
+    const {mutateAsync, isPending, isError, isSuccess, error, reset} = useMutation({
+        mutationFn: (message: SendMessage) => {
+            return sendChatbotMessage(message);
+        }
+    })
     return {sendMessage: mutateAsync, isPending, isError, isSuccess, error, reset}
 }
