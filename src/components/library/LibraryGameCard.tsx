@@ -2,7 +2,6 @@ import {useMemo, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {Heart} from "lucide-react";
 import {LibraryGame} from "@/model/library";
-import {useStartSinglePlayerGame} from "@/hooks/useLobbies.ts";
 import {useAddToFavorites, useRemoveFromFavorites} from "@/hooks/useLibrary.ts";
 import {LibraryGridView} from "./LibraryGridView";
 import {LibraryListView} from "./LibraryListView";
@@ -17,7 +16,7 @@ interface LibraryGameCardProps {
 export function LibraryGameCard({libraryItem, viewMode}: LibraryGameCardProps) {
     const {game, favorite} = libraryItem;
     const navigate = useNavigate();
-    const {isPending, startSinglePlayer} = useStartSinglePlayerGame();
+
     const {
         addToFavorites,
         isPending: isAdding,
@@ -76,14 +75,6 @@ export function LibraryGameCard({libraryItem, viewMode}: LibraryGameCardProps) {
         "Failed to remove favorite"
     );
 
-    const handlePlayClick = async () => {
-        const response = await startSinglePlayer(game.id);
-        if (response?.launchUrl) {
-            window.open(response.launchUrl, "_blank", "noopener,noreferrer");
-        } else {
-            alert("Error launching game.");
-        }
-    };
 
     const FavoriteHeart = (
         <div
@@ -98,9 +89,7 @@ export function LibraryGameCard({libraryItem, viewMode}: LibraryGameCardProps) {
     const commonProps = {
         libraryItem,
         onPress: handleCardClick,
-        onPlay: handlePlayClick,
         imageElement,
-        isPending,
         renderFavorite: FavoriteHeart
     };
 

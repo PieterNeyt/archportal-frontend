@@ -8,7 +8,6 @@ import {
     leaveLobby,
     startMultiPlayer,
     startMultiplayerLobby,
-    startSinglePlayer
 } from "../service/lobbyService";
 import {InLobby, LobbiesResponse, MultiplayerLobbyInfo, StartMultiPlayerRequest} from "@/model/lobby.ts";
 
@@ -18,27 +17,6 @@ const PLAYER_IN_LOBBY_KEY = "player in lobby";
 const LOBBY_INFO_KEY = "lobby info";
 const MY_SESSION_KEY = "my session";
 
-export function useStartSinglePlayerGame() {
-    const queryClient = useQueryClient()
-    const {
-        mutateAsync,
-        isPending,
-        isError,
-
-    } = useMutation(
-        {
-            mutationFn: (gameId: string) => {
-                return startSinglePlayer(gameId)
-            },
-            onSuccess: () => queryClient.invalidateQueries({queryKey: [SESSION_KEY]}),
-        })
-
-    return {
-        isPending,
-        isError,
-        startSinglePlayer: mutateAsync
-    }
-}
 
 export function useStartMultiplayerGame() {
     const queryClient = useQueryClient()
