@@ -16,9 +16,9 @@ interface UserProps {
     activeUsernameColorId?: string;
 }
 
-export default function FriendCard({id,gamerTag, icon, activeUsernameColorId}: UserProps) {
+export default function FriendCard({id, gamerTag, icon, activeUsernameColorId}: UserProps) {
     const remove = useRemoveFriend();
-    const { data: benefits } = useBenefits();
+    const {data: benefits} = useBenefits();
     const navigate = useNavigate();
 
     useToastEffect(remove, "Friend removed", "Failed to remove friend", "The friend has been removed from your list.");
@@ -40,20 +40,19 @@ export default function FriendCard({id,gamerTag, icon, activeUsernameColorId}: U
     return (
         <div
             className={"backdrop-blur-sm flex items-center justify-between p-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all cursor-pointer shadow-md group"}
-            onClick={() => console.log("navigate to profile")}
+            onClick={() => navigate(`/profile/${id}`)}
         >
             <User
                 avatarProps={{
                     src: icon,
-                    fallback: <Avatar showFallback />,
+                    fallback: <Avatar showFallback/>,
                     name: gamerTag,
                     className: "w-10 h-10 flex-shrink-0"
                 }}
-                onClick={() => navigate(`/profile/${id}`)}
                 name={
                     <span
                         className="text-base font-bold truncate transition-colors"
-                        style={activeColor ? { color: activeColor } : { color: 'white' }}
+                        style={activeColor ? {color: activeColor} : {color: 'white'}}
                     >
                         {gamerTag}
                     </span>
