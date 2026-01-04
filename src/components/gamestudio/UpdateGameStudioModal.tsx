@@ -53,14 +53,12 @@ export function UpdateGameStudioModal({isOpen, onOpenChange, gameStudio}: Update
             <ModalContent className="bg-black/30 backdrop-blur-xl border border-white/10 shadow-2xl">
                 {(onClose) => (
                     <>
-                        {/* Header */}
                         <ModalHeader className="flex flex-col gap-1 px-6 py-4">
                             Update: <span className="text-primary">{gameStudio.name}</span>
                         </ModalHeader>
 
                         <div className="border-t border-white/10"></div>
 
-                        {/* Body */}
                         <ModalBody className="py-6 px-6">
                             <form
                                 id="update-studio-form"
@@ -77,7 +75,6 @@ export function UpdateGameStudioModal({isOpen, onOpenChange, gameStudio}: Update
 
                         <div className="border-t border-white/10"></div>
 
-                        {/* Footer */}
                         <ModalFooter className="flex gap-2 justify-end px-6 py-4">
                             <Button
                                 color="danger"

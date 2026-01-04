@@ -8,12 +8,7 @@ interface GameInfoSectionProps {
     onStart: () => void;
 }
 
-export function GameInfoSection({
-                                    title,
-                                    description,
-                                    isPending,
-                                    onStart,
-                                }: GameInfoSectionProps) {
+export function GameInfoSection({title, description, isPending, onStart}: GameInfoSectionProps) {
     return (
         <div className="flex flex-col gap-6">
             <div>

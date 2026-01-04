@@ -23,7 +23,6 @@ export default function ChatRoomCard({title, lastMessage, onClick, isActive}: Ch
             }
             `}
         >
-            {/* Avatar Icon */}
             <div className={`
                 flex items-center justify-center w-12 h-12 rounded-full flex-shrink-0 transition-colors duration-300
                 ${isActive
@@ -34,15 +33,11 @@ export default function ChatRoomCard({title, lastMessage, onClick, isActive}: Ch
                 <Users size={20}/>
             </div>
 
-            {/* Content Area */}
             <div className="flex-1 min-w-0 flex flex-col justify-center gap-0.5">
                 <div className="flex justify-between items-center">
-                    {/* Title */}
                     <h3 className={`font-semibold text-sm truncate transition-colors ${isActive ? "text-white" : "text-white/90"}`}>
                         {title}
                     </h3>
-
-                    {/* Time Ago (Rechtsboven) */}
                     {lastMessage?.timestamp && (
                         <span
                             className={`text-[10px] whitespace-nowrap ml-2 font-medium ${isActive ? "text-white/60" : "text-white/30"}`}>
@@ -50,8 +45,6 @@ export default function ChatRoomCard({title, lastMessage, onClick, isActive}: Ch
                         </span>
                     )}
                 </div>
-
-                {/* Last Message */}
                 <div
                     className={`text-xs truncate h-4 flex items-center ${isActive ? "text-white/80" : "text-white/50 group-hover:text-white/70"}`}>
 

@@ -10,7 +10,6 @@ interface ChatRoomListProps {
     selectedId?: string;
 }
 
-const SKELETON_COUNT = 5;
 
 export default function ChatRoomList({chatRooms, setChatRoom, isLoading, selectedId}: ChatRoomListProps) {
 
@@ -19,7 +18,7 @@ export default function ChatRoomList({chatRooms, setChatRoom, isLoading, selecte
 
             {/* Loading State */}
             {isLoading && (
-                Array(SKELETON_COUNT).fill(0).map((_, i) => (
+                Array(5).fill(0).map((_, i) => (
                     <ChatRoomSkeletonCard key={i}/>
                 ))
             )}

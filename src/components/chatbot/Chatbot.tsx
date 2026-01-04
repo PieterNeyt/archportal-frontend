@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
-import Draggable from "react-draggable"; // Importeer de draggable component
+import Draggable from "react-draggable";
 import { SendMessage } from "@/model/chatRoom.ts";
 import { Card, CardHeader } from "@heroui/card";
 import { Bot, MessageCircle, Send, X, GripVertical } from "lucide-react";
@@ -20,7 +20,7 @@ export default function FloatingAssistant() {
     ]);
 
     const scrollRef = useRef<HTMLDivElement>(null);
-    const draggableRef = useRef(null); // Voor de draggable component
+    const draggableRef = useRef(null);
     const { sendMessage, isPending } = useSendChatbotMessage();
 
     useEscapeKey(() => setIsOpen(false));
@@ -70,7 +70,6 @@ export default function FloatingAssistant() {
                 {isOpen && (
                     <Card
                         className={`w-[350px] h-[500px] shadow-2xl border border-white/10 bg-black/90 backdrop-blur-xl mb-2 animate-in fade-in zoom-in-95 ${GLASS_CARD_STYLES}`}>
-                        {/* De Header is nu een drag-handle */}
                         <CardHeader
                             className={"drag-handle cursor-move flex justify-between items-center bg-white/5 p-4 border-b border-white/10 active:cursor-grabbing"}>
                             <div className={"flex items-center gap-2 pointer-events-none"}>
@@ -126,8 +125,6 @@ export default function FloatingAssistant() {
                         </CardBody>
                     </Card>
                 )}
-
-                {/* De knop zelf is ook een drag-handle */}
                 <div className="drag-handle cursor-move active:cursor-grabbing">
                     <Button
                         isIconOnly

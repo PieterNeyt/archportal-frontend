@@ -11,13 +11,7 @@ interface PurchaseConfirmationModalProps {
     onConfirm: () => void;
 }
 
-export function PurchaseConfirmationModal({
-                                              isOpen,
-                                              onClose,
-                                              benefit,
-                                              userPoints,
-                                              onConfirm
-                                          }: PurchaseConfirmationModalProps) {
+export function PurchaseConfirmationModal({isOpen, onClose, benefit, userPoints, onConfirm}: PurchaseConfirmationModalProps) {
     return (
         <Modal
             isOpen={isOpen}

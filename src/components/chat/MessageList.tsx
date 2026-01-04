@@ -10,8 +10,6 @@ interface MessageListProps {
     id: string;
 }
 
-const SKELETON_COUNT = 5;
-
 export default function MessageList({ id }: MessageListProps) {
     const { isLoading, isError, chatRoom, refetch } = useGetChatRoom(id);
     const messagesEndRef = useRef<null | HTMLDivElement>(null);
@@ -36,7 +34,7 @@ export default function MessageList({ id }: MessageListProps) {
             size={40}
         >
             {isLoading &&
-                Array(SKELETON_COUNT)
+                Array(5)
                     .fill(0)
                     .map((_, i) => <MessageSkeletonCard key={i} />)}
 
@@ -57,7 +55,6 @@ export default function MessageList({ id }: MessageListProps) {
                 </div>
             )}
 
-            {/* Messages List */}
             {!isLoading &&
                 chatRoom &&
                 chatRoom.messages.length > 0 &&

@@ -12,15 +12,7 @@ interface RequestSectionProps {
     type: "incoming" | "outgoing";
 }
 
-export default function RequestSection({
-                                           title,
-                                           icon,
-                                           emptyIcon,
-                                           isLoading,
-                                           isError,
-                                           profiles,
-                                           type
-                                       }: RequestSectionProps) {
+export default function RequestSection({title, icon, emptyIcon, isLoading, isError, profiles, type}: RequestSectionProps) {
     return (
         <>
             <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">

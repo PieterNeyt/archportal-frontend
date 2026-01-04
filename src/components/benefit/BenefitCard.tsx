@@ -17,7 +17,7 @@ interface Props {
 
 export function BenefitCard({benefit, profileBenefits, userPoints, onBuy, isBuying}: Props) {
     const {loggedInUser: profile} = useContext(securityContext);
-    // Check of de gebruiker dit voordeel al bezit
+
     const isOwned = profileBenefits?.some(b => b.id === benefit.id);
     const canAfford = userPoints >= benefit.pointCost;
 

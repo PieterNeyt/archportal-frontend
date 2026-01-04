@@ -1,12 +1,12 @@
 import {Card, CardBody} from "@heroui/card";
 import {Tab, Tabs} from "@heroui/tabs";
 import {Gamepad2, Trophy} from "lucide-react";
-import React from "react";
 import {LobbiesTabContent} from "@/components/library/game/lobby/LobbiesTabContent.tsx";
 import {Game} from "@/model/game.ts";
 import {AchievementsTabContent} from "@/components/library/game/achievement/AchievementsTabContent.tsx";
+import {ReactNode} from "react";
 
-function Title({ icon, label }: { icon: React.ReactNode; label: string }) {
+function Title({ icon, label }: { icon: ReactNode; label: string }) {
     return <div className="flex items-center gap-2">{icon}<span>{label}</span></div>;
 }
 

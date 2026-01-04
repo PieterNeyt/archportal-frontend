@@ -91,7 +91,6 @@ export default function MessageInput({chatId}: MessageInputProps) {
             />
 
             <div className="flex gap-2 items-center">
-                {/* 1. Emoji Button */}
                 <Popover
                     placement="top-end"
                     showArrow={true}
@@ -121,8 +120,6 @@ export default function MessageInput({chatId}: MessageInputProps) {
                         />
                     </PopoverContent>
                 </Popover>
-
-                {/* 2. Send Button */}
                 <Button
                     type="submit"
                     color="primary"

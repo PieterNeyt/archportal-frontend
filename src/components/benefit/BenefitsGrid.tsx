@@ -11,13 +11,7 @@ interface BenefitsGridProps {
     onBuy: (benefit: Benefit) => void;
 }
 
-export function BenefitsGrid({
-                                 benefits,
-                                 userPoints,
-                                 isBuying,
-                                 isLoading,
-                                 onBuy
-                             }: BenefitsGridProps) {
+export function BenefitsGrid({benefits, userPoints, isBuying, isLoading, onBuy}: BenefitsGridProps) {
     const {isLoading: isLoadingBenefit, data: profileBenefits} = useProfileBenefits();
 
     if (isLoading || isLoadingBenefit) {
