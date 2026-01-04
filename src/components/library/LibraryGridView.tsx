@@ -1,19 +1,16 @@
 import React, {useState} from "react";
 import {Card, CardBody, CardFooter} from "@heroui/card";
-import {Button} from "@heroui/button";
 import {Play} from "lucide-react";
 import {LibraryGame} from "@/model/library";
 
 interface Props {
     libraryItem: LibraryGame;
     onPress: () => void;
-    onPlay: () => void;
-    isPending: boolean;
     imageElement: React.JSX.Element;
     renderFavorite: React.ReactNode;
 }
 
-export function LibraryGridView({libraryItem, onPress, onPlay, isPending, imageElement, renderFavorite}: Props) {
+export function LibraryGridView({libraryItem, onPress, imageElement, renderFavorite}: Props) {
     const {game} = libraryItem;
     const [isHovered, setIsHovered] = useState(false);
 
@@ -42,10 +39,6 @@ export function LibraryGridView({libraryItem, onPress, onPlay, isPending, imageE
                     <h4 className="font-bold text-lg truncate text-white">{game.title}</h4>
                     <p className="text-xs text-white/50 line-clamp-2 min-h-[32px]">{game.description}</p>
                 </div>
-                <Button color="primary" startContent={<Play size={18}/>}
-                        className="w-full font-bold shadow-lg shadow-primary/20" isLoading={isPending} onPress={onPlay}>
-                    Play
-                </Button>
             </CardFooter>
         </Card>
     );

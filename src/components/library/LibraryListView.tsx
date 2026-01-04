@@ -1,19 +1,15 @@
 import {Card, CardBody} from "@heroui/card";
-import {Button} from "@heroui/button";
-import {Play} from "lucide-react";
 import {LibraryGame} from "@/model/library";
 import React from "react";
 
 interface Props {
     libraryItem: LibraryGame;
     onPress: () => void;
-    onPlay: () => void;
-    isPending: boolean;
     imageElement: React.JSX.Element;
     renderFavorite: React.ReactNode;
 }
 
-export function LibraryListView({libraryItem, onPress, onPlay, isPending, imageElement, renderFavorite}: Props) {
+export function LibraryListView({libraryItem, onPress, imageElement, renderFavorite}: Props) {
     const {game} = libraryItem;
 
     return (
@@ -32,10 +28,6 @@ export function LibraryListView({libraryItem, onPress, onPlay, isPending, imageE
                         <h3 className="text-xl font-bold text-white truncate">{game.title}</h3>
                         <p className="text-sm text-white/70 line-clamp-1">{game.description}</p>
                     </div>
-                    <Button color="primary" size="sm" className="w-fit font-bold" startContent={<Play size={16}/>}
-                            isLoading={isPending} onPress={onPlay}>
-                        Play
-                    </Button>
                 </div>
             </CardBody>
         </Card>

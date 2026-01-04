@@ -1,7 +1,6 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {Button} from "@heroui/button";
 import {ArrowLeft} from "lucide-react";
-import {useStartSinglePlayerGame} from "@/hooks/useLobbies";
 import {GameInfoSection} from "@/components/library/game/GameInfoSection.tsx";
 import {GameStatisticsCard} from "@/components/library/game/GameStatisticsCard.tsx";
 import {GameDetailsTabs} from "@/components/library/game/GameDetailsTabs.tsx";
@@ -13,13 +12,6 @@ export default function LibraryGamePage() {
     const navigate = useNavigate();
 
     const { game, isLoading, isError } = useGame(gameId ?? "");
-    const { startSinglePlayer, isPending, isError: startError } = useStartSinglePlayerGame();
-
-    const handleStart = async () => {
-        if (!game) return;
-        const res = await startSinglePlayer(game.id);
-        if (!startError) window.open(res.launchUrl, "_blank");
-    };
 
     if (isLoading) return <div>Skeleton…</div>;
     if (isError || !game) return <div>Game not found</div>;
@@ -43,8 +35,6 @@ export default function LibraryGamePage() {
                         <GameInfoSection
                             title={game.title}
                             description={game.description}
-                            isPending={isPending}
-                            onStart={handleStart}
                         />
 
                         <div className="mt-6">
