@@ -34,12 +34,7 @@ export function SidebarFooter({isOpen}: FooterProps) {
                         setDropdownOpen(false);
                         navigate("/user/settings");
                     }}/>
-                    {loggedInUser?.hasStudio ? (
-                        <DropdownButton text={"Game studio"} onClick={() => {
-                            setDropdownOpen(false);
-                            navigate("#gamestudio");
-                        }}/>
-                    ) : (
+                    {!loggedInUser?.hasStudio && (
                         <DropdownButton text={"Create game studio"} onClick={() => {
                             setDropdownOpen(false);
                             navigate("/create/gamestudio")
